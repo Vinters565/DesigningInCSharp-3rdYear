@@ -20,12 +20,12 @@ public static class RuleManager
         {
             if (!rule.Check(calendarEvent))
             {
-                message = "Несовместимые атрибуты";
+                message = $"Несовместимое правило: {rule}";
                 return false;
             }
         }
-
-        message = "Атрибуты применены";
+    
+        message = "Правила применены";
         return true;
     } 
 }

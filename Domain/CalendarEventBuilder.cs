@@ -18,6 +18,12 @@ public class CalendarEventBuilder
         return this;
     }
 
+    public CalendarEventBuilder RemoveAttribute<T>() where T : CalendarEventAttribute
+    {
+        CalendarEvent.RemoveAttribute<T>();
+        return this;
+    }
+
     public CalendarEvent? Apply()
     {
         // Валидация события

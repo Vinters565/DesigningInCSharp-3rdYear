@@ -17,6 +17,12 @@ public class CalendarEvent : Entity<Guid>
         return this;
     }
 
+    public CalendarEvent RemoveAttribute<T>() where T : CalendarEventAttribute
+    {
+        attributes.Remove(typeof(T));
+        return this;
+    }
+
     public T GetAttribute<T>() where T : CalendarEventAttribute
     {
         return (T)attributes[typeof(T)];
