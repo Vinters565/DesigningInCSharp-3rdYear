@@ -14,8 +14,8 @@ public class SingleOnlyRule(ICalendarEventRepository calendarEventRepository) : 
             return true;
         }
 
-        var start = newCalendarEvent.GetAttribute<StartTimeEventAttribute>().StartTime;
-        var end = newCalendarEvent.GetAttribute<EndTimeEventAttribute>().EndTime;
+        var start = newCalendarEvent.GetAttribute<StartDateEventAttribute>().StartDate;
+        var end = newCalendarEvent.GetAttribute<EndDateEventAttribute>().EndDate;
 
         var events = calendarEventRepository.GetEvents(start, end);
 

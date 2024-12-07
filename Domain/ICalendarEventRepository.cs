@@ -5,7 +5,7 @@ namespace SchedulePlanner.Domain;
 
 public interface ICalendarEventRepository
 {
-    public CalendarEvent[] GetEvents(TimeOnly start, TimeOnly end);
+    public CalendarEvent[] GetEvents(DateTime start, DateTime end);
 }
 
 public class CalendarEventRepository : ICalendarEventRepository
@@ -13,22 +13,22 @@ public class CalendarEventRepository : ICalendarEventRepository
     private CalendarEvent[] events = new[]
     {
         new CalendarEvent()
-            .AddAttribute(new StartTimeEventAttribute(new TimeOnly(13, 0)))
-            .AddAttribute(new EndTimeEventAttribute(new TimeOnly(15, 30))),
+            .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 10, 0, 0)))
+            .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 12, 0, 0))),
         new CalendarEvent()
-            .AddAttribute(new StartTimeEventAttribute(new TimeOnly(10, 0)))
-            .AddAttribute(new EndTimeEventAttribute(new TimeOnly(16, 30)))
+            .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 14, 0, 0)))
+            .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 18, 0, 0)))
             .AddAttribute(new SingleOnlyEventAttribute(true)),
         new CalendarEvent()
-            .AddAttribute(new StartTimeEventAttribute(new TimeOnly(9, 0)))
-            .AddAttribute(new EndTimeEventAttribute(new TimeOnly(10, 30))),
+            .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 19, 0, 0)))
+            .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 21, 0, 0))),
     };
     
-    public CalendarEvent[] GetEvents(TimeOnly start, TimeOnly end)
+    public CalendarEvent[] GetEvents(DateTime start, DateTime end)
     {
         return events
-            .Where(e => e.GetAttribute<StartTimeEventAttribute>().StartTime > start 
-                        || e.GetAttribute<StartTimeEventAttribute>().StartTime < end)
+            .Where(e => e.GetAttribute<StartDateEventAttribute>().StartDate > start 
+                        || e.GetAttribute<StartDateEventAttribute>().StartDate < end)
             .ToArray();
     }
 }

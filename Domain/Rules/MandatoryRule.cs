@@ -10,7 +10,7 @@ public class MandatoryRule : Rule
     public override bool Check(CalendarEvent newCalendarEvent)
     {
         // TODO: собирать из рефлексии
-        var mandatoryAttributes = new[] { typeof(StartTimeEventAttribute), typeof(EndTimeEventAttribute) };
+        var mandatoryAttributes = new[] { typeof(StartDateEventAttribute), typeof(EndDateEventAttribute) };
 
         foreach (var attribute in mandatoryAttributes)
         {
