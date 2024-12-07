@@ -8,10 +8,10 @@ public class TimeRule : RuleHandler
 {
     public override int VerificationPriority => 1;
     
-    protected override bool PerformHandle(CalendarEvent newCalendarEvent)
+    protected override bool PerformHandle(CalendarEvent calendarEvent)
     {
-        var startTime = newCalendarEvent.GetAttribute<StartDateEventAttribute>().StartDate;
-        var endTime = newCalendarEvent.GetAttribute<EndDateEventAttribute>().EndDate;
+        var startTime = calendarEvent.GetRequiredAttribute<StartDateEventAttribute>().StartDate;
+        var endTime = calendarEvent.GetRequiredAttribute<EndDateEventAttribute>().EndDate;
 
         return startTime < endTime;
     }

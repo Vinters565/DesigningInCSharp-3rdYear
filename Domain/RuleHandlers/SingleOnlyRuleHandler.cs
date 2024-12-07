@@ -11,13 +11,13 @@ public class SingleOnlyRuleHandler(ICalendarEventRepository calendarEventReposit
 
     protected override bool PerformHandle(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.TryGetAttribute<SingleOnlyEventAttribute>(out _))
+        if (!calendarEvent.ContainsAttribute<SingleOnlyEventAttribute>())
         {
             return true;
         }
 
-        var start = calendarEvent.GetAttribute<StartDateEventAttribute>().StartDate;
-        var end = calendarEvent.GetAttribute<EndDateEventAttribute>().EndDate;
+        var start = calendarEvent.GetRequiredAttribute<StartDateEventAttribute>().StartDate;
+        var end = calendarEvent.GetRequiredAttribute<EndDateEventAttribute>().EndDate;
 
         return !calendarEventRepository.Any(start, end);
     }

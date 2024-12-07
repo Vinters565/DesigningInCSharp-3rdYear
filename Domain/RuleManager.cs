@@ -1,4 +1,3 @@
-using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Domain.RuleHandlers;
@@ -9,18 +8,12 @@ public static class RuleManager
 {
     public static bool TryCheckEvent(CalendarEvent calendarEvent, out string message)
     {
-        var ruleHandler = GetActiveRuleChain();
+        var ruleChain = GetActiveRuleChain();
 
-        var success = ruleHandler.Handle(calendarEvent, out var failedRule);
-
-        if (success)
-        {
-            message = "Правила применены";
-            return true;
-        }
+        var success = ruleChain.Handle(calendarEvent, out var failedRule);
         
-        message = $"Несовместимое правило: {failedRule}";
-        return false;
+        message = success ? "Правила применены" : $"Несовместимое правило: {failedRule}";
+        return success;
     }
 
     private static IRuleHandler GetActiveRuleChain()
