@@ -1,15 +1,14 @@
-using SchedulePlanner.Domain.CalendarEventAttributes;
-using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.RuleHandlers;
+namespace SchedulePlanner.Domain.Rules;
 
-public class SingleOnlyRuleHandler(ICalendarEventRepository calendarEventRepository) : RuleHandler
+public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepository) : IEventRule
 {
-    public override int VerificationPriority => 2;
+    public int Priority => 2;
 
-    protected override bool PerformHandle(CalendarEvent calendarEvent)
+    public bool Check(CalendarEvent calendarEvent)
     {
         if (!calendarEvent.ContainsAttribute<SingleOnlyEventAttribute>())
         {

@@ -1,7 +1,6 @@
 using SchedulePlanner.Domain.Common;
-using SchedulePlanner.Domain.Entities;
 
-namespace SchedulePlanner.Domain.CalendarEventAttributes;
+namespace SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 
 public class SingleOnlyEventAttribute(bool isSingleOnly) : CalendarEventAttribute("SingleOnly")
 {

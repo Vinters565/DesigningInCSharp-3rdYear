@@ -1,6 +1,6 @@
 namespace SchedulePlanner.Domain.Entities;
 
-public class PublicCalendar(Guid userId) : Calendar
+public class PublicCalendar(Guid[] userIds) : Calendar
 {
-    public Guid UserId { get; } = userId;
+    public Guid[] UserIds { get; } = userIds;
 }

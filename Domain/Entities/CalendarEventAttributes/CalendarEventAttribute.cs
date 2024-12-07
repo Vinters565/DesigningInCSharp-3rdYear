@@ -1,4 +1,4 @@
-namespace SchedulePlanner.Domain.Common;
+namespace SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 
 public abstract class CalendarEventAttribute(string name)
 {

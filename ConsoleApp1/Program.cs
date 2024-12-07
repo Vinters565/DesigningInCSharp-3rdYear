@@ -1,6 +1,7 @@
 ﻿using SchedulePlanner.Domain;
-using SchedulePlanner.Domain.CalendarEventAttributes;
+using SchedulePlanner.Domain.Builders;
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 
 var newEvent = new CalendarEventBuilder( new CalendarEvent())
     .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 15, 0, 0)))
