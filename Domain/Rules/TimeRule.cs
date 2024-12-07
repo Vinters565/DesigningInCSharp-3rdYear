@@ -1,3 +1,4 @@
+using SchedulePlanner.Domain.CalendarEventAttributes;
 using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Domain.Rules;
@@ -8,8 +9,8 @@ public class TimeRule : Rule
 
     public override bool Check(CalendarEvent newCalendarEvent)
     {
-        var startTime = (TimeOnly)newCalendarEvent.Attributes["StartTime"].Value;
-        var endTime = (TimeOnly)newCalendarEvent.Attributes["EndTime"].Value;
+        var startTime = newCalendarEvent.GetAttribute<StartTimeEventAttribute>().StartTime;
+        var endTime = newCalendarEvent.GetAttribute<EndTimeEventAttribute>().EndTime;
 
         return startTime < endTime;
     }

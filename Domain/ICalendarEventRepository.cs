@@ -27,8 +27,8 @@ public class CalendarEventRepository : ICalendarEventRepository
     public CalendarEvent[] GetEvents(TimeOnly start, TimeOnly end)
     {
         return events
-            .Where(e => (TimeOnly)e.Attributes["StartTime"].Value > start 
-                        || (TimeOnly)e.Attributes["StartTime"].Value < end)
+            .Where(e => e.GetAttribute<StartTimeEventAttribute>().StartTime > start 
+                        || e.GetAttribute<StartTimeEventAttribute>().StartTime < end)
             .ToArray();
     }
 }

@@ -12,7 +12,7 @@ public class CalendarEventBuilder
         CalendarEvent = calendarEvent;
     }
 
-    public CalendarEventBuilder AddAttribute(CalendarEventAttribute newAttribute)
+    public CalendarEventBuilder AddAttribute<T>(T newAttribute) where T : CalendarEventAttribute
     {
         CalendarEvent.AddAttribute(newAttribute);
         return this;

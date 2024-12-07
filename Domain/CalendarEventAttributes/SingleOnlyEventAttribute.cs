@@ -3,6 +3,7 @@ using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Domain.CalendarEventAttributes;
 
-public class SingleOnlyEventAttribute(bool isSingleOnly) : CalendarEventAttribute("SingleOnly", isSingleOnly)
+public class SingleOnlyEventAttribute(bool isSingleOnly) : CalendarEventAttribute("SingleOnly")
 {
+    public bool IsSingleOnly { get; } = isSingleOnly;
 }

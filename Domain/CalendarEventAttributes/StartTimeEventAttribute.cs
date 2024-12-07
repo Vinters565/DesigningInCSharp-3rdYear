@@ -3,10 +3,7 @@ using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Domain.CalendarEventAttributes;
 
-public class StartTimeEventAttribute : CalendarEventAttribute, IMandatory
+public class StartTimeEventAttribute(TimeOnly start) : CalendarEventAttribute("StartTime"), IMandatory
 {
-    public StartTimeEventAttribute(TimeOnly start) : base("StartTime", start)
-    {
-
-    }
+    public TimeOnly StartTime { get; } = start;
 }

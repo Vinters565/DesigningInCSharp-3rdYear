@@ -1,3 +1,4 @@
+using SchedulePlanner.Domain.CalendarEventAttributes;
 using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Domain.Rules;
@@ -8,13 +9,13 @@ public class SingleOnlyRule(ICalendarEventRepository calendarEventRepository) : 
     
     public override bool Check(CalendarEvent newCalendarEvent)
     {
-        if (!newCalendarEvent.Attributes.TryGetValue("SingleOnly", out var singleOnly))
+        if (!newCalendarEvent.TryGetAttribute<SingleOnlyEventAttribute>(out _))
         {
             return true;
         }
 
-        var start = (TimeOnly)newCalendarEvent.Attributes["StartTime"].Value;
-        var end = (TimeOnly)newCalendarEvent.Attributes["EndTime"].Value;
+        var start = newCalendarEvent.GetAttribute<StartTimeEventAttribute>().StartTime;
+        var end = newCalendarEvent.GetAttribute<EndTimeEventAttribute>().EndTime;
 
         var events = calendarEventRepository.GetEvents(start, end);
 
