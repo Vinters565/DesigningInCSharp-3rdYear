@@ -6,6 +6,8 @@ namespace SchedulePlanner.Domain.Interfaces;
 public interface ICalendarEventRepository
 {
     public CalendarEvent[] GetEvents(DateTime start, DateTime end);
+
+    public bool Any(DateTime start, DateTime end);
 }
 
 public class CalendarEventRepository : ICalendarEventRepository
@@ -30,5 +32,12 @@ public class CalendarEventRepository : ICalendarEventRepository
             .Where(e => e.GetAttribute<StartDateEventAttribute>().StartDate > start 
                         || e.GetAttribute<StartDateEventAttribute>().StartDate < end)
             .ToArray();
+    }
+
+    public bool Any(DateTime start, DateTime end)
+    {
+        return events
+            .Any(e => e.GetAttribute<StartDateEventAttribute>().StartDate > start 
+                        || e.GetAttribute<StartDateEventAttribute>().StartDate < end);
     }
 }

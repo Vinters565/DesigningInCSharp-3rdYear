@@ -2,23 +2,17 @@ using SchedulePlanner.Domain.CalendarEventAttributes;
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
 
-namespace SchedulePlanner.Domain.Rules;
+namespace SchedulePlanner.Domain.RuleHandlers;
 
-public class MandatoryRule : Rule
+public class MandatoryRuleHandler : RuleHandler
 {
     public override int VerificationPriority => 0;
 
-    public override bool Check(CalendarEvent newCalendarEvent)
+    protected override bool PerformHandle(CalendarEvent newCalendarEvent)
     {
         // TODO: собирать из рефлексии
         var mandatoryAttributes = new[] { typeof(StartDateEventAttribute), typeof(EndDateEventAttribute) };
 
-        foreach (var attribute in mandatoryAttributes)
-        {
-            if (!newCalendarEvent.ContainsAttribute(attribute))
-                return false;
-        }
-
-        return true;
+        return mandatoryAttributes.All(newCalendarEvent.ContainsAttribute);
     }
 }

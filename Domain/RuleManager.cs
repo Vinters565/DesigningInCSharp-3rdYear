@@ -1,31 +1,34 @@
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
-using SchedulePlanner.Domain.Rules;
+using SchedulePlanner.Domain.RuleHandlers;
 
 namespace SchedulePlanner.Domain;
 
 public static class RuleManager
 {
-    private static Dictionary<Rule, bool> ruleData { get; } = new()
-    {
-        { new MandatoryRule(), true },
-        { new TimeRule(), true },
-        { new SingleOnlyRule(new CalendarEventRepository()), true }
-    };
-
     public static bool TryCheckEvent(CalendarEvent calendarEvent, out string message)
     {
-        foreach (var (rule, _) in ruleData.Where(r => r.Value))
+        var ruleHandler = GetActiveRuleChain();
+
+        var success = ruleHandler.Handle(calendarEvent, out var failedRule);
+
+        if (success)
         {
-            if (!rule.Check(calendarEvent))
-            {
-                message = $"Несовместимое правило: {rule}";
-                return false;
-            }
+            message = "Правила применены";
+            return true;
         }
-    
-        message = "Правила применены";
-        return true;
-    } 
+        
+        message = $"Несовместимое правило: {failedRule}";
+        return false;
+    }
+
+    private static IRuleHandler GetActiveRuleChain()
+    {
+        var ruleHandler = new MandatoryRuleHandler();
+        ruleHandler.Next = new TimeRule();
+        ruleHandler.Next.Next = new SingleOnlyRuleHandler(new CalendarEventRepository());
+
+        return ruleHandler;
+    }
 }
