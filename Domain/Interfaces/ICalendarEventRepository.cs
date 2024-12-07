@@ -1,7 +1,7 @@
 using SchedulePlanner.Domain.CalendarEventAttributes;
 using SchedulePlanner.Domain.Entities;
 
-namespace SchedulePlanner.Domain;
+namespace SchedulePlanner.Domain.Interfaces;
 
 public interface ICalendarEventRepository
 {

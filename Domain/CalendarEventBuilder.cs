@@ -24,13 +24,6 @@ public class CalendarEventBuilder
         var success = RuleManager.TryCheckEvent(CalendarEvent, out var message);
 
         Console.WriteLine(message);
-        if (success)
-        {
-            return CalendarEvent;
-        }
-        else
-        {
-            return null;
-        }
+        return success ? CalendarEvent : null;
     }
 }

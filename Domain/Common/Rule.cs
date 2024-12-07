@@ -1,6 +1,6 @@
 using SchedulePlanner.Domain.Entities;
 
-namespace SchedulePlanner.Domain;
+namespace SchedulePlanner.Domain.Common;
 
 public abstract class Rule
 {

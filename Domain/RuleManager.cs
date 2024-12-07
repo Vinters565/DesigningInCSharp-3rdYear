@@ -1,11 +1,13 @@
+using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Domain.Rules;
 
 namespace SchedulePlanner.Domain;
 
 public static class RuleManager
 {
-    public static Dictionary<Rule, bool> RuleData { get; } = new Dictionary<Rule, bool>()
+    private static Dictionary<Rule, bool> ruleData { get; } = new()
     {
         { new MandatoryRule(), true },
         { new TimeRule(), true },
@@ -14,7 +16,7 @@ public static class RuleManager
 
     public static bool TryCheckEvent(CalendarEvent calendarEvent, out string message)
     {
-        foreach (var (rule, _) in RuleData.Where(r => r.Value))
+        foreach (var (rule, _) in ruleData.Where(r => r.Value))
         {
             if (!rule.Check(calendarEvent))
             {

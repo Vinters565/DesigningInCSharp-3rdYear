@@ -22,10 +22,10 @@ public class CalendarEvent : Entity<Guid>
         return (T)attributes[typeof(T)];
     }
 
-    public bool TryGetAttribute<T>(out T? value) where T : CalendarEventAttribute
+    public bool TryGetAttribute<T>(out T? attribute) where T : CalendarEventAttribute
     {
-        var success = attributes.TryGetValue(typeof(T), out var attribute);
-        value = (T?)attribute;
+        var success = attributes.TryGetValue(typeof(T), out var value);
+        attribute = (T?)value;
         return success;
     }
 

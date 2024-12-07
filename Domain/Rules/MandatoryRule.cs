@@ -1,4 +1,5 @@
 using SchedulePlanner.Domain.CalendarEventAttributes;
+using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Domain.Rules;
