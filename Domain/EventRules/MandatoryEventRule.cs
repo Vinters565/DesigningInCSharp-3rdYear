@@ -1,7 +1,6 @@
 using System.Reflection;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.EventRules;
 

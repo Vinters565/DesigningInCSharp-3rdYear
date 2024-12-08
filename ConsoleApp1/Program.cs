@@ -1,13 +1,19 @@
-﻿using SchedulePlanner.Domain;
+﻿using Application;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using SchedulePlanner.Domain;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.EventRules;
-using SchedulePlanner.Domain.Interfaces;
 
-var ruleChain = new EventRuleChain()
-    .AddNextEventRule(new MandatoryEventRule())
-    .AddNextEventRule(new TimeEventRule())
-    .AddNextEventRule(new SingleOnlyEventRule(new CalendarEventRepository()));
+var services = new ServiceCollection();
+
+services.AddInfrastructureLayer();
+services.AddApplicationLayer();
+
+var serviceProvider = services.BuildServiceProvider();
+
+var ruleChain = serviceProvider.GetRequiredService<IEventRuleChain>();
 
 var newEvent = new CalendarEventBuilder(new CalendarEvent(Guid.NewGuid()), ruleChain)
     .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 15, 0, 0)))
