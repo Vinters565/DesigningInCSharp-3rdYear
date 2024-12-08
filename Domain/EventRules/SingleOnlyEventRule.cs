@@ -1,5 +1,5 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
+using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.EventRules;
@@ -10,7 +10,7 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
 
     public bool Check(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.ContainsAttribute<SingleOnlyEventAttribute>())
+        if (!calendarEvent.HasAttribute<SingleOnlyEventAttribute>())
         {
             return true;
         }

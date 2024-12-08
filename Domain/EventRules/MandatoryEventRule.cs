@@ -1,5 +1,7 @@
+using System.Reflection;
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
+using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.EventRules;
 
@@ -7,11 +9,18 @@ public class MandatoryEventRule : IEventRule
 {
     public int Priority => 0;
 
+    private readonly Type[] mandatoryAttributeTypes;
+    
+    public MandatoryEventRule()
+    {
+        mandatoryAttributeTypes = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => typeof(IMandatoryEventAttribute).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+            .ToArray();
+    }
+    
     public bool Check(CalendarEvent newCalendarEvent)
     {
-        // TODO: собирать из рефлексии
-        var mandatoryAttributes = new[] { typeof(StartDateEventAttribute), typeof(EndDateEventAttribute) };
-
-        return mandatoryAttributes.All(newCalendarEvent.ContainsAttribute);
+        return mandatoryAttributeTypes.All(newCalendarEvent.HasAttribute);
     }
 }

@@ -1,5 +1,5 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
+using SchedulePlanner.Domain.EventAttributes;
 
 namespace SchedulePlanner.Domain.Interfaces;
 

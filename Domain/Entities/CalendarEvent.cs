@@ -1,5 +1,5 @@
 using SchedulePlanner.Domain.Common;
-using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
+using SchedulePlanner.Domain.EventAttributes;
 
 namespace SchedulePlanner.Domain.Entities;
 
@@ -7,15 +7,15 @@ public class CalendarEvent : Entity<Guid>
 {
     public Guid UserId { get; }
     
-    private readonly Dictionary<Type, CalendarEventAttribute> attributes = new();
-    public IReadOnlyDictionary<Type, CalendarEventAttribute> Attributes => attributes;
+    private readonly Dictionary<Type, IEventAttribute> attributes = new();
+    public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
 
     public CalendarEvent(Guid userId) : base(Guid.NewGuid())
     {
         UserId = userId;
     }
 
-    public CalendarEvent AddAttribute<T>(T newAttribute) where T : CalendarEventAttribute
+    public CalendarEvent AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {
         var key = typeof(T);
 
@@ -27,7 +27,7 @@ public class CalendarEvent : Entity<Guid>
         return this;
     }
 
-    public CalendarEvent RemoveAttribute<T>() where T : CalendarEventAttribute
+    public CalendarEvent RemoveAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
 
@@ -40,23 +40,23 @@ public class CalendarEvent : Entity<Guid>
         return this;
     }
 
-    public T? GetAttribute<T>() where T : CalendarEventAttribute
+    public T? GetAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
 
         return attributes.TryGetValue(key, out var attribute) 
             ? (T?)attribute 
-            : null;
+            : default;
     }
 
-    public T GetRequiredAttribute<T>() where T : CalendarEventAttribute
+    public T GetRequiredAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
 
         return (T)attributes[key];
     }
 
-    public bool TryGetAttribute<T>(out T? attribute) where T : CalendarEventAttribute
+    public bool TryGetAttribute<T>(out T? attribute) where T : IEventAttribute
     {
         var key = typeof(T);
         var success = attributes.TryGetValue(key, out var value);
@@ -64,8 +64,8 @@ public class CalendarEvent : Entity<Guid>
         return success;
     }
 
-    public bool ContainsAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
+    public bool HasAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
 
-    public bool ContainsAttribute<T>() where T : CalendarEventAttribute 
+    public bool HasAttribute<T>() where T : IEventAttribute 
         => attributes.ContainsKey(typeof(T));
 }
