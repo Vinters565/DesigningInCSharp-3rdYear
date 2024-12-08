@@ -1,7 +1,7 @@
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 
-namespace SchedulePlanner.Domain.Rules;
+namespace SchedulePlanner.Domain.EventRules;
 
 public class TimeEventRule : IEventRule
 {

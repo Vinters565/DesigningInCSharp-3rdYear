@@ -1,7 +1,7 @@
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
+using SchedulePlanner.Domain.EventRules;
 using SchedulePlanner.Domain.Interfaces;
-using SchedulePlanner.Domain.Rules;
 
 namespace SchedulePlanner.Domain.Builders;
 

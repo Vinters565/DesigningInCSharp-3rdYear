@@ -5,10 +5,14 @@ namespace SchedulePlanner.Domain.Entities;
 
 public class CalendarEvent : Entity<Guid>
 {
+    public Guid UserId { get; }
+    
     private readonly Dictionary<Type, CalendarEventAttribute> attributes = new();
+    public IReadOnlyDictionary<Type, CalendarEventAttribute> Attributes => attributes;
 
-    public CalendarEvent() : base(Guid.NewGuid())
+    public CalendarEvent(Guid userId) : base(Guid.NewGuid())
     {
+        UserId = userId;
     }
 
     public CalendarEvent AddAttribute<T>(T newAttribute) where T : CalendarEventAttribute

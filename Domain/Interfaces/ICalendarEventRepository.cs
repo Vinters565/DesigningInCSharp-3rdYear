@@ -14,14 +14,14 @@ public class CalendarEventRepository : ICalendarEventRepository
 {
     private CalendarEvent[] events = new[]
     {
-        new CalendarEvent()
+        new CalendarEvent(Guid.NewGuid())
             .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 10, 0, 0)))
             .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 12, 0, 0))),
-        new CalendarEvent()
+        new CalendarEvent(Guid.NewGuid())
             .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 14, 0, 0)))
             .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 18, 0, 0)))
             .AddAttribute(new SingleOnlyEventAttribute(true)),
-        new CalendarEvent()
+        new CalendarEvent(Guid.NewGuid())
             .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 19, 0, 0)))
             .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 21, 0, 0))),
     };

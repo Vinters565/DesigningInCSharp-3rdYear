@@ -2,7 +2,7 @@ using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Entities.CalendarEventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.Rules;
+namespace SchedulePlanner.Domain.EventRules;
 
 public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepository) : IEventRule
 {
