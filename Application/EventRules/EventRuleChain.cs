@@ -3,7 +3,7 @@ using SchedulePlanner.Domain.EventRules;
 
 namespace SchedulePlanner.Application.EventRules;
 
-public class EventRuleChain : IEventRuleChain
+public class EventRuleChain : IEventRuleChecker
 {
     private EventRuleHandler? firstRuleHandler;
     private EventRuleHandler? currentRuleHandler;

@@ -16,7 +16,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddEventRuleChain(this IServiceCollection services)
     {
-        services.AddSingleton<IEventRuleChain>(provider =>
+        services.AddSingleton<IEventRuleChecker, EventRuleChain>(provider =>
         {
             var calendarEventRepository = provider.GetRequiredService<ICalendarEventRepository>();
     

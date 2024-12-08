@@ -15,9 +15,9 @@ services.AddApplicationLayer();
 
 var serviceProvider = services.BuildServiceProvider();
 
-var ruleChain = serviceProvider.GetRequiredService<IEventRuleChain>();
+var ruleChecker = serviceProvider.GetRequiredService<IEventRuleChecker>();
 
-var newEvent = new CalendarEventAttributeApplier(new CalendarEvent(Guid.NewGuid()), ruleChain)
+var newEvent = new CalendarEventAttributeApplier(new CalendarEvent(Guid.NewGuid()), ruleChecker)
     .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 15, 0, 0)))
     .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 16, 30, 0)))
     //.AddAttribute(new SingleOnlyEventAttribute(true))

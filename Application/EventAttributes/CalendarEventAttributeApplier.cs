@@ -5,7 +5,7 @@ using SchedulePlanner.Domain.EventRules;
 
 namespace SchedulePlanner.Application.EventAttributes;
 
-public class CalendarEventAttributeApplier(CalendarEvent calendarEvent, IEventRuleChain eventRuleChain)
+public class CalendarEventAttributeApplier(CalendarEvent calendarEvent, IEventRuleChecker eventRuleChecker)
 {
     public CalendarEventAttributeApplier AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {
@@ -22,7 +22,7 @@ public class CalendarEventAttributeApplier(CalendarEvent calendarEvent, IEventRu
     //TODO: возвращать Result
     public CalendarEvent? Apply()
     {
-        var success = eventRuleChain.Check(calendarEvent, out var failedRule);
+        var success = eventRuleChecker.Check(calendarEvent, out var failedRule);
 
         var message = success ? "Атрибуты успешно применены" : $"Правило нарушено: {failedRule ?? "none"}";
         Console.WriteLine(message);
