@@ -2,7 +2,7 @@ using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace Infrastructure.Repositories;
+namespace SchedulePlanner.Infrastructure.Repositories;
 
 public class CalendarEventRepository : ICalendarEventRepository
 {

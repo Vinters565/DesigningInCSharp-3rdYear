@@ -1,6 +1,7 @@
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.EventRules;
 
-namespace SchedulePlanner.Domain.EventRules;
+namespace SchedulePlanner.Application.EventRules;
 
 public class EventRuleChain : IEventRuleChain
 {

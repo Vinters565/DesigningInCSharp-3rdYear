@@ -1,8 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
+using SchedulePlanner.Application.EventRules;
 using SchedulePlanner.Domain.EventRules;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace Application;
+namespace SchedulePlanner.Application;
 
 public static class DependencyInjection
 {

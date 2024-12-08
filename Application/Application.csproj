@@ -4,14 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AssemblyName>SchedulePlanner.Application</AssemblyName>
+        <RootNamespace>SchedulePlanner.Application</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="EventRules\" />
     </ItemGroup>
 
     <ItemGroup>
