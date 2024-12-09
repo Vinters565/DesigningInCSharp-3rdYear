@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application;
-using SchedulePlanner.Application.EventAttributes;
 using SchedulePlanner.Application.EventRules;
 using SchedulePlanner.Domain;
 using SchedulePlanner.Domain.Entities;
@@ -17,9 +16,12 @@ var serviceProvider = services.BuildServiceProvider();
 
 var ruleChecker = serviceProvider.GetRequiredService<IEventRuleChecker>();
 
-var newEvent = new CalendarEventBuilder(new CalendarEvent(Guid.NewGuid()), ruleChecker)
+var newEventResult = new CalendarEventBuilder(new CalendarEvent(Guid.NewGuid()), ruleChecker)
     .AddAttribute(new StartDateEventAttribute(new DateTime(2024, 12, 6, 15, 0, 0)))
     .AddAttribute(new EndDateEventAttribute(new DateTime(2024, 12, 6, 16, 30, 0)))
-    //.AddAttribute(new SingleOnlyEventAttribute(true))
-    //.RemoveAttribute<EndDateEventAttribute>()
+    .AddAttribute(new SingleOnlyEventAttribute(true))
+    .RemoveAttribute<EndDateEventAttribute>()
     .ApplyRules();
+
+if (newEventResult.IsError) Console.WriteLine(newEventResult.ErrorMessage);
+else Console.WriteLine("Атрибуты успешно применены");

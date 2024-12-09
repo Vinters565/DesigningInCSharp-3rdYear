@@ -7,11 +7,11 @@ public class EventRuleHandler(IEventRule rule)
 {
     public EventRuleHandler? Next { get; set; }
 
-    public bool Handle(CalendarEvent calendarEvent, out string? failedRule)
+    public bool Handle(CalendarEvent calendarEvent, out IEventRule? failedRule)
     {
         if (!rule.Check(calendarEvent))
         {
-            failedRule = rule.GetType().Name;
+            failedRule = rule;
             return false;
         }
 

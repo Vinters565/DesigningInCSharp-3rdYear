@@ -1,8 +1,9 @@
 using SchedulePlanner.Application.EventRules;
+using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 
-namespace SchedulePlanner.Application.EventAttributes;
+namespace SchedulePlanner.Application;
 
 public class CalendarEventBuilder(CalendarEvent calendarEvent, IEventRuleChecker eventRuleChecker)
 {
@@ -24,13 +25,10 @@ public class CalendarEventBuilder(CalendarEvent calendarEvent, IEventRuleChecker
         return this;
     }
 
-    //TODO: возвращать Result
-    public CalendarEvent? ApplyRules()
+    public Result<CalendarEvent> ApplyRules()
     {
         var success = eventRuleChecker.Check(calendarEvent, out var failedRule);
 
-        var message = success ? "Атрибуты успешно применены" : $"Правило нарушено: {failedRule ?? "none"}";
-        Console.WriteLine(message);
-        return success ? calendarEvent : null;
+        return success ? calendarEvent : Error.Failure($"Правило нарушено: {failedRule?.GetType().Name ?? "None"}");
     }
 }

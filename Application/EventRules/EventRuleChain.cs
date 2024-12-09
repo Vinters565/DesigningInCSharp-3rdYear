@@ -25,7 +25,7 @@ public class EventRuleChain : IEventRuleChecker
         return this;
     }
 
-    public bool Check(CalendarEvent calendarEvent, out string? failedRule)
+    public bool Check(CalendarEvent calendarEvent, out IEventRule? failedRule)
     {
         if (firstRuleHandler == null)
         {
