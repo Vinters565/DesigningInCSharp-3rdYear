@@ -1,26 +1,31 @@
 using SchedulePlanner.Application.EventRules;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.EventRules;
 
 namespace SchedulePlanner.Application.EventAttributes;
 
-public class CalendarEventAttributeApplier(CalendarEvent calendarEvent, IEventRuleChecker eventRuleChecker)
+public class CalendarEventBuilder(CalendarEvent calendarEvent, IEventRuleChecker eventRuleChecker)
 {
-    public CalendarEventAttributeApplier AddAttribute<T>(T newAttribute) where T : IEventAttribute
+    public CalendarEventBuilder AddAttribute<T>(T attribute) where T : IEventAttribute
     {
-        calendarEvent.AddAttribute(newAttribute);
+        calendarEvent.AddAttribute(attribute);
         return this;
     }
 
-    public CalendarEventAttributeApplier RemoveAttribute<T>() where T : IEventAttribute
+    public CalendarEventBuilder WithAttribute<T>(T attribute) where T : IEventAttribute
+    {
+        calendarEvent.UpdateAttribute(attribute);
+        return this;
+    }
+
+    public CalendarEventBuilder RemoveAttribute<T>() where T : IEventAttribute
     {
         calendarEvent.RemoveAttribute<T>();
         return this;
     }
 
     //TODO: возвращать Result
-    public CalendarEvent? Apply()
+    public CalendarEvent? ApplyRules()
     {
         var success = eventRuleChecker.Check(calendarEvent, out var failedRule);
 

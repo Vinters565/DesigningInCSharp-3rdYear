@@ -27,6 +27,12 @@ public class CalendarEvent : Entity<Guid>
         return this;
     }
 
+    public void UpdateAttribute<T>(T attribute) where T : IEventAttribute
+    {
+        var key = typeof(T);
+        attributes[key] = attribute;
+    }
+
     public CalendarEvent RemoveAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
