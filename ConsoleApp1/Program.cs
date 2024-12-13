@@ -23,5 +23,5 @@ var newEventResult = new CalendarEventBuilder(new CalendarEvent(Guid.NewGuid()),
     .RemoveAttribute<EndDateEventAttribute>()
     .ApplyRules();
 
-if (newEventResult.IsError) Console.WriteLine(newEventResult.ErrorMessage);
+if (newEventResult.IsError) Console.WriteLine(newEventResult.Error.Message);
 else Console.WriteLine("Атрибуты успешно применены");

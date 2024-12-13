@@ -2,9 +2,15 @@ namespace SchedulePlanner.Domain.Common.Results;
 
 public class Result<T>
 {
-    private readonly Error? error;
-
     private readonly T? value;
+    
+    public T Value => value!;
+
+    private readonly Error? error;
+ 
+    public Error Error => error!;
+
+    public bool IsError => error != null;
 
     private Result(T value)
     {
@@ -16,18 +22,7 @@ public class Result<T>
         this.error = error;
     }
 
-    public Error Error => error!;
-
-    public string ErrorMessage => error?.Message ?? "";
-
-    public T Value => value!;
-
-    public static Result<T> Success(T value)
-    {
-        return new Result<T>(value);
-    }
-
-    public bool IsError => error != null;
+    public static Result<T> Success(T value) => new(value);
 
     public static implicit operator Result<T>(T value)
     {
@@ -44,6 +39,10 @@ public class Result
 {
     private readonly Error? error;
 
+    public Error Error => error!;
+    
+    public bool IsError => error != null;
+    
     private Result()
     {
     }
@@ -52,17 +51,8 @@ public class Result
     {
         this.error = error;
     }
-
-    public Error Error => error!;
-
-    public string ErrorMessage => error?.Message ?? "";
-
-    public static Result Success()
-    {
-        return new Result();
-    }
-
-    public bool IsError => error != null;
+    
+    public static Result Success() => new();
 
     public static implicit operator Result(Error error)
     {

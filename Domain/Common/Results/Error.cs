@@ -1,13 +1,20 @@
+using System.Net;
+
 namespace SchedulePlanner.Domain.Common.Results;
 
 public class Error
 {
-    private Error(string message)
+    public string Message { get; }
+    
+    public HttpStatusCode HttpStatus { get; }
+    
+    protected Error(string message, HttpStatusCode httpStatus)
     {
         Message = message;
+        HttpStatus = httpStatus;
     }
-
-    public string Message { get; }
-
-    public static Error Failure(string message) => new(message);
+    
+    public static Error NotFound(string message = "") => new(message, HttpStatusCode.NotFound);
+    
+    public static Error Failure(string message = "") => new(message, HttpStatusCode.BadRequest);
 }
