@@ -7,12 +7,18 @@ public class CalendarEvent : Entity<Guid>
 {
     public Guid UserId { get; }
     
+    public DateTime StartDate { get; }
+    
+    public DateTime EndDate { get; }
+    
     private readonly Dictionary<Type, IEventAttribute> attributes = new();
     public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
 
-    public CalendarEvent(Guid userId) : base(Guid.NewGuid())
+    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate) : base(Guid.NewGuid())
     {
         UserId = userId;
+        StartDate = startDate;
+        EndDate = endDate;
     }
 
     public CalendarEvent AddAttribute<T>(T newAttribute) where T : IEventAttribute

@@ -9,8 +9,8 @@ public class TimeEventRule : IEventRule
     
     public bool Check(CalendarEvent calendarEvent)
     {
-        var startTime = calendarEvent.GetRequiredAttribute<StartDateEventAttribute>().StartDate;
-        var endTime = calendarEvent.GetRequiredAttribute<EndDateEventAttribute>().EndDate;
+        var startTime = calendarEvent.StartDate;
+        var endTime = calendarEvent.EndDate;
 
         return startTime < endTime;
     }
