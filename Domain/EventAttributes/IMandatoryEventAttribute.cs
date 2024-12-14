@@ -1,5 +1,5 @@
 namespace SchedulePlanner.Domain.EventAttributes;
 
-public interface IMandatoryEventAttribute : IEventAttribute
+public interface IMandatoryEventAttribute
 {
 }

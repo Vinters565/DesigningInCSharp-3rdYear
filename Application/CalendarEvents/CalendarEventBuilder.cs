@@ -3,7 +3,7 @@ using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 
-namespace SchedulePlanner.Application;
+namespace SchedulePlanner.Application.CalendarEvents;
 
 public class CalendarEventBuilder(CalendarEvent calendarEvent, IEventRuleChecker eventRuleChecker)
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application;
+using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.EventRules;
 using SchedulePlanner.Domain;
 using SchedulePlanner.Domain.Entities;
