@@ -20,6 +20,14 @@ public class CalendarEvent : Entity<Guid>
         StartDate = startDate;
         EndDate = endDate;
     }
+    
+    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate, Dictionary<Type, IEventAttribute> attributes) : base(Guid.NewGuid())
+    {
+        UserId = userId;
+        StartDate = startDate;
+        EndDate = endDate;
+        this.attributes = attributes;
+    }
 
     public CalendarEvent AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {

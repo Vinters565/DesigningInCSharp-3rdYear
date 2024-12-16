@@ -1,12 +1,20 @@
-using Api.Converters;
+using SchedulePlanner.Application.Converters;
 using SchedulePlanner.Application;
 using SchedulePlanner.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Application.EventRules;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
+        options.JsonSerializerOptions.Converters.Add(new EventAttributeIReadOnlyDictionaryConverter());
         options.JsonSerializerOptions.Converters.Add(new EventAttributeDictionaryConverter());
     });
 
@@ -15,7 +23,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureLayer();
 builder.Services.AddApplicationLayer();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -25,9 +32,49 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+var ruleChecker = app.Services.GetRequiredService<IEventRuleChecker>();
+var repository = app.Services.GetRequiredService<ICalendarEventRepository>();
+repository.AddEvent(
+    new CalendarEvent(
+        Guid.NewGuid(),
+        new DateTime(2024, 12, 6, 10, 0, 0),
+        new DateTime(2024, 12, 6, 12, 0, 0)));
+
+repository.AddEvent(
+    new CalendarEvent(
+        Guid.NewGuid(),
+        new DateTime(2024, 12, 6, 14, 0, 0),
+        new DateTime(2024, 12, 6, 18, 0, 0))
+        .AddAttribute(new SingleOnlyEventAttribute(true)));
+
+repository.AddEvent(
+    new CalendarEvent(
+        Guid.NewGuid(),
+        new DateTime(2024, 12, 6, 19, 0, 0),
+        new DateTime(2024, 12, 6, 21, 0, 0)));
+
+var newEventResult = new CalendarEventBuilder(new CalendarEvent(
+        Guid.NewGuid(),
+        new DateTime(2024, 12, 6, 15, 0, 0),
+        new DateTime(2024, 12, 6, 16, 30, 0)), ruleChecker)
+    .AddAttribute(new SingleOnlyEventAttribute(true))
+    .ApplyRules();
+
+if (!newEventResult.IsError)
+{
+    repository.AddEvent(newEventResult.Value);
+}
+
+foreach (var ev in repository.GetAllEvents())
+{
+    Console.WriteLine($"{ev.Id} {ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss")} {ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss")} {ev.Attributes.Select(x => x.Key.Name).FirstOrDefault()}");
+    repository.DeleteEvent(ev.Id.ToString());
+}
+
+if (newEventResult.IsError) Console.WriteLine(newEventResult.Error.Message);
+else Console.WriteLine("Атрибуты успешно применены");
 
 app.Run();
