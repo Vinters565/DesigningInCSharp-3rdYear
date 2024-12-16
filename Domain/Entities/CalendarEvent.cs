@@ -20,8 +20,23 @@ public class CalendarEvent : Entity<Guid>
         StartDate = startDate;
         EndDate = endDate;
     }
-    
+
+    public CalendarEvent(Guid userId, Guid entityId, DateTime startDate, DateTime endDate) : base(entityId)
+    {
+        UserId = userId;
+        StartDate = startDate;
+        EndDate = endDate;
+    }
+
     public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate, Dictionary<Type, IEventAttribute> attributes) : base(Guid.NewGuid())
+    {
+        UserId = userId;
+        StartDate = startDate;
+        EndDate = endDate;
+        this.attributes = attributes;
+    }
+
+    public CalendarEvent(Guid userId, Guid entityId, DateTime startDate, DateTime endDate, Dictionary<Type, IEventAttribute> attributes) : base(entityId)
     {
         UserId = userId;
         StartDate = startDate;

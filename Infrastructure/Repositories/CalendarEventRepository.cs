@@ -26,159 +26,148 @@ public class CalendarEventRepository : ICalendarEventRepository
 
     private void InitializeDatabase()
     {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
+        ExecuteCommands(
+            @"CREATE TABLE IF NOT EXISTS CalendarEvents (
+                Id TEXT PRIMARY KEY,
+                UserId TEXT NOT NULL,
+                StartDate DATETIME NOT NULL,
+                EndDate DATETIME NOT NULL,
+                Attribute TEXT NOT NULL)",
+            new Action<SQLiteCommand>(com => { })
+            );
+    }
 
-            string createTableQuery = @"
-                CREATE TABLE IF NOT EXISTS CalendarEvents (
-                    Id TEXT PRIMARY KEY,
-                    StartDate TEXT NOT NULL,
-                    EndDate TEXT NOT NULL,
-                    Attribute TEXT NOT NULL
-                )";
-
-            using (var command = new SQLiteCommand(createTableQuery, connection))
-            {
-                command.ExecuteNonQuery();
-            }
-        }
+    public void DeleteTable()
+    {
+        ExecuteCommands(
+            "DROP TABLE IF EXISTS CalendarEvents",
+            new Action<SQLiteCommand>(command => command.ExecuteNonQuery())
+            );
     }
 
     public void AddEvent(CalendarEvent newEvent)
     {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-            string insertQuery = "INSERT INTO CalendarEvents (Id, StartDate, EndDate, Attribute) VALUES (@Id, @StartDate, @EndDate, @Attribute)";
-            using (var command = new SQLiteCommand(insertQuery, connection))
+        ExecuteCommands(
+            @"INSERT INTO CalendarEvents (Id, UserId, StartDate, EndDate, Attribute)
+              VALUES (@Id, @UserId, @StartDate, @EndDate, @Attribute)",
+            new Action<SQLiteCommand>(command =>
             {
-                command.Parameters.AddWithValue("@Id", newEvent.Id.ToString());
-                command.Parameters.AddWithValue("@StartDate", newEvent.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.Parameters.AddWithValue("@EndDate", newEvent.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"));
+                command.Parameters.AddWithValue("@Id", newEvent.Id.ToString("D"));
+                command.Parameters.AddWithValue("@UserId", newEvent.UserId.ToString("D"));
+                command.Parameters.AddWithValue("@StartDate", newEvent.StartDate);
+                command.Parameters.AddWithValue("@EndDate", newEvent.EndDate);
                 command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.Attributes, serializeOptions));
-                
-                command.ExecuteNonQuery();
-            }
-        }
+            }));
     }
 
     public List<CalendarEvent> GetAllEvents()
     {
-        var events = new List<CalendarEvent>();
-
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-
-            string selectQuery = "SELECT * FROM CalendarEvents";
-            using (var command = new SQLiteCommand(selectQuery, connection))
-            using (var reader = command.ExecuteReader())
+        return ExecuteCommandsReader(
+            "SELECT * FROM CalendarEvents",
+            new Action<SQLiteCommand>( command => { }),
+            new Func<SQLiteDataReader, List<CalendarEvent>>(reader =>
             {
+                var events = new List<CalendarEvent>();
                 while (reader.Read())
                 {
                     events.Add(new CalendarEvent(
+                        Guid.Parse(reader["UserId"].ToString()!),
                         Guid.Parse(reader["Id"].ToString()!),
-                        Convert.ToDateTime(DateTime.Parse(reader["StartDate"].ToString()!)),
-                        Convert.ToDateTime(DateTime.Parse(reader["EndDate"].ToString()!)),
-                        JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(reader["Attribute"].ToString()!, serializeOptions)?? new Dictionary<Type, IEventAttribute>())
+                        Convert.ToDateTime(reader["StartDate"]),
+                        Convert.ToDateTime(reader["EndDate"]),
+                        JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(reader["Attribute"].ToString()!, serializeOptions)
+                            ?? new Dictionary<Type, IEventAttribute>())
                     );
                 }
-            }
-        }
-
-        return events;
+                return events;
+            }));
     }
 
     public void UpdateEvent(CalendarEvent updatedEvent)
     {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-
-            string updateQuery = @"
-                UPDATE CalendarEvents
-                SET StartDate = @StartDate, EndDate = @EndDate, Attribute = @Attribute
-                WHERE Id = @Id";
-
-            using (var command = new SQLiteCommand(updateQuery, connection))
+        ExecuteCommands(
+            @"UPDATE CalendarEvents
+              SET StartDate = @StartDate, EndDate = @EndDate, Attribute = @Attribute
+              WHERE Id = @Id",
+            new Action<SQLiteCommand>(command =>
             {
-                command.Parameters.AddWithValue("@Id", updatedEvent.Id.ToString());
-                command.Parameters.AddWithValue("@StartDate", updatedEvent.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.Parameters.AddWithValue("@EndDate", updatedEvent.EndDate.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.Parameters.AddWithValue("@Attribute", "");
-
-                command.ExecuteNonQuery();
-            }
-        }
+                command.Parameters.AddWithValue("@Id", updatedEvent.Id.ToString("D"));
+                command.Parameters.AddWithValue("@StartDate", updatedEvent.StartDate);
+                command.Parameters.AddWithValue("@EndDate", updatedEvent.EndDate);
+                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.Attributes, serializeOptions));
+            }));
     }
 
     public void DeleteEvent(string id)
     {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-
-            string deleteQuery = "DELETE FROM CalendarEvents WHERE Id = @Id";
-            using (var command = new SQLiteCommand(deleteQuery, connection))
+        ExecuteCommands(
+            "DELETE FROM CalendarEvents WHERE Id = @Id",
+            new Action<SQLiteCommand>(command =>
             {
                 command.Parameters.AddWithValue("@Id", id);
                 command.ExecuteNonQuery();
-            }
-        }
+            }));
     }
 
     
-    public CalendarEvent[] GetEvents(DateTime start, DateTime end)
+    public List<CalendarEvent> GetEvents(DateTime start, DateTime end)
     {
-        var events = new List<CalendarEvent>();
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-
-            string deleteQuery = "SELECT * FROM CalendarEvents WHERE StartDate > @StartDate or StartDate < @EndDate";
-            using (var command = new SQLiteCommand(deleteQuery, connection))
+        return ExecuteCommandsReader(
+            "SELECT * FROM CalendarEvents WHERE (StartDate <= @EndDate) AND (EndDate >= @StartDate)",
+            new Action<SQLiteCommand>(command => 
             {
-                command.Parameters.AddWithValue("@StartDate", start.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.Parameters.AddWithValue("@EndDate", end.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.ExecuteNonQuery();
-
-                using (var reader = command.ExecuteReader())
+                command.Parameters.AddWithValue("@StartDate", start);
+                command.Parameters.AddWithValue("@EndDate", end);
+            }),
+            new Func<SQLiteDataReader, List<CalendarEvent>>(reader =>
+            {
+                var events = new List<CalendarEvent>();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        events.Add(new CalendarEvent(
-                            Guid.Parse(reader["Id"].ToString()!),
-                            Convert.ToDateTime(DateTime.Parse(reader["StartDate"].ToString()!)),
-                            Convert.ToDateTime(DateTime.Parse(reader["EndDate"].ToString()!)))
-                        );
-                    }
+                    events.Add(new CalendarEvent(
+                        Guid.Parse(reader["UserId"].ToString()!),
+                        Guid.Parse(reader["Id"].ToString()!),
+                        Convert.ToDateTime(reader["StartDate"]),
+                        Convert.ToDateTime(reader["EndDate"]),
+                        JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(reader["Attribute"].ToString()!, serializeOptions)
+                            ?? new Dictionary<Type, IEventAttribute>())
+                    );
                 }
+                return events;
             }
-        }
-        return events.ToArray();
+            ));
     }
 
     public bool Any(DateTime start, DateTime end)
     {
+        return GetEvents(start, end).Count > 0;
+    }
+
+    private void ExecuteCommands(string sqlCommand, Action<SQLiteCommand> action)
+    {
         using (var connection = new SQLiteConnection(connectionString))
         {
             connection.Open();
-
-            string findQuery = "SELECT * FROM CalendarEvents WHERE StartDate > @StartDate or StartDate < @EndDate";
-            using (var command = new SQLiteCommand(findQuery, connection))
+            using (var command = new SQLiteCommand(sqlCommand, connection))
             {
-                command.Parameters.AddWithValue("@StartDate", start.ToString("yyyy-MM-ddTHH:mm:ss"));
-                command.Parameters.AddWithValue("@EndDate", end.ToString("yyyy-MM-ddTHH:mm:ss"));
+                action(command);
                 command.ExecuteNonQuery();
+            }
+        }
+    }
 
+    private T ExecuteCommandsReader<T>(string sqlCommand, Action<SQLiteCommand> action, Func<SQLiteDataReader, T> readFunc)
+    {
+        using (var connection = new SQLiteConnection(connectionString))
+        {
+            connection.Open();
+            using (var command = new SQLiteCommand(sqlCommand, connection))
+            {
+                action(command);
+                command.ExecuteNonQuery();
                 using (var reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
-                    {
-                        return true;
-                    }
-                    return false;
+                    return readFunc(reader);
                 }
             }
         }
