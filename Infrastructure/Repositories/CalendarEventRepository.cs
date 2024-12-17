@@ -113,11 +113,12 @@ public class CalendarEventRepository : ICalendarEventRepository
     public List<CalendarEvent> GetEvents(DateTime start, DateTime end)
     {
         return ExecuteCommandsReader(
-            "SELECT * FROM CalendarEvents WHERE (StartDate <= @EndDate) AND (EndDate >= @StartDate)",
+            @"SELECT * FROM CalendarEvents WHERE (strftime('%Y-%m-%d %H:%M:%S', StartDate) <= @EndDate)
+            AND (strftime('%Y-%m-%d %H:%M:%S', EndDate) >= @StartDate)",
             new Action<SQLiteCommand>(command => 
             {
-                command.Parameters.AddWithValue("@StartDate", start);
-                command.Parameters.AddWithValue("@EndDate", end);
+                command.Parameters.AddWithValue("@StartDate", start.ToString("yyyy-MM-dd HH:mm:ss"));
+                command.Parameters.AddWithValue("@EndDate", end.ToString("yyyy-MM-dd HH:mm:ss"));
             }),
             new Func<SQLiteDataReader, List<CalendarEvent>>(reader =>
             {

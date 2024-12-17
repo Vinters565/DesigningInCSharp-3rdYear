@@ -58,6 +58,11 @@ events.Add(
         new DateTime(2024, 12, 6, 19, 0, 0),
         new DateTime(2024, 12, 6, 21, 0, 0)));
 
+foreach (var ev in events)
+{
+    repository.AddEvent(ev);
+}
+
 var newEventResult = new CalendarEventBuilder(new CalendarEvent(
         Guid.NewGuid(),
         new DateTime(2024, 12, 6, 15, 0, 0),
@@ -72,16 +77,12 @@ if (newEventResult.IsError)
 else
 {
     Console.WriteLine("Атрибуты успешно применены");
-    events.Add(newEventResult.Value);
+    repository.AddEvent(newEventResult.Value);
 }
 
-foreach (var ev in events)
-{
-    repository.AddEvent(ev);
-}
 
 foreach (var ev in repository.GetAllEvents())
-{    
+{
     Console.WriteLine($"{ev.Id} {ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss")} {ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss")} ");
     var atributs = ev.Attributes.Select(x => x.Key.Name).ToList();
     if (atributs.Count != 0)
