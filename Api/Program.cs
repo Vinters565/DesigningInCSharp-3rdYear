@@ -25,15 +25,15 @@ builder.Services.AddInfrastructureLayer();
 builder.Services.AddApplicationLayer();
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-//app.UseHttpsRedirection();
-//app.UseAuthorization();
-//app.MapControllers();
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
 var ruleChecker = app.Services.GetRequiredService<IEventRuleChecker>();
 var repository = app.Services.GetRequiredService<ICalendarEventRepository>();
@@ -63,23 +63,6 @@ foreach (var ev in events)
     repository.AddEvent(ev);
 }
 
-var newEventResult = new CalendarEventBuilder(new CalendarEvent(
-        Guid.NewGuid(),
-        new DateTime(2024, 12, 6, 15, 0, 0),
-        new DateTime(2024, 12, 6, 16, 30, 0)), ruleChecker)
-    .AddAttribute(new SingleOnlyEventAttribute(true))
-    .ApplyRules();
-
-if (newEventResult.IsError)
-{
-    Console.WriteLine(newEventResult.Error.Message);
-}
-else
-{
-    Console.WriteLine("Атрибуты успешно применены");
-    repository.AddEvent(newEventResult.Value);
-}
-
 
 foreach (var ev in repository.GetAllEvents())
 {
@@ -96,4 +79,4 @@ foreach (var ev in repository.GetAllEvents())
     repository.DeleteEvent(ev.Id.ToString("D"));
 }
 
-//app.Run();
+app.Run();
