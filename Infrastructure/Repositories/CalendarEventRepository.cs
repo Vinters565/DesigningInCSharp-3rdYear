@@ -45,6 +45,33 @@ public class CalendarEventRepository : ICalendarEventRepository
             );
     }
 
+    //TODO: заменить на реализацию
+    public Task<List<CalendarEvent>> GetByUserIdAsync(Guid userId)
+    {
+        var events = new List<CalendarEvent>();
+        events.Add(
+            new CalendarEvent(
+                userId,
+                new DateTime(2024, 12, 6, 12, 0, 0),
+                new DateTime(2024, 12, 6, 15, 0, 0)));
+
+        events.Add(
+            new CalendarEvent(
+                    userId,
+                    new DateTime(2024, 12, 6, 15, 0, 0),
+                    new DateTime(2024, 12, 6, 18, 0, 0))
+                .AddAttribute(new SingleOnlyEventAttribute(true))
+                .AddAttribute(new PublicityAttribute(true)));
+
+        events.Add(
+            new CalendarEvent(
+                userId,
+                new DateTime(2024, 12, 6, 19, 0, 0),
+                new DateTime(2024, 12, 6, 21, 0, 0)));
+
+        return Task.FromResult(events);
+    }
+
     public void AddEvent(CalendarEvent newEvent)
     {
         ExecuteCommands(

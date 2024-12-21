@@ -5,6 +5,7 @@ namespace SchedulePlanner.Domain.Interfaces;
 
 public interface ICalendarEventRepository
 {
+    Task<List<CalendarEvent>> GetByUserIdAsync(Guid userId);
     public void AddEvent(CalendarEvent newEvent);
     public List<CalendarEvent> GetAllEvents();
     public void UpdateEvent(CalendarEvent updatedEvent);
