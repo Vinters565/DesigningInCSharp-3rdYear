@@ -24,9 +24,9 @@ public class CalendarEventService(
     {
         //TODO: проверять существование юзера
         var calendarEvent = new CalendarEvent(userId, start, end, attributes);
-        var isEventValid = ruleChecker.Check(calendarEvent, out var failedRule);
+        var failedRule = await ruleChecker.CheckAsync(calendarEvent);
 
-        if (!isEventValid)
+        if (failedRule != null)
         {
             return Error.Failure($"Правило '{failedRule}' нарушено");
         }

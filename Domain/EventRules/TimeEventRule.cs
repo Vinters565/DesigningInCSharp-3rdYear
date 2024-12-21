@@ -7,11 +7,11 @@ public class TimeEventRule : IEventRule
 {
     public int Priority => 1;
     
-    public bool Check(CalendarEvent calendarEvent)
+    public Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
         var startTime = calendarEvent.StartDate;
         var endTime = calendarEvent.EndDate;
 
-        return startTime < endTime;
+        return Task.FromResult(startTime < endTime);
     }
 }

@@ -8,7 +8,7 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
 {
     public int Priority => 2;
 
-    public bool Check(CalendarEvent calendarEvent)
+    public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
         if (!calendarEvent.HasAttribute<SingleOnlyEventAttribute>())
         {
@@ -18,6 +18,6 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
 
-        return !calendarEventRepository.Any(start, end);
+        return await Task.FromResult(!calendarEventRepository.Any(start, end));
     }
 }

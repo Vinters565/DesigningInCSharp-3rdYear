@@ -6,5 +6,5 @@ public interface IEventRule
 {
     public int Priority { get; }
 
-    public bool Check(CalendarEvent calendarEvent);
+    public Task<bool> CheckAsync(CalendarEvent calendarEvent);
 }

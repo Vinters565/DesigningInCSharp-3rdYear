@@ -18,8 +18,8 @@ public class MandatoryEventRule : IEventRule
             .ToArray();
     }
     
-    public bool Check(CalendarEvent newCalendarEvent)
+    public async Task<bool> CheckAsync(CalendarEvent newCalendarEvent)
     {
-        return mandatoryAttributeTypes.All(newCalendarEvent.HasAttribute);
+        return await Task.FromResult(mandatoryAttributeTypes.All(newCalendarEvent.HasAttribute));
     }
 }

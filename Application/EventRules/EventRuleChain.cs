@@ -5,12 +5,12 @@ namespace SchedulePlanner.Application.EventRules;
 
 public class EventRuleChain : IEventRuleChecker
 {
-    private EventRuleHandler? firstRuleHandler;
-    private EventRuleHandler? currentRuleHandler;
+    private EventRuleValidator? firstRuleHandler;
+    private EventRuleValidator? currentRuleHandler;
 
     public EventRuleChain AddNextEventRule(IEventRule eventRule)
     {
-        var eventRuleHandler = new EventRuleHandler(eventRule);
+        var eventRuleHandler = new EventRuleValidator(eventRule);
         
         if (firstRuleHandler == null)
         {
@@ -25,13 +25,13 @@ public class EventRuleChain : IEventRuleChecker
         return this;
     }
 
-    public bool Check(CalendarEvent calendarEvent, out IEventRule? failedRule)
+    public async Task<IEventRule?> CheckAsync(CalendarEvent calendarEvent)
     {
         if (firstRuleHandler == null)
         {
             throw new InvalidOperationException("Цепочка правил не содержит ни одного правила.");
         }
 
-        return firstRuleHandler.Handle(calendarEvent, out failedRule);
+        return await firstRuleHandler.ValidateAsync(calendarEvent);
     }
 }

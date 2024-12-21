@@ -5,5 +5,5 @@ namespace SchedulePlanner.Application.EventRules;
 
 public interface IEventRuleChecker
 {
-    public bool Check(CalendarEvent calendarEvent, out IEventRule? failedRule);
+    Task<IEventRule?> CheckAsync(CalendarEvent calendarEvent);
 }
