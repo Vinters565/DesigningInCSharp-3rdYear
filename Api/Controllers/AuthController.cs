@@ -10,12 +10,12 @@ public class AuthController(IUserService userService) : ControllerBase
     [HttpPost("/register")]
     public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserRequest request)
     {
-        throw new NotImplementedException();
+        return Ok();
     }
 
     [HttpPost("/login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginUserRequest request)
     {
-        throw new NotImplementedException();
+        return Ok();
     }
 }

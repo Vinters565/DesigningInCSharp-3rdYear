@@ -15,8 +15,8 @@ public static class DependencyInjection
 
         services.AddEventRuleChain();
 
-        // services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
-        // services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }
