@@ -2,9 +2,10 @@ using SchedulePlanner.Domain.Common;
 
 namespace SchedulePlanner.Domain.Entities;
 
-public class User : Entity<Guid>
+public class User(Guid id, string username, string displayedName, string passwordHash)
+    : Entity<Guid>(id)
 {
-    public User() : base(Guid.NewGuid())
-    {
-    }
+    public string Username { get; } = username;
+    public string DisplayedName { get; } = displayedName;
+    public string PasswordHash { get; } = passwordHash;
 }
