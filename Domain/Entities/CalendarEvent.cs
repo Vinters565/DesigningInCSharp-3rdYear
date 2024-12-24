@@ -7,11 +7,11 @@ public class CalendarEvent : Entity<Guid>
 {
     public Guid UserId { get; }
     
-    public DateTime StartDate { get; }
+    public DateTime StartDate { get; private set; }
     
-    public DateTime EndDate { get; }
+    public DateTime EndDate { get; private set; }
     
-    private readonly Dictionary<Type, IEventAttribute> attributes = new();
+    private Dictionary<Type, IEventAttribute> attributes = new();
     public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
 
     public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate) : base(Guid.NewGuid())
@@ -103,4 +103,19 @@ public class CalendarEvent : Entity<Guid>
 
     public bool HasAttribute<T>() where T : IEventAttribute 
         => attributes.ContainsKey(typeof(T));
+
+    public void Update(DateTime? start, DateTime? end, Dictionary<Type, IEventAttribute>? newAttributes)
+    {
+        if (start != null) StartDate = start.Value;
+        if (end != null) EndDate = end.Value;
+
+        ValidateDates();
+
+        if (newAttributes != null) attributes = newAttributes;
+    }
+
+    private void ValidateDates()
+    {
+        if (StartDate > EndDate) throw new ArgumentException("Start date must be earlier than the end");
+    }
 }

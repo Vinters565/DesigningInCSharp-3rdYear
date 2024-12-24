@@ -45,31 +45,19 @@ public class CalendarEventRepository : ICalendarEventRepository
             );
     }
 
-    //TODO: заменить на реализацию
-    public Task<List<CalendarEvent>> GetByUserIdAsync(Guid userId)
+    public async Task<List<CalendarEvent>> GetAllByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
-        var events = new List<CalendarEvent>();
-        events.Add(
-            new CalendarEvent(
-                userId,
-                new DateTime(2024, 12, 6, 12, 0, 0),
-                new DateTime(2024, 12, 6, 15, 0, 0)));
+        throw new NotImplementedException();
+    }
 
-        events.Add(
-            new CalendarEvent(
-                    userId,
-                    new DateTime(2024, 12, 6, 15, 0, 0),
-                    new DateTime(2024, 12, 6, 18, 0, 0))
-                .AddAttribute(new SingleOnlyEventAttribute(true))
-                .AddAttribute(new PublicityAttribute(true)));
+    public async Task<CalendarEvent?> GetByIdAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-        events.Add(
-            new CalendarEvent(
-                userId,
-                new DateTime(2024, 12, 6, 19, 0, 0),
-                new DateTime(2024, 12, 6, 21, 0, 0)));
-
-        return Task.FromResult(events);
+    public void Delete(CalendarEvent calendarEvent)
+    {
+        DeleteEvent(calendarEvent.Id.ToString());
     }
 
     public void AddEvent(CalendarEvent newEvent)

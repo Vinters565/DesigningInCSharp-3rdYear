@@ -4,6 +4,8 @@ namespace SchedulePlanner.Application.Dto;
 
 public class CalendarEventDto
 {
+    public Guid Id { get; init; }
+    
     public Guid UserId { get; init; }
     
     public DateTime Start { get; init; }
