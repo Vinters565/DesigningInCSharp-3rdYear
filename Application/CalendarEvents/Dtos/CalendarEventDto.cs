@@ -1,6 +1,6 @@
 using SchedulePlanner.Domain.EventAttributes;
 
-namespace SchedulePlanner.Application.Dto;
+namespace SchedulePlanner.Application.CalendarEvents.Dtos;
 
 public class CalendarEventDto
 {

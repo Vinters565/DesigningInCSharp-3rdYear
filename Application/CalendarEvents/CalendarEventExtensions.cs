@@ -1,4 +1,4 @@
-using SchedulePlanner.Application.Dto;
+using SchedulePlanner.Application.CalendarEvents.Dtos;
 using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Application.CalendarEvents;

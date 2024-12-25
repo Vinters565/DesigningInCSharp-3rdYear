@@ -1,5 +1,4 @@
 using SchedulePlanner.Application.CalendarEvents.Dtos;
-using SchedulePlanner.Application.Dto;
 using SchedulePlanner.Application.EventRules;
 using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
