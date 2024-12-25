@@ -2,15 +2,14 @@ using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.EventRules;
+namespace SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 
 public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepository) : IEventRule
 {
-    public int Priority => 2;
-
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.HasAttribute<SingleOnlyEventAttribute>())
+        if (!calendarEvent.TryGetAttribute<SingleOnlyEventAttribute>(out var singleOnlyEventAttribute) 
+            || !singleOnlyEventAttribute!.IsSingleOnly)
         {
             return true;
         }

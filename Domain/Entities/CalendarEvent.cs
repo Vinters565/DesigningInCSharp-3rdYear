@@ -1,5 +1,6 @@
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.Entities;
 
@@ -7,41 +8,42 @@ public class CalendarEvent : Entity<Guid>
 {
     public Guid UserId { get; }
     
-    public DateTime StartDate { get; }
+    public DateTime StartDate { get; private set; }
     
-    public DateTime EndDate { get; }
+    public DateTime EndDate { get; private set; }
     
-    private readonly Dictionary<Type, IEventAttribute> attributes = new();
+    private Dictionary<Type, IEventAttribute> attributes;
     public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
 
-    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate) : base(Guid.NewGuid())
+    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate)
+        : this(userId, Guid.NewGuid(), startDate, endDate)
     {
-        UserId = userId;
-        StartDate = startDate;
-        EndDate = endDate;
     }
 
-    public CalendarEvent(Guid userId, Guid entityId, DateTime startDate, DateTime endDate) : base(entityId)
+    public CalendarEvent(
+        Guid userId, 
+        DateTime startDate, 
+        DateTime endDate, 
+        Dictionary<Type, IEventAttribute> attributes) 
+        : this(userId, Guid.NewGuid(), startDate, endDate, attributes)
     {
-        UserId = userId;
-        StartDate = startDate;
-        EndDate = endDate;
     }
 
-    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate, Dictionary<Type, IEventAttribute> attributes) : base(Guid.NewGuid())
+    public CalendarEvent(
+        Guid userId, 
+        Guid entityId, 
+        DateTime startDate, 
+        DateTime endDate, 
+        Dictionary<Type, IEventAttribute>? attributes = null) 
+        : base(entityId)
     {
         UserId = userId;
+        
         StartDate = startDate;
         EndDate = endDate;
-        this.attributes = attributes;
-    }
-
-    public CalendarEvent(Guid userId, Guid entityId, DateTime startDate, DateTime endDate, Dictionary<Type, IEventAttribute> attributes) : base(entityId)
-    {
-        UserId = userId;
-        StartDate = startDate;
-        EndDate = endDate;
-        this.attributes = attributes;
+        ValidateDates();
+        
+        this.attributes = attributes ?? new Dictionary<Type, IEventAttribute>();
     }
 
     public CalendarEvent AddAttribute<T>(T newAttribute) where T : IEventAttribute
@@ -101,6 +103,19 @@ public class CalendarEvent : Entity<Guid>
 
     public bool HasAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
 
-    public bool HasAttribute<T>() where T : IEventAttribute 
-        => attributes.ContainsKey(typeof(T));
+    public bool HasAttribute<T>() where T : IEventAttribute => attributes.ContainsKey(typeof(T));
+
+    public void Update(DateTime? start, DateTime? end, Dictionary<Type, IEventAttribute>? newAttributes)
+    {
+        if (start != null) StartDate = start.Value;
+        if (end != null) EndDate = end.Value;
+        ValidateDates();
+
+        if (newAttributes != null) attributes = newAttributes;
+    }
+
+    private void ValidateDates()
+    {
+        if (StartDate > EndDate) throw new ArgumentException("Start date must be earlier than the end");
+    }
 }

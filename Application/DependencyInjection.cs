@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
-using SchedulePlanner.Application.EventRules;
-using SchedulePlanner.Domain.EventRules;
-using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Application.CalendarEvents.EventRules;
+using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 
 namespace SchedulePlanner.Application;
 
@@ -24,9 +23,8 @@ public static class DependencyInjection
             var calendarEventRepository = provider.GetRequiredService<ICalendarEventRepository>();
     
             return new EventRuleChain()
-                .AddNextEventRule(new MandatoryEventRule())
-                .AddNextEventRule(new TimeEventRule())
-                .AddNextEventRule(new SingleOnlyEventRule(calendarEventRepository));
+                .AddNextEventRule(new SingleOnlyEventRule(calendarEventRepository))
+                .AddNextEventRule(new NonOverlappingLocationsRule(calendarEventRepository));
         });
 
         return services;

@@ -1,15 +1,15 @@
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Application.Converters
+namespace SchedulePlanner.Application.JsonConverters
 {
-    public class EventAttributeDictionaryConverter: JsonConverter<Dictionary<Type, IEventAttribute>>
+    public class EventAttributeIReadOnlyDictionaryConverter: JsonConverter<IReadOnlyDictionary<Type, IEventAttribute>>
     {
         private readonly Dictionary<string, Type> typeMapping;
 
-        public EventAttributeDictionaryConverter()
+        public EventAttributeIReadOnlyDictionaryConverter()
         {
             typeMapping = Assembly.Load("SchedulePlanner.Domain")
                 .GetTypes()
@@ -17,7 +17,7 @@ namespace SchedulePlanner.Application.Converters
                 .ToDictionary(t => t.Name, t => t);
         }
 
-        public override Dictionary<Type, IEventAttribute> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IReadOnlyDictionary<Type, IEventAttribute> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var result = new Dictionary<Type, IEventAttribute>();
 
@@ -50,7 +50,7 @@ namespace SchedulePlanner.Application.Converters
             return result;
         }
 
-        public override void Write(Utf8JsonWriter writer, Dictionary<Type, IEventAttribute> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IReadOnlyDictionary<Type, IEventAttribute> value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
 
