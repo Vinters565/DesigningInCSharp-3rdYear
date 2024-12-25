@@ -17,4 +17,6 @@ public interface ICalendarEventRepository
     public List<CalendarEvent> GetEvents(DateTime start, DateTime end);
 
     public bool Any(DateTime start, DateTime end);
+
+    public Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
 }

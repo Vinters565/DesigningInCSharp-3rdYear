@@ -160,6 +160,11 @@ public class CalendarEventRepository : ICalendarEventRepository
         return GetEvents(start, end).Count > 0;
     }
 
+    public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
+    {
+        throw new NotImplementedException();
+    }
+
     private void ExecuteCommands(string sqlCommand, Action<SQLiteCommand> action)
     {
         using (var connection = new SQLiteConnection(connectionString))
