@@ -1,7 +1,7 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventRules;
+using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Application.EventRules;
+namespace SchedulePlanner.Application.CalendarEvents.EventRules;
 
 public interface IEventRuleChecker
 {

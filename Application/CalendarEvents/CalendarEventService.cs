@@ -1,9 +1,7 @@
 using SchedulePlanner.Application.CalendarEvents.Dtos;
-using SchedulePlanner.Application.EventRules;
+using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Application.CalendarEvents;
 

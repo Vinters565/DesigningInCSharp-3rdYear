@@ -1,4 +1,4 @@
-namespace SchedulePlanner.Domain.EventAttributes;
+namespace SchedulePlanner.Domain.Enums;
 
 public enum RecurrenceType
 {

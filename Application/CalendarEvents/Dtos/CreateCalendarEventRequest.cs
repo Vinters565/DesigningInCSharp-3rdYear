@@ -1,4 +1,4 @@
-using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Application.CalendarEvents.Dtos;
 

@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
-using SchedulePlanner.Application.EventRules;
-using SchedulePlanner.Domain.EventRules;
-using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Application.CalendarEvents.EventRules;
+using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 
 namespace SchedulePlanner.Application;
 

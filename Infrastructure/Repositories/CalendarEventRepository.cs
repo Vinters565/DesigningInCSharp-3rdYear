@@ -1,10 +1,11 @@
-using SchedulePlanner.Application.Converters;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
 using System.Data.SQLite;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 

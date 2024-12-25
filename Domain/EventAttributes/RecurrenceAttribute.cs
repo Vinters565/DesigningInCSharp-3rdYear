@@ -1,3 +1,6 @@
+using SchedulePlanner.Domain.Enums;
+using SchedulePlanner.Domain.Interfaces;
+
 namespace SchedulePlanner.Domain.EventAttributes;
 
 public class RecurrenceAttribute : IEventAttribute

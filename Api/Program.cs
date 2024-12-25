@@ -1,13 +1,12 @@
-using SchedulePlanner.Application.Converters;
 using SchedulePlanner.Application;
 using SchedulePlanner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
-using SchedulePlanner.Application.EventRules;
 using System;
+using SchedulePlanner.Application.CalendarEvents.EventRules;
+using SchedulePlanner.Application.JsonConverters;
 
 var builder = WebApplication.CreateBuilder(args);
 
