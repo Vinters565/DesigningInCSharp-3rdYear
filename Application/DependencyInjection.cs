@@ -24,7 +24,6 @@ public static class DependencyInjection
             var calendarEventRepository = provider.GetRequiredService<ICalendarEventRepository>();
     
             return new EventRuleChain()
-                .AddNextEventRule(new MandatoryEventRule())
                 .AddNextEventRule(new TimeEventRule())
                 .AddNextEventRule(new SingleOnlyEventRule(calendarEventRepository));
         });
