@@ -13,7 +13,7 @@ public static class CalendarEventExtensions
             UserId = calendarEvent.UserId,
             Start = calendarEvent.StartDate,
             End = calendarEvent.EndDate,
-            Attributes = calendarEvent.Attributes
+            Attributes = calendarEvent.AttributeData.Attributes
         };
     }
 }

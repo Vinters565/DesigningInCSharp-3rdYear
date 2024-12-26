@@ -72,7 +72,7 @@ public class CalendarEventRepository : ICalendarEventRepository
                 command.Parameters.AddWithValue("@UserId", newEvent.UserId.ToString("D"));
                 command.Parameters.AddWithValue("@StartDate", newEvent.StartDate);
                 command.Parameters.AddWithValue("@EndDate", newEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.Attributes, serializeOptions));
+                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.AttributeData.Attributes, serializeOptions));
             }));
     }
 
@@ -110,7 +110,7 @@ public class CalendarEventRepository : ICalendarEventRepository
                 command.Parameters.AddWithValue("@Id", updatedEvent.Id.ToString("D"));
                 command.Parameters.AddWithValue("@StartDate", updatedEvent.StartDate);
                 command.Parameters.AddWithValue("@EndDate", updatedEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.Attributes, serializeOptions));
+                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.AttributeData.Attributes, serializeOptions));
             }));
     }
 

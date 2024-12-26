@@ -8,7 +8,7 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
 {
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.TryGetAttribute<SingleOnlyEventAttribute>(out var singleOnlyEventAttribute) 
+        if (!calendarEvent.AttributeData.TryGetAttribute<SingleOnlyEventAttribute>(out var singleOnlyEventAttribute) 
             || !singleOnlyEventAttribute!.IsSingleOnly)
         {
             return true;

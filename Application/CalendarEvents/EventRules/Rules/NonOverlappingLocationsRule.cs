@@ -9,7 +9,7 @@ public class NonOverlappingLocationsRule(
 {
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.TryGetAttribute<DependsOnLocationAttribute>(out var dependsOnLocationAttribute)
+        if (!calendarEvent.AttributeData.TryGetAttribute<DependsOnLocationAttribute>(out var dependsOnLocationAttribute)
             || !dependsOnLocationAttribute!.IsDependsOnLocation)
         {
             return true;
