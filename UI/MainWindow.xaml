@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UI"
+        xmlns:local="clr-namespace:UI.UserControls"
         mc:Ignorable="d"
-        Title="EVCalendar" Height="450" Width="800">
+        Title="EVCalendar" Height="450" Width="860">
     
     <Window.Resources>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
@@ -82,13 +82,9 @@
             <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Background="LightGray" Margin="5" Orientation="Horizontal">
-            <Button Content="Лист" Width="70" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="День" Width="70" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Неделя" Width="70" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Месяц" Width="275" Height="25" Margin="5 0 10 0" Style="{StaticResource BlueRoundButtonStyle}"></Button>
-        </StackPanel>
-
-        <Grid Grid.Row="2" Grid.Column="1" Background="LightGray" Margin="5"></Grid> 
+  
+        <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="LightGray" Margin="5">
+            <local:CalendarView/>
+        </Grid> 
     </Grid>
 </Window>
