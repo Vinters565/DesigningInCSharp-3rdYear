@@ -5,8 +5,6 @@ namespace SchedulePlanner.Application.CalendarEvents;
 
 public interface ICalendarEventService
 {
-    Task<Result<List<CalendarEventDto>>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end);
-
     Task<Result<CalendarEventDto>> GetByIdAsync(Guid id);
 
     Task<Result<CalendarEventDto>> CreateAsync(Guid userId, CreateCalendarEventRequest request);

@@ -1,10 +1,10 @@
 using SchedulePlanner.Application;
 using SchedulePlanner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using System;
+using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.JsonConverters;
 using SchedulePlanner.Domain.Interfaces;

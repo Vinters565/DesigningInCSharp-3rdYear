@@ -4,6 +4,7 @@ using SchedulePlanner.Application.CalendarEvents.AttributeActions;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
+using SchedulePlanner.Application.Calendars;
 
 namespace SchedulePlanner.Application;
 
@@ -12,6 +13,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
     {
         services.AddScoped<ICalendarEventService, CalendarEventService>();
+        services.AddScoped<ICalendarService, CalendarService>();
         
         services.AddEventRuleChain();
 

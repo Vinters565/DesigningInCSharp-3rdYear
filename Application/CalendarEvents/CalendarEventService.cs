@@ -9,14 +9,6 @@ public class CalendarEventService(
     IEventAttributeManager eventAttributeManager,
     ICalendarEventRepository calendarEventRepository) : ICalendarEventService
 {
-    public async Task<Result<List<CalendarEventDto>>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
-    {
-        //TODO: проверять существование юзера
-        var events = await calendarEventRepository.GetAllByUserIdAsync(userId, start, end);
-
-        return events.Select(e => e.ToDto()).ToList();
-    }
-
     public async Task<Result<CalendarEventDto>> GetByIdAsync(Guid id)
     {
         var calendarEvent = await calendarEventRepository.GetByIdAsync(id);
