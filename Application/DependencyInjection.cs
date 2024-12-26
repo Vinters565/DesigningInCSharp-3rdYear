@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Application.CalendarEvents.AttributeActions;
+using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 
@@ -10,8 +12,12 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
     {
         services.AddScoped<ICalendarEventService, CalendarEventService>();
-            
+        
         services.AddEventRuleChain();
+
+        services.AddSingleton<IAttributeAction[]>([new PublicityAttributeAction()]);
+        services.AddScoped<IAttributeActionsApplier, AttributeActionsApplier>();
+        services.AddScoped<IEventAttributeManager, EventAttributeManager>();
         
         return services;
     }

@@ -45,12 +45,15 @@ public class CalendarEvent : Entity<Guid>
         AttributeData = new AttributeData(attributes);
     }
 
-    public void Update(DateTime? start, DateTime? end, Dictionary<Type, IEventAttribute>? newAttributes)
+    public void Update(DateTime? start, DateTime? end)
     {
         if (start != null) StartDate = start.Value;
         if (end != null) EndDate = end.Value;
         ValidateDates();
+    }
 
+    public void UpdateAttributes(Dictionary<Type, IEventAttribute>? newAttributes)
+    {
         if (newAttributes != null) AttributeData = new AttributeData(newAttributes);
     }
 

@@ -67,4 +67,24 @@ public class AttributeData
     public bool HasAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
 
     public bool HasAttribute<T>() where T : IEventAttribute => attributes.ContainsKey(typeof(T));
+
+    public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
+        where TAttribute : IEventAttribute
+    {
+        return !existedAttributes.HasAttribute<TAttribute>() && newAttributes.HasAttribute<TAttribute>();
+    }
+    
+    public static bool IsAttributeUpdated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
+        where TAttribute : IEventAttribute
+    {
+        return existedAttributes.TryGetAttribute<TAttribute>(out var existedAttr)
+               && newAttributes.TryGetAttribute<TAttribute>(out var newAttr)
+               && !existedAttr!.Equals(newAttr!);
+    }
+    
+    public static bool IsAttributeDeleted<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
+        where TAttribute : IEventAttribute
+    {
+        return existedAttributes.HasAttribute<TAttribute>() && !newAttributes.HasAttribute<TAttribute>();
+    }
 }

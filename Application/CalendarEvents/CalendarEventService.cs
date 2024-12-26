@@ -1,12 +1,12 @@
 using SchedulePlanner.Application.CalendarEvents.Dtos;
-using SchedulePlanner.Application.CalendarEvents.EventRules;
+using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Application.CalendarEvents;
 
 public class CalendarEventService(
-    IEventRuleChecker ruleChecker,
+    IEventAttributeManager eventAttributeManager,
     ICalendarEventRepository calendarEventRepository) : ICalendarEventService
 {
     public async Task<Result<List<CalendarEventDto>>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
@@ -28,13 +28,10 @@ public class CalendarEventService(
     public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, CreateCalendarEventRequest request)
     {
         //TODO: проверять существование юзера
-        var calendarEvent = new CalendarEvent(userId, request.Start, request.End, request.Attributes.ToDictionary());
-        var failedRule = await ruleChecker.CheckAsync(calendarEvent);
+        var calendarEvent = new CalendarEvent(userId, request.Start, request.End);
 
-        if (failedRule != null)
-        {
-            return Error.Failure($"Правило '{failedRule}' нарушено");
-        }
+        var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, request.Attributes.ToDictionary());
+        if (attributesResult.IsError) return attributesResult.Error;
 
         calendarEventRepository.AddEvent(calendarEvent);
         return await Task.FromResult(calendarEvent.ToDto());
@@ -44,8 +41,14 @@ public class CalendarEventService(
     {
         var calendarEvent = await calendarEventRepository.GetByIdAsync(id);
         if (calendarEvent == null) return Error.NotFound("Календарное событие не найдено");
-        
-        calendarEvent.Update(request.Start, request.End, request.Attributes?.ToDictionary());
+
+        calendarEvent.Update(request.Start, request.End);
+
+        if (request.Attributes != null)
+        {
+            var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, request.Attributes.ToDictionary());
+            if (attributesResult.IsError) return attributesResult.Error;
+        }
 
         calendarEventRepository.UpdateEvent(calendarEvent);
 
