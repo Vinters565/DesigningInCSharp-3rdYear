@@ -1,10 +1,11 @@
-using SchedulePlanner.Application.Converters;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
 using System.Data.SQLite;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 
@@ -45,31 +46,19 @@ public class CalendarEventRepository : ICalendarEventRepository
             );
     }
 
-    //TODO: заменить на реализацию
-    public Task<List<CalendarEvent>> GetByUserIdAsync(Guid userId)
+    public async Task<List<CalendarEvent>> GetAllByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
-        var events = new List<CalendarEvent>();
-        events.Add(
-            new CalendarEvent(
-                userId,
-                new DateTime(2024, 12, 6, 12, 0, 0),
-                new DateTime(2024, 12, 6, 15, 0, 0)));
+        throw new NotImplementedException();
+    }
 
-        events.Add(
-            new CalendarEvent(
-                    userId,
-                    new DateTime(2024, 12, 6, 15, 0, 0),
-                    new DateTime(2024, 12, 6, 18, 0, 0))
-                .AddAttribute(new SingleOnlyEventAttribute(true))
-                .AddAttribute(new PublicityAttribute(true)));
+    public async Task<CalendarEvent?> GetByIdAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 
-        events.Add(
-            new CalendarEvent(
-                userId,
-                new DateTime(2024, 12, 6, 19, 0, 0),
-                new DateTime(2024, 12, 6, 21, 0, 0)));
-
-        return Task.FromResult(events);
+    public void Delete(CalendarEvent calendarEvent)
+    {
+        DeleteEvent(calendarEvent.Id.ToString());
     }
 
     public void AddEvent(CalendarEvent newEvent)
@@ -83,7 +72,7 @@ public class CalendarEventRepository : ICalendarEventRepository
                 command.Parameters.AddWithValue("@UserId", newEvent.UserId.ToString("D"));
                 command.Parameters.AddWithValue("@StartDate", newEvent.StartDate);
                 command.Parameters.AddWithValue("@EndDate", newEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.Attributes, serializeOptions));
+                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.AttributeData.Attributes, serializeOptions));
             }));
     }
 
@@ -121,7 +110,7 @@ public class CalendarEventRepository : ICalendarEventRepository
                 command.Parameters.AddWithValue("@Id", updatedEvent.Id.ToString("D"));
                 command.Parameters.AddWithValue("@StartDate", updatedEvent.StartDate);
                 command.Parameters.AddWithValue("@EndDate", updatedEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.Attributes, serializeOptions));
+                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.AttributeData.Attributes, serializeOptions));
             }));
     }
 
@@ -169,6 +158,11 @@ public class CalendarEventRepository : ICalendarEventRepository
     public bool Any(DateTime start, DateTime end)
     {
         return GetEvents(start, end).Count > 0;
+    }
+
+    public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
+    {
+        throw new NotImplementedException();
     }
 
     private void ExecuteCommands(string sqlCommand, Action<SQLiteCommand> action)

@@ -1,13 +1,13 @@
-using SchedulePlanner.Application.Converters;
 using SchedulePlanner.Application;
 using SchedulePlanner.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
-using SchedulePlanner.Application.EventRules;
 using System;
+using SchedulePlanner.Application.CalendarEvents.EventRules;
+using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,9 +48,12 @@ events.Add(
     new CalendarEvent(
         Guid.NewGuid(),
         new DateTime(2024, 12, 6, 15, 0, 0),
-        new DateTime(2024, 12, 6, 18, 0, 0))
-        .AddAttribute(new SingleOnlyEventAttribute(true))
-        .AddAttribute(new PublicityAttribute(true)));
+        new DateTime(2024, 12, 6, 18, 0, 0),
+        new Dictionary<Type, IEventAttribute>()
+        {
+            { typeof(SingleOnlyEventAttribute), new SingleOnlyEventAttribute(true) },
+            { typeof(PublicityAttribute), new PublicityAttribute(true) }
+        }));
 
 events.Add(
     new CalendarEvent(
@@ -67,7 +70,7 @@ foreach (var ev in events)
 foreach (var ev in repository.GetAllEvents())
 {
     Console.WriteLine($"{ev.Id} {ev.StartDate.ToString("yyyy-MM-ddTHH:mm:ss")} {ev.EndDate.ToString("yyyy-MM-ddTHH:mm:ss")} ");
-    var atributs = ev.Attributes.Select(x => x.Key.Name).ToList();
+    var atributs = ev.AttributeData.Attributes.Select(x => x.Key.Name).ToList();
     if (atributs.Count != 0)
     {
         foreach (var atribute in atributs)

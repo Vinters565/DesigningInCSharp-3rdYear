@@ -1,3 +1,5 @@
+using SchedulePlanner.Domain.Interfaces;
+
 namespace SchedulePlanner.Domain.EventAttributes;
 
 public class PublicityAttribute : IEventAttribute
