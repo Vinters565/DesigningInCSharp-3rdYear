@@ -21,19 +21,12 @@ public class CalendarController(
         return result.ToActionResult(this);
     }
 
-    [HttpPost("private/events")]
-    public async Task<ActionResult<CalendarEventDto>> NewPrivateCalendarEvent(CreateCalendarEventRequest request)
+    [HttpGet("public/{username}/events")]
+    public async Task<ActionResult<CalendarEventDto>> GetPublicCalendarEventsByUsername(
+        string username, [FromQuery] DateTime start, [FromQuery] CalendarView view)
     {
-        var userId = GetAuthenticatedUserId();
-
-        var result = await calendarService.AddPrivateCalendarEventAsync(
-            userId, 
-            request.Start, 
-            request.End, 
-            request.Attributes);
-        
-        return result.ToActionResult(this,
-            value => CreatedAtAction("NewPrivateCalendarEvent", value));
+        var result = await calendarService.GetPublicCalendarByUsernameAsync(username, start, view);
+        return result.ToActionResult(this);
     }
 
     private Guid GetAuthenticatedUserId()

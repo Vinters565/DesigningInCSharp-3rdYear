@@ -51,6 +51,11 @@ public class CalendarEventRepository : ICalendarEventRepository
         throw new NotImplementedException();
     }
 
+    public Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<CalendarEvent?> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();

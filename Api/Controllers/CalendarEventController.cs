@@ -10,6 +10,21 @@ namespace Api.Controllers;
 public class CalendarEventController(
     ICalendarEventService calendarEventService) : ControllerBase
 {
+    [HttpPost]
+    public async Task<ActionResult<CalendarEventDto>> NewCalendarEvent(CreateCalendarEventRequest request)
+    {
+        var userId = GetAuthenticatedUserId();
+
+        var result = await calendarEventService.CreateAsync(
+            userId, 
+            request.Start, 
+            request.End, 
+            request.Attributes);
+        
+        return result.ToActionResult(this,
+            value => CreatedAtAction("NewCalendarEvent", value));
+    }
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<CalendarEventDto>> GetByIdAsync(Guid id)
     {
@@ -31,7 +46,7 @@ public class CalendarEventController(
         return result.ToActionResult(this);
     }
 
-    private Guid GetUserId()
+    private Guid GetAuthenticatedUserId()
     {
         return Guid.NewGuid(); //TODO: change to identity userId
     }
