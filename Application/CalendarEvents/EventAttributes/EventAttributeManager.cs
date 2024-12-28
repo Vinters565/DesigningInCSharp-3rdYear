@@ -1,4 +1,4 @@
-using SchedulePlanner.Application.CalendarEvents.AttributeActions;
+using SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
@@ -7,7 +7,7 @@ using SchedulePlanner.Domain.Interfaces;
 namespace SchedulePlanner.Application.CalendarEvents.EventAttributes;
 
 public class EventAttributeManager(
-    IAttributeActionsApplier attributeActionsApplier,
+    IAttributesChangesHandler attributesChangesHandler,
     IEventRuleChecker ruleChecker) : IEventAttributeManager
 {
     public async Task<Result> UpdateAsync(CalendarEvent calendarEvent, Dictionary<Type, IEventAttribute> newAttributes)
@@ -21,7 +21,7 @@ public class EventAttributeManager(
             return Error.Failure($"Правило '{failedRule}' нарушено");
         }
 
-        await attributeActionsApplier.Apply(oldAttributes, calendarEvent.AttributeData, calendarEvent);
+        await attributesChangesHandler.HandleAsync(oldAttributes, calendarEvent.AttributeData, calendarEvent);
         return Result.Success();
     }
 }

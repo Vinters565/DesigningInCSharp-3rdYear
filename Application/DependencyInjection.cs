@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
-using SchedulePlanner.Application.CalendarEvents.AttributeActions;
+using SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
+using SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
@@ -17,8 +18,8 @@ public static class DependencyInjection
         
         services.AddEventRuleChain();
 
-        services.AddSingleton<IAttributeAction[]>([new PublicityAttributeAction()]);
-        services.AddScoped<IAttributeActionsApplier, AttributeActionsApplier>();
+        services.AddSingleton<IAttributeChangeHandler[]>([new PublicityAttributeChangeHandler()]);
+        services.AddScoped<IAttributesChangesHandler, AttributesChangesHandler>();
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
         
         return services;

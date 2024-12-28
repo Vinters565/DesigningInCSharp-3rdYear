@@ -45,7 +45,7 @@ public class CalendarEventService(
         }
 
         calendarEventRepository.UpdateEvent(calendarEvent);
-
+        
         return calendarEvent.ToDto();
     }
 
