@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,32 @@ using System.Windows.Shapes;
 
 namespace UI.UserControls
 {
-    /// <summary>
-    /// Логика взаимодействия для DayView.xaml
-    /// </summary>
     public partial class DayView : UserControl
     {
+        private DateTime currentDate;
+
         public DayView()
         {
             InitializeComponent();
+            currentDate = DateTime.Today; 
+            UpdateDateText(); 
+        }
+
+        private void PreviousDay_Click(object sender, RoutedEventArgs e)
+        {
+            currentDate = currentDate.AddDays(-1); 
+            UpdateDateText(); 
+        }
+
+        private void NextDay_Click(object sender, RoutedEventArgs e)
+        {
+            currentDate = currentDate.AddDays(1); 
+            UpdateDateText(); 
+        }
+
+        private void UpdateDateText()
+        {
+            DayDateText.Text = currentDate.ToString("ddd dd.MM.yyyy", CultureInfo.InvariantCulture);
         }
     }
 }

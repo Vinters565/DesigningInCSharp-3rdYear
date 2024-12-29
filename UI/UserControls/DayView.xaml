@@ -6,7 +6,118 @@
              xmlns:local="clr-namespace:UI.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button Content="&#x276E;" Margin="5" Click="PreviousDay_Click"  Style="{StaticResource ButtonStyle}"/>
+            <TextBlock x:Name="DayDateText" FontSize="16" Text="Пон" VerticalAlignment="Center" Margin="5" Style="{StaticResource TextBlockStyle}"/>
+            <Button Content="&#x276F;" Margin="5" Click="NextDay_Click" Style="{StaticResource ButtonStyle}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="All Day" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="6:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="7:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="8:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="9:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="10" Grid.Column="0" Text="10:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="11" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="12" Grid.Column="0" Text="11:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="13" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="14" Grid.Column="0" Text="12:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="15" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="16" Grid.Column="0" Text="13:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="17" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="18" Grid.Column="0" Text="14:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="19" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="20" Grid.Column="0" Text="15:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="21" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="22" Grid.Column="0" Text="16:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="23" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="24" Grid.Column="0" Text="17:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="25" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="26" Grid.Column="0" Text="18:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="27" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="28" Grid.Column="0" Text="19:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="29" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="30" Grid.Column="0" Text="20:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="31" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="32" Grid.Column="0" Text="21:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="33" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="34" Grid.Column="0" Text="22:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+            <TextBlock Grid.Row="35" Grid.Column="0" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="36" Grid.Column="0" Text="23:00" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+        </Grid>
     </Grid>
 </UserControl>
