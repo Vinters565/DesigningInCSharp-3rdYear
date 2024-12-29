@@ -7,7 +7,7 @@ using SchedulePlanner.Domain.Interfaces;
 namespace SchedulePlanner.Application.CalendarEvents.EventAttributes;
 
 public class EventAttributeManager(
-    IAttributesChangesHandler attributesChangesHandler,
+    IAttributeChangesHandler attributeChangesHandler,
     IEventRuleChecker ruleChecker) : IEventAttributeManager
 {
     public async Task<Result> UpdateAsync(CalendarEvent calendarEvent, Dictionary<Type, IEventAttribute> newAttributes)
@@ -21,7 +21,7 @@ public class EventAttributeManager(
             return Error.Failure($"Правило '{failedRule}' нарушено");
         }
 
-        await attributesChangesHandler.HandleAsync(oldAttributes, calendarEvent.AttributeData, calendarEvent);
+        await attributeChangesHandler.HandleAsync(oldAttributes, calendarEvent.AttributeData, calendarEvent);
         return Result.Success();
     }
 }

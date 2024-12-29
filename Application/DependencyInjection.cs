@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddEventRuleChain();
 
         services.AddSingleton<IAttributeChangeHandler[]>([new PublicityAttributeChangeHandler()]);
-        services.AddScoped<IAttributesChangesHandler, AttributesChangesHandler>();
+        services.AddScoped<IAttributeChangesHandler, AttributeChangesHandler>();
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
         
         return services;

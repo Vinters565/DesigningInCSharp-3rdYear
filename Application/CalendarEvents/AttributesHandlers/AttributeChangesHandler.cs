@@ -2,11 +2,11 @@ using SchedulePlanner.Domain.Entities;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 
-public class AttributesChangesHandler : IAttributesChangesHandler
+public class AttributeChangesHandler : IAttributeChangesHandler
 {
     private readonly IAttributeChangeHandler[] attributeChangeHandlers;
 
-    public AttributesChangesHandler(IAttributeChangeHandler[] attributeChangeHandlers)
+    public AttributeChangesHandler(IAttributeChangeHandler[] attributeChangeHandlers)
     {
         this.attributeChangeHandlers = attributeChangeHandlers;
     }

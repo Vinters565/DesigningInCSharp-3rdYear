@@ -5,33 +5,33 @@ namespace SchedulePlanner.Application.CalendarEvents.EventRules;
 
 public class EventRuleChain : IEventRuleChecker
 {
-    private EventRuleValidator? firstRuleHandler;
-    private EventRuleValidator? currentRuleHandler;
+    private EventRuleValidator? firstRuleValidator;
+    private EventRuleValidator? currentRuleValidator;
 
     public EventRuleChain AddNextEventRule(IEventRule eventRule)
     {
-        var eventRuleHandler = new EventRuleValidator(eventRule);
+        var eventRuleValidator = new EventRuleValidator(eventRule);
         
-        if (firstRuleHandler == null)
+        if (firstRuleValidator == null)
         {
-            firstRuleHandler = eventRuleHandler;
+            firstRuleValidator = eventRuleValidator;
         }
         else
         {
-            currentRuleHandler!.Next = eventRuleHandler;
+            currentRuleValidator!.Next = eventRuleValidator;
         }
         
-        currentRuleHandler = eventRuleHandler;
+        currentRuleValidator = eventRuleValidator;
         return this;
     }
 
     public async Task<IEventRule?> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (firstRuleHandler == null)
+        if (firstRuleValidator == null)
         {
             throw new InvalidOperationException("Цепочка правил не содержит ни одного правила.");
         }
 
-        return await firstRuleHandler.ValidateAsync(calendarEvent);
+        return await firstRuleValidator.ValidateAsync(calendarEvent);
     }
 }
