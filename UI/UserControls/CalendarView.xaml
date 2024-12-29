@@ -41,7 +41,8 @@
             <Button Content="Лист" Width="70" Height="25" Click="ListButton_Click" Style="{StaticResource RoundButtonStyle}"></Button>
             <Button Content="День" Width="70" Height="25" Click="DayButton_Click" Style="{StaticResource RoundButtonStyle}"></Button>
             <Button Content="Неделя" Width="70" Height="25" Click="WeekButton_Click" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Месяц" Width="275" Height="25" Click="MonthButton_Click" Style="{StaticResource RoundButtonStyle}"></Button>
+            <Button Content="Месяц" Width="215" Height="25" Click="MonthButton_Click" Style="{StaticResource RoundButtonStyle}"></Button>
+            <Button Content="Создать событие" Width="100" Height="25" Click="CreateNewEvent_Click" Style="{StaticResource RoundButtonStyle}"></Button>
         </StackPanel>
 
 
