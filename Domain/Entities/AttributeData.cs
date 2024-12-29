@@ -4,24 +4,23 @@ namespace SchedulePlanner.Domain.Entities;
 
 public class AttributeData
 {
-    private Dictionary<Type, IEventAttribute> attributes;
-    public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
+    public Dictionary<Type, IEventAttribute> Attributes { get; set; }
 
     public AttributeData(Dictionary<Type, IEventAttribute>? attributes = null)
     {
-        this.attributes = attributes ?? new Dictionary<Type, IEventAttribute>();
+        this.Attributes = attributes ?? new Dictionary<Type, IEventAttribute>();
     }
 
     public AttributeData()
     {
-        this.attributes = new Dictionary<Type, IEventAttribute>();
+        Attributes = new Dictionary<Type, IEventAttribute>();
     }
 
     public void AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {
         var key = typeof(T);
 
-        if (!attributes.TryAdd(key, newAttribute))
+        if (!Attributes.TryAdd(key, newAttribute))
         {
             throw new InvalidOperationException($"Attribute of type {key.Name} is already added.");
         }
@@ -30,26 +29,26 @@ public class AttributeData
     public void UpdateAttribute<T>(T attribute) where T : IEventAttribute
     {
         var key = typeof(T);
-        attributes[key] = attribute;
+        Attributes[key] = attribute;
     }
 
     public void RemoveAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
 
-        if (!attributes.ContainsKey(key))
+        if (!Attributes.ContainsKey(key))
         {
             throw new KeyNotFoundException($"Attribute of type {key.Name} does not exist.");
         }
 
-        attributes.Remove(key);
+        Attributes.Remove(key);
     }
 
     public T? GetAttribute<T>() where T : IEventAttribute
     {
         var key = typeof(T);
 
-        return attributes.TryGetValue(key, out var attribute) 
+        return Attributes.TryGetValue(key, out var attribute) 
             ? (T?)attribute 
             : default;
     }
@@ -58,20 +57,20 @@ public class AttributeData
     {
         var key = typeof(T);
 
-        return (T)attributes[key];
+        return (T)Attributes[key];
     }
 
     public bool TryGetAttribute<T>(out T? attribute) where T : IEventAttribute
     {
         var key = typeof(T);
-        var success = attributes.TryGetValue(key, out var value);
+        var success = Attributes.TryGetValue(key, out var value);
         attribute = success ? (T?)value : default;
         return success;
     }
 
-    public bool HasAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
+    public bool HasAttribute(Type attributeType) => Attributes.ContainsKey(attributeType);
 
-    public bool HasAttribute<T>() where T : IEventAttribute => attributes.ContainsKey(typeof(T));
+    public bool HasAttribute<T>() where T : IEventAttribute => Attributes.ContainsKey(typeof(T));
 
     public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
         where TAttribute : IEventAttribute

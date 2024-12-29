@@ -1,7 +1,6 @@
 using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
-using SchedulePlanner.Application.JsonConverters;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 
