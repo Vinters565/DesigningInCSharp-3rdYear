@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Infrastructure.Repositories;
@@ -15,8 +16,11 @@ public static class DependencyInjection
 
     private static IServiceCollection AddRepository(this IServiceCollection services)
     {
-        services.AddSingleton<ICalendarEventRepository, CalendarEventRepository>(provider => new CalendarEventRepository());
+        services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=calendar_app.db"));
+        services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
 
         return services;
     }
 }
+
+//"Data Source=calendar_app.db"

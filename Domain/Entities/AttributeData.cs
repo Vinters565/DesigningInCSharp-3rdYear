@@ -11,7 +11,12 @@ public class AttributeData
     {
         this.attributes = attributes ?? new Dictionary<Type, IEventAttribute>();
     }
-    
+
+    public AttributeData()
+    {
+        this.attributes = new Dictionary<Type, IEventAttribute>();
+    }
+
     public void AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {
         var key = typeof(T);
