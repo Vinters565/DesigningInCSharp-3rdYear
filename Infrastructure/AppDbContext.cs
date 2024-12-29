@@ -17,7 +17,6 @@ namespace SchedulePlanner.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            // Настройки для CalendarEvent
             modelBuilder.Entity<CalendarEvent>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -32,19 +31,14 @@ namespace SchedulePlanner.Infrastructure
                 serializeOptions.Converters.Add(new EventAttributeIReadOnlyDictionaryConverter());
                 serializeOptions.Converters.Add(new EventAttributeDictionaryConverter());
 
-                entity
-                    .OwnsOne(e => e.AttributeData, a =>
-                    {
-                        a.Property(ad => ad.Attributes)
-                            .HasColumnName("Attributes")
-                            .HasConversion(
-                                v => JsonSerializer.Serialize(v, serializeOptions),
-                                v =>
-                                    JsonSerializer
-                                        .Deserialize<Dictionary<Type, IEventAttribute>>(v, serializeOptions) ??
-                                    new Dictionary<Type, IEventAttribute>()
-                            );
-                    });
+                entity.Property(e => e.AttributeData)
+                    .HasColumnName("Attributes")
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v.Attributes, serializeOptions),
+                        v => new AttributeData(
+                            JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(v, serializeOptions) ??
+                            new Dictionary<Type, IEventAttribute>())
+                    );
             });
         }
     } 
