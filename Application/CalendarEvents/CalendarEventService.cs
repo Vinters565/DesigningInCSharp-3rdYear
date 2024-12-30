@@ -7,6 +7,7 @@ using SchedulePlanner.Domain.Interfaces;
 namespace SchedulePlanner.Application.CalendarEvents;
 
 public class CalendarEventService(
+    IUserRepository userRepository,
     IEventAttributeManager eventAttributeManager,
     ICalendarEventRepository calendarEventRepository) : ICalendarEventService
 {
@@ -21,7 +22,9 @@ public class CalendarEventService(
     public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, DateTime start, DateTime end,
         IReadOnlyDictionary<Type, IEventAttribute> attributes)
     {
-        //TODO: проверять существование юзера
+        var user = await userRepository.GetByIDAsync(userId);
+        if (user == null) return Error.NotFound("User not found");
+        
         var calendarEvent = new CalendarEvent(userId, start, end);
 
         var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, attributes.ToDictionary());

@@ -9,11 +9,13 @@ using SchedulePlanner.Domain.Interfaces;
 namespace SchedulePlanner.Application.Calendars;
 
 public class CalendarService(
+    IUserRepository userRepository,
     ICalendarEventRepository calendarEventRepository) : ICalendarService
 {
     public async Task<Result<List<CalendarEventDto>>> GetPrivateCalendarAsync(Guid userId, DateTime start, CalendarView view)
     {
-        // TODO: проверять существование юзера
+        var user = await userRepository.GetByIDAsync(userId);
+        if (user == null) return Error.NotFound("User not found");
 
         // TODO: Данный метод не смотрит на публичность события, соответственно в приватном календаре видно публичные события, норм ли это?
         var end = GetEndDate(start, view);
@@ -24,11 +26,11 @@ public class CalendarService(
 
     public async Task<Result<List<CalendarEventDto>>> GetPublicCalendarByUsernameAsync(string username, DateTime start, CalendarView view)
     {
-        // TODO: получаем Id юзера по username
-        var userId = Guid.NewGuid();
+        var user = await userRepository.GetByUsernameAsync(username);
+        if (user == null) return Error.NotFound("User not found");
         
         var end = GetEndDate(start, view);
-        var events = await calendarEventRepository.GetPublicByUserIdAsync(userId, start, end);
+        var events = await calendarEventRepository.GetPublicByUserIdAsync(user.Id, start, end);
 
         return events.Select(e => e.ToDto()).ToList();
     }
