@@ -20,8 +20,8 @@ public static class DependencyInjection
         services.AddScoped<IAttributeActionsApplier, AttributeActionsApplier>();
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
 
-        // services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
-        // services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

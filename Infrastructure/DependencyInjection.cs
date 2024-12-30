@@ -17,6 +17,8 @@ public static class DependencyInjection
     {
         services.AddSingleton<ICalendarEventRepository, CalendarEventRepository>(provider => new CalendarEventRepository());
 
+        services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+
         return services;
     }
 }
