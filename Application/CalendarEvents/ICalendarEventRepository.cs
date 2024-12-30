@@ -5,6 +5,8 @@ namespace SchedulePlanner.Application.CalendarEvents;
 public interface ICalendarEventRepository
 {
     Task<List<CalendarEvent>> GetAllByUserIdAsync(Guid userId, DateTime start, DateTime end);
+    
+    Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end);
 
     Task<CalendarEvent?> GetByIdAsync(Guid id);
 

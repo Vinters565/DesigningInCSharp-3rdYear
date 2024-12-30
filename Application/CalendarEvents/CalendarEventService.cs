@@ -2,6 +2,7 @@ using SchedulePlanner.Application.CalendarEvents.Dtos;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Application.CalendarEvents;
 
@@ -9,14 +10,6 @@ public class CalendarEventService(
     IEventAttributeManager eventAttributeManager,
     ICalendarEventRepository calendarEventRepository) : ICalendarEventService
 {
-    public async Task<Result<List<CalendarEventDto>>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
-    {
-        //TODO: проверять существование юзера
-        var events = await calendarEventRepository.GetAllByUserIdAsync(userId, start, end);
-
-        return events.Select(e => e.ToDto()).ToList();
-    }
-
     public async Task<Result<CalendarEventDto>> GetByIdAsync(Guid id)
     {
         var calendarEvent = await calendarEventRepository.GetByIdAsync(id);
@@ -25,12 +18,13 @@ public class CalendarEventService(
         return calendarEvent.ToDto();
     }
 
-    public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, CreateCalendarEventRequest request)
+    public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, DateTime start, DateTime end,
+        IReadOnlyDictionary<Type, IEventAttribute> attributes)
     {
         //TODO: проверять существование юзера
-        var calendarEvent = new CalendarEvent(userId, request.Start, request.End);
+        var calendarEvent = new CalendarEvent(userId, start, end);
 
-        var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, request.Attributes.ToDictionary());
+        var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, attributes.ToDictionary());
         if (attributesResult.IsError) return attributesResult.Error;
 
         calendarEventRepository.AddEvent(calendarEvent);
@@ -51,7 +45,7 @@ public class CalendarEventService(
         }
 
         calendarEventRepository.UpdateEvent(calendarEvent);
-
+        
         return calendarEvent.ToDto();
     }
 

@@ -11,29 +11,26 @@ namespace Api.Controllers;
 public class CalendarEventController(
     ICalendarEventService calendarEventService) : ControllerBase
 {
-    [HttpGet]
-    public async Task<ActionResult<CalendarEventDto>> GetByUserIdAsync(DateTime startDate, DateTime endDate)
+    [HttpPost]
+    public async Task<ActionResult<CalendarEventDto>> NewCalendarEvent(CreateCalendarEventRequest request)
     {
-        var userId = GetUserId(); 
-        
-        var result = await calendarEventService.GetByUserIdAsync(userId, startDate, endDate);
-        return result.ToActionResult(this);
-    }
+        var userId = GetAuthenticatedUserId();
 
+        var result = await calendarEventService.CreateAsync(
+            userId, 
+            request.Start, 
+            request.End, 
+            request.Attributes);
+        
+        return result.ToActionResult(this,
+            value => CreatedAtAction("NewCalendarEvent", value));
+    }
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<CalendarEventDto>> GetByIdAsync(Guid id)
     {
         var result = await calendarEventService.GetByIdAsync(id);
         return result.ToActionResult(this);
-    }
-    
-    [HttpPost]
-    public async Task<ActionResult<CalendarEventDto>> NewCalendarEventAsync(CreateCalendarEventRequest request)
-    {
-        var userId = GetUserId();
-
-        var result = await calendarEventService.CreateAsync(userId, request);
-        return result.ToActionResult(this, value => CreatedAtAction("NewCalendarEvent", value));
     }
 
     [HttpPut("{id}")]
@@ -50,7 +47,7 @@ public class CalendarEventController(
         return result.ToActionResult(this);
     }
 
-    private Guid GetUserId()
+    private Guid GetAuthenticatedUserId()
     {
         return Guid.NewGuid(); //TODO: change to identity userId
     }
