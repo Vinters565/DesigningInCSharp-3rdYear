@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Infrastructure.Repositories;
+using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Infrastructure;
 

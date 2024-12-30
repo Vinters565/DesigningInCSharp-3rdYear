@@ -22,6 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructureLayer();
+builder.Services.AddJwtAuth(builder.Configuration.GetSection("JwtOptions"));
 builder.Services.AddApplicationLayer();
 var app = builder.Build();
 
@@ -33,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseAuthentication();
 app.MapControllers();
 
 var ruleChecker = app.Services.GetRequiredService<IEventRuleChecker>();
