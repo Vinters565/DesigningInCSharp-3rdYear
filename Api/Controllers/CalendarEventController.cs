@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.Dtos;

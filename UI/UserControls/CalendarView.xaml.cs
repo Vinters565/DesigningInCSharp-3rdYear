@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.Windows;
 
 namespace UI.UserControls
 {
@@ -40,6 +41,12 @@ namespace UI.UserControls
         private void ListButton_Click(object sender, RoutedEventArgs e) 
         {
             ShowListView();
+        }
+
+        private void CreateNewEvent_Click(object sender, RoutedEventArgs e) 
+        {
+            var eventWindow = new NewEventWindow();
+            eventWindow.Show();
         }
 
         private void ShowMonthView() 
