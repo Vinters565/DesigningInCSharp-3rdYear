@@ -18,7 +18,7 @@ public class EventAttributeManager(
 
         if (failedRule != null)
         {
-            return Error.Failure($"Правило '{failedRule}' нарушено");
+            return Error.Failure(failedRule.FailMessage);
         }
 
         await attributeChangesHandler.HandleAsync(oldAttributes, calendarEvent.AttributeData, calendarEvent);

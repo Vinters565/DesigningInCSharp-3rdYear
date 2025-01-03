@@ -7,6 +7,8 @@ namespace SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 public class NonOverlappingLocationsRule(
     ICalendarEventRepository calendarEventRepository) : IEventRule
 {
+    public string FailMessage => "Пересечение с другим календарным событием на выбранное место";
+
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
         if (!calendarEvent.AttributeData.TryGetAttribute<DependsOnLocationAttribute>(out var dependsOnLocationAttribute)

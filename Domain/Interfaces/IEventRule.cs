@@ -4,5 +4,7 @@ namespace SchedulePlanner.Domain.Interfaces;
 
 public interface IEventRule
 {
-    public Task<bool> CheckAsync(CalendarEvent calendarEvent);
+    string FailMessage { get; }
+    
+    Task<bool> CheckAsync(CalendarEvent calendarEvent);
 }
