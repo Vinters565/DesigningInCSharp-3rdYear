@@ -1,54 +1,20 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventAttributes;
-using System.Data.SQLite;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
-using SchedulePlanner.Application.JsonConverters;
-using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 
 public class CalendarEventRepository : ICalendarEventRepository
 {
-    private const string connectionString = "Data Source={calendar_app.db};Version=3;";
-    private readonly JsonSerializerOptions serializeOptions;
-    public CalendarEventRepository()
-    {
-        InitializeDatabase();
-        serializeOptions = new JsonSerializerOptions
-        {
-            WriteIndented = true
-        };
-        serializeOptions.Converters.Add(new EventAttributeIReadOnlyDictionaryConverter());
-        serializeOptions.Converters.Add(new EventAttributeDictionaryConverter());
-    }
+    private readonly AppDbContext context;
 
-
-    private void InitializeDatabase()
-    {
-        ExecuteCommands(
-            @"CREATE TABLE IF NOT EXISTS CalendarEvents (
-                Id TEXT PRIMARY KEY,
-                UserId TEXT NOT NULL,
-                StartDate DATETIME NOT NULL,
-                EndDate DATETIME NOT NULL,
-                Attribute TEXT NOT NULL)",
-            new Action<SQLiteCommand>(com => { })
-            );
-    }
-
-    public void DeleteTable()
-    {
-        ExecuteCommands(
-            "DROP TABLE IF EXISTS CalendarEvents",
-            new Action<SQLiteCommand>(command => command.ExecuteNonQuery())
-            );
-    }
+    public CalendarEventRepository(AppDbContext context) => this.context = context;
 
     public async Task<List<CalendarEvent>> GetAllByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        return await context.CalendarEvents
+            .Where(e => e.UserId == userId && e.StartDate >= start && e.EndDate <= end)
+            .ToListAsync();
     }
 
     public Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
@@ -58,145 +24,57 @@ public class CalendarEventRepository : ICalendarEventRepository
 
     public async Task<CalendarEvent?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await context.CalendarEvents.FindAsync(id);
     }
 
     public void Delete(CalendarEvent calendarEvent)
     {
-        DeleteEvent(calendarEvent.Id.ToString());
+        context.CalendarEvents.Remove(calendarEvent);
+        context.SaveChangesAsync();
     }
 
     public void AddEvent(CalendarEvent newEvent)
     {
-        ExecuteCommands(
-            @"INSERT INTO CalendarEvents (Id, UserId, StartDate, EndDate, Attribute)
-              VALUES (@Id, @UserId, @StartDate, @EndDate, @Attribute)",
-            new Action<SQLiteCommand>(command =>
-            {
-                command.Parameters.AddWithValue("@Id", newEvent.Id.ToString("D"));
-                command.Parameters.AddWithValue("@UserId", newEvent.UserId.ToString("D"));
-                command.Parameters.AddWithValue("@StartDate", newEvent.StartDate);
-                command.Parameters.AddWithValue("@EndDate", newEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(newEvent.AttributeData.Attributes, serializeOptions));
-            }));
+        context.CalendarEvents.Add(newEvent);
+        context.SaveChangesAsync();
     }
 
     public List<CalendarEvent> GetAllEvents()
     {
-        return ExecuteCommandsReader(
-            "SELECT * FROM CalendarEvents",
-            new Action<SQLiteCommand>( command => { }),
-            new Func<SQLiteDataReader, List<CalendarEvent>>(reader =>
-            {
-                var events = new List<CalendarEvent>();
-                while (reader.Read())
-                {
-                    events.Add(new CalendarEvent(
-                        Guid.Parse(reader["UserId"].ToString()!),
-                        Guid.Parse(reader["Id"].ToString()!),
-                        Convert.ToDateTime(reader["StartDate"]),
-                        Convert.ToDateTime(reader["EndDate"]),
-                        JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(reader["Attribute"].ToString()!, serializeOptions)
-                            ?? new Dictionary<Type, IEventAttribute>())
-                    );
-                }
-                return events;
-            }));
+        return context.CalendarEvents.ToList();
     }
 
     public void UpdateEvent(CalendarEvent updatedEvent)
     {
-        ExecuteCommands(
-            @"UPDATE CalendarEvents
-              SET StartDate = @StartDate, EndDate = @EndDate, Attribute = @Attribute
-              WHERE Id = @Id",
-            new Action<SQLiteCommand>(command =>
-            {
-                command.Parameters.AddWithValue("@Id", updatedEvent.Id.ToString("D"));
-                command.Parameters.AddWithValue("@StartDate", updatedEvent.StartDate);
-                command.Parameters.AddWithValue("@EndDate", updatedEvent.EndDate);
-                command.Parameters.AddWithValue("@Attribute", JsonSerializer.Serialize(updatedEvent.AttributeData.Attributes, serializeOptions));
-            }));
+        context.CalendarEvents.Update(updatedEvent);
+        context.SaveChangesAsync();
     }
 
-    public void DeleteEvent(string id)
+    public void DeleteEventById(string id)
     {
-        ExecuteCommands(
-            "DELETE FROM CalendarEvents WHERE Id = @Id",
-            new Action<SQLiteCommand>(command =>
-            {
-                command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
-            }));
+        var eventToDelete = context.CalendarEvents.FirstOrDefault(e => e.Id.ToString() == id);
+        if (eventToDelete != null)
+        {
+            context.CalendarEvents.Remove(eventToDelete);
+        }
+        context.SaveChangesAsync();
     }
 
-    
     public List<CalendarEvent> GetEvents(DateTime start, DateTime end)
     {
-        return ExecuteCommandsReader(
-            @"SELECT * FROM CalendarEvents WHERE (strftime('%Y-%m-%d %H:%M:%S', StartDate) <= @EndDate)
-            AND (strftime('%Y-%m-%d %H:%M:%S', EndDate) >= @StartDate)",
-            new Action<SQLiteCommand>(command => 
-            {
-                command.Parameters.AddWithValue("@StartDate", start.ToString("yyyy-MM-dd HH:mm:ss"));
-                command.Parameters.AddWithValue("@EndDate", end.ToString("yyyy-MM-dd HH:mm:ss"));
-            }),
-            new Func<SQLiteDataReader, List<CalendarEvent>>(reader =>
-            {
-                var events = new List<CalendarEvent>();
-                while (reader.Read())
-                {
-                    events.Add(new CalendarEvent(
-                        Guid.Parse(reader["UserId"].ToString()!),
-                        Guid.Parse(reader["Id"].ToString()!),
-                        Convert.ToDateTime(reader["StartDate"]),
-                        Convert.ToDateTime(reader["EndDate"]),
-                        JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(reader["Attribute"].ToString()!, serializeOptions)
-                            ?? new Dictionary<Type, IEventAttribute>())
-                    );
-                }
-                return events;
-            }
-            ));
+        return context.CalendarEvents
+            .Where(e => e.StartDate >= start && e.EndDate <= end)
+            .ToList();
     }
 
     public bool Any(DateTime start, DateTime end)
     {
-        return GetEvents(start, end).Count > 0;
+        return context.CalendarEvents
+            .Any(e => e.StartDate < end && e.EndDate > start);
     }
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
     {
         throw new NotImplementedException();
-    }
-
-    private void ExecuteCommands(string sqlCommand, Action<SQLiteCommand> action)
-    {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-            using (var command = new SQLiteCommand(sqlCommand, connection))
-            {
-                action(command);
-                command.ExecuteNonQuery();
-            }
-        }
-    }
-
-    private T ExecuteCommandsReader<T>(string sqlCommand, Action<SQLiteCommand> action, Func<SQLiteDataReader, T> readFunc)
-    {
-        using (var connection = new SQLiteConnection(connectionString))
-        {
-            connection.Open();
-            using (var command = new SQLiteCommand(sqlCommand, connection))
-            {
-                action(command);
-                command.ExecuteNonQuery();
-                using (var reader = command.ExecuteReader())
-                {
-                    return readFunc(reader);
-                }
-            }
-        }
     }
 }

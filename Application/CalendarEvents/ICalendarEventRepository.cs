@@ -15,7 +15,7 @@ public interface ICalendarEventRepository
     public void AddEvent(CalendarEvent newEvent);
     public List<CalendarEvent> GetAllEvents();
     public void UpdateEvent(CalendarEvent updatedEvent);
-    public void DeleteEvent(string id);
+    public void DeleteEventById(string id);
     public List<CalendarEvent> GetEvents(DateTime start, DateTime end);
 
     public bool Any(DateTime start, DateTime end);

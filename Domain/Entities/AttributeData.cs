@@ -4,14 +4,15 @@ namespace SchedulePlanner.Domain.Entities;
 
 public class AttributeData
 {
-    private Dictionary<Type, IEventAttribute> attributes;
+    private readonly Dictionary<Type, IEventAttribute> attributes;
+
     public IReadOnlyDictionary<Type, IEventAttribute> Attributes => attributes;
 
     public AttributeData(Dictionary<Type, IEventAttribute>? attributes = null)
     {
         this.attributes = attributes ?? new Dictionary<Type, IEventAttribute>();
     }
-    
+
     public void AddAttribute<T>(T newAttribute) where T : IEventAttribute
     {
         var key = typeof(T);
@@ -32,7 +33,7 @@ public class AttributeData
     {
         var key = typeof(T);
 
-        if (!attributes.ContainsKey(key))
+        if (!Attributes.ContainsKey(key))
         {
             throw new KeyNotFoundException($"Attribute of type {key.Name} does not exist.");
         }
