@@ -13,10 +13,10 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
         {
             return true;
         }
-
+        var userId = calendarEvent.UserId;
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
 
-        return !await calendarEventRepository.AnyAsync(start, end);
+        return !await calendarEventRepository.AnyAsync(userId, start, end);
     }
 }

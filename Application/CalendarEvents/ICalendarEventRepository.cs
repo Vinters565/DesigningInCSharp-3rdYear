@@ -16,13 +16,13 @@ public interface ICalendarEventRepository
     public Task<List<CalendarEvent>> GetAllEventsAsync();
     public void UpdateEvent(CalendarEvent updatedEvent);
     public void DeleteEventById(string id);
-    public Task<List<CalendarEvent>> GetEventsAsync(DateTime start, DateTime end);
+    public Task<List<CalendarEvent>> GetEventsAsync(Guid userId, DateTime start, DateTime end);
 
-    public Task<bool> AnyAsync(DateTime start, DateTime end);
+    public Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end);
 
-    public Task<bool> AnySinglOnlyAsync(DateTime start, DateTime end);
+    public Task<bool> AnySinglOnlyAsync(Guid userId, DateTime start, DateTime end);
 
-    public Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
+    public Task<bool> AnyWithLocationAsync(Guid userId, string location, DateTime start, DateTime end);
 
     public Task SaveChangesAsync();
 }

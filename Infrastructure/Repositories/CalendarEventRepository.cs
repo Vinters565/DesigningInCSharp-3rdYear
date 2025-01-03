@@ -64,34 +64,36 @@ public class CalendarEventRepository : ICalendarEventRepository
         }
     }
 
-    public async Task<List<CalendarEvent>> GetEventsAsync(DateTime start, DateTime end)
+    public async Task<List<CalendarEvent>> GetEventsAsync(Guid userId, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .Where(e => e.StartDate >= start && e.EndDate <= end)
+            .Where(e => e.UserId == userId && e.StartDate >= start && e.EndDate <= end)
             .ToListAsync();
     }
 
-    public async Task<bool> AnyAsync(DateTime start, DateTime end)
+    public async Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .AnyAsync(e => e.StartDate < end && e.EndDate > start);
+            .AnyAsync(e => e.UserId == userId && e.StartDate < end && e.EndDate > start);
     }
     
-    public async Task<bool> AnySinglOnlyAsync(DateTime start, DateTime end)
+    public async Task<bool> AnySinglOnlyAsync(Guid userId, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
             .AnyAsync(
-                e => e.StartDate >= start
+                e => e.UserId == userId 
+                && e.StartDate >= start
                 && e.EndDate <= end
                 && e.AttributeData.HasAttribute(typeof(SingleOnlyEventAttribute))
                 && e.AttributeData.GetAttribute<SingleOnlyEventAttribute>()!.IsSingleOnly);
     }
 
-    public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
+    public async Task<bool> AnyWithLocationAsync(Guid userId, string location, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
             .AnyAsync(
-                e => e.StartDate >= start
+                e => e.UserId == userId 
+                && e.StartDate >= start
                 && e.EndDate <= end
                 && e.AttributeData.HasAttribute(typeof(DependsOnLocationAttribute))
                 && e.AttributeData.GetAttribute<DependsOnLocationAttribute>()!.Location == location);
