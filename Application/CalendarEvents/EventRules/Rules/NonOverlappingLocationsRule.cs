@@ -18,6 +18,6 @@ public class NonOverlappingLocationsRule(
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
         
-        return await calendarEventRepository.AnyWithLocationAsync(dependsOnLocationAttribute.Location!, start, end);
+        return !await calendarEventRepository.AnyWithLocationAsync(dependsOnLocationAttribute.Location!, start, end);
     }
 }

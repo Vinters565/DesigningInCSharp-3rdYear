@@ -1,6 +1,6 @@
 ﻿using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 public class UserRepository : IUserRepository
@@ -16,21 +16,18 @@ public class UserRepository : IUserRepository
 
     public async Task DeleteAsync(Guid id)
     {
-        var users = context.Users.Where(user => user.Id == id);
-        foreach (var user in users)
-        {
-            context.Remove(user);
-        }
+        var users = await context.Users.Where(user => user.Id == id).ToListAsync();
+        context.RemoveRange(users);
     }
 
     public async Task<User?> GetByIDAsync(Guid id)
     {
-        return await context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
+        return await context.Users.FirstOrDefaultAsync(user => user.Id == id);
     }
 
     public async Task<User?> GetByUsernameAsync(string username)
     {
-        return await context.Users.Where(user => user.Username == username).FirstOrDefaultAsync();
+        return await context.Users.FirstOrDefaultAsync(user => user.Username == username);
     }
 
     public async Task UpdateAsync(User user)
