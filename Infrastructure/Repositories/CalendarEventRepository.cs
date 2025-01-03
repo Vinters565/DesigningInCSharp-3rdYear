@@ -1,6 +1,8 @@
 using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
+using System.Linq;
+using SchedulePlanner.Domain.EventAttributes;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 
@@ -17,9 +19,15 @@ public class CalendarEventRepository : ICalendarEventRepository
             .ToListAsync();
     }
 
-    public Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
+    public async Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        return await context.CalendarEvents
+            .Where(
+                e => e.UserId == userId 
+                && e.StartDate >= start 
+                && e.EndDate <= end 
+                && e.AttributeData.HasAttribute(typeof(PublicityAttribute)))
+            .ToListAsync();
     }
 
     public async Task<CalendarEvent?> GetByIdAsync(Guid id)
@@ -75,6 +83,12 @@ public class CalendarEventRepository : ICalendarEventRepository
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        return await context.CalendarEvents
+            .Where(
+                e => e.StartDate >= start
+                && e.EndDate <= end
+                && e.AttributeData.HasAttribute(typeof(DependsOnLocationAttribute))
+                && e.AttributeData.GetAttribute<DependsOnLocationAttribute>().Location == location)
+            .CountAsync() > 0;
     }
 }
