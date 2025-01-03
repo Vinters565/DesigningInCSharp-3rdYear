@@ -12,7 +12,6 @@ public class UserRepository : IUserRepository
     public async Task CreateAsync(User user)
     {
         context.Users.Add(user);
-        await context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
@@ -22,7 +21,6 @@ public class UserRepository : IUserRepository
         {
             context.Remove(user);
         }
-        await context.SaveChangesAsync();
     }
 
     public async Task<User?> GetByIDAsync(Guid id)
@@ -39,5 +37,10 @@ public class UserRepository : IUserRepository
     {
         await DeleteAsync(user.Id);
         await CreateAsync(user);
+    }
+    
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
     }
 }

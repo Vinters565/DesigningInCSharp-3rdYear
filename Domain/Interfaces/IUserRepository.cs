@@ -8,4 +8,5 @@ public interface IUserRepository
     Task<User?> GetByUsernameAsync(string username);
     Task UpdateAsync(User user);
     Task DeleteAsync(Guid id);
+    Task SaveChangesAsync();
 }

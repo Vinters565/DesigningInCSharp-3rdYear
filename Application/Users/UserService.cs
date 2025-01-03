@@ -37,6 +37,7 @@ public class UserService(
         var passwordHash = passwordHasher.Hash(request.Password);
         user = new(userID, request.Username, request.DisplayedName, passwordHash);
         await userRepository.CreateAsync(user);
+        await userRepository.SaveChangesAsync();
 
         return Result.Success();
     }
