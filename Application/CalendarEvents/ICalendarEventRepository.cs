@@ -12,13 +12,17 @@ public interface ICalendarEventRepository
 
     void Delete(CalendarEvent calendarEvent);
     
-    public void AddEvent(CalendarEvent newEvent);
-    public List<CalendarEvent> GetAllEvents();
+    public Task AddEventAsync(CalendarEvent newEvent);
+    public Task<List<CalendarEvent>> GetAllEventsAsync();
     public void UpdateEvent(CalendarEvent updatedEvent);
     public void DeleteEventById(string id);
-    public List<CalendarEvent> GetEvents(DateTime start, DateTime end);
+    public Task<List<CalendarEvent>> GetEventsAsync(DateTime start, DateTime end);
 
-    public bool Any(DateTime start, DateTime end);
+    public Task<bool> AnyAsync(DateTime start, DateTime end);
+
+    public Task<bool> AnySinglOnlyAsync(DateTime start, DateTime end);
 
     public Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
+
+    public Task SaveChangesAsync();
 }

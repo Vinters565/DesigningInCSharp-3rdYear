@@ -17,6 +17,6 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
 
-        return await Task.FromResult(!calendarEventRepository.Any(start, end));
+        return await Task.FromResult(!calendarEventRepository.AnyAsync(start, end));
     }
 }

@@ -38,24 +38,21 @@ public class CalendarEventRepository : ICalendarEventRepository
     public void Delete(CalendarEvent calendarEvent)
     {
         context.CalendarEvents.Remove(calendarEvent);
-        context.SaveChangesAsync();
     }
 
-    public void AddEvent(CalendarEvent newEvent)
+    public async Task AddEventAsync(CalendarEvent newEvent)
     {
-        context.CalendarEvents.Add(newEvent);
-        context.SaveChangesAsync();
+        await context.CalendarEvents.AddAsync(newEvent);
     }
 
-    public List<CalendarEvent> GetAllEvents()
+    public async Task<List<CalendarEvent>> GetAllEventsAsync()
     {
-        return context.CalendarEvents.ToList();
+        return await context.CalendarEvents.ToListAsync();
     }
 
     public void UpdateEvent(CalendarEvent updatedEvent)
     {
         context.CalendarEvents.Update(updatedEvent);
-        context.SaveChangesAsync();
     }
 
     public void DeleteEventById(string id)
@@ -65,30 +62,45 @@ public class CalendarEventRepository : ICalendarEventRepository
         {
             context.CalendarEvents.Remove(eventToDelete);
         }
-        context.SaveChangesAsync();
     }
 
-    public List<CalendarEvent> GetEvents(DateTime start, DateTime end)
+    public async Task<List<CalendarEvent>> GetEventsAsync(DateTime start, DateTime end)
     {
-        return context.CalendarEvents
+        return await context.CalendarEvents
             .Where(e => e.StartDate >= start && e.EndDate <= end)
-            .ToList();
+            .ToListAsync();
     }
 
-    public bool Any(DateTime start, DateTime end)
+    public async Task<bool> AnyAsync(DateTime start, DateTime end)
     {
-        return context.CalendarEvents
-            .Any(e => e.StartDate < end && e.EndDate > start);
+        return await context.CalendarEvents
+            .AnyAsync(e => e.StartDate < end && e.EndDate > start);
+    }
+    
+    public async Task<bool> AnySinglOnlyAsync(DateTime start, DateTime end)
+    {
+        return await context.CalendarEvents
+            .AnyAsync(
+                e => e.StartDate >= start
+                && e.EndDate <= end
+                && e.AttributeData.HasAttribute(typeof(SingleOnlyEventAttribute))
+                && e.AttributeData.GetAttribute<SingleOnlyEventAttribute>()!.IsSingleOnly);
     }
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .Where(
+            .AnyAsync(
                 e => e.StartDate >= start
                 && e.EndDate <= end
                 && e.AttributeData.HasAttribute(typeof(DependsOnLocationAttribute))
-                && e.AttributeData.GetAttribute<DependsOnLocationAttribute>().Location == location)
-            .CountAsync() > 0;
+                && e.AttributeData.GetAttribute<DependsOnLocationAttribute>()!.Location == location);
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
+    }
+
+    
 }

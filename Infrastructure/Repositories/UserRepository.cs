@@ -1,5 +1,6 @@
 ﻿using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using System.Data.Entity;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 public class UserRepository : IUserRepository
@@ -8,44 +9,35 @@ public class UserRepository : IUserRepository
 
     public UserRepository(AppDbContext context) => this.context = context;
 
-    public Task CreateAsync(User user)
+    public async Task CreateAsync(User user)
     {
-        return Task.Run(() =>
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var users = context.Users.Where(user => user.Id == id);
+        foreach (var user in users)
         {
-            context.Users.Add(user);
-            context.SaveChangesAsync();
-        });
+            context.Remove(user);
+        }
+        await context.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task<User?> GetByIDAsync(Guid id)
     {
-        return Task.Run(() =>
-        {
-            var users = context.Users.Where(user => user.Id == id);
-            foreach (var user in users)
-            {
-                context.Remove(user);
-            }
-            context.SaveChangesAsync();
-        });
+        return await context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
     }
 
-    public Task<User?> GetByIDAsync(Guid id)
+    public async Task<User?> GetByUsernameAsync(string username)
     {
-        return Task.Run(() => context.Users.Where(user => user.Id == id).FirstOrDefault());
+        return await context.Users.Where(user => user.Username == username).FirstOrDefaultAsync();
     }
 
-    public Task<User?> GetByUsernameAsync(string username)
+    public async Task UpdateAsync(User user)
     {
-        return Task.Run(() => context.Users.Where(user => user.Username == username).FirstOrDefault());
-    }
-
-    public Task UpdateAsync(User user)
-    {
-        return Task.Run(() =>
-        {
-            DeleteAsync(user.Id);
-            CreateAsync(user);
-        });
+        await DeleteAsync(user.Id);
+        await CreateAsync(user);
     }
 }
