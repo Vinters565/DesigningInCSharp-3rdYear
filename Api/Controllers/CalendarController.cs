@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Application.CalendarEvents.Dtos;
 using SchedulePlanner.Application.Calendars;
@@ -8,6 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("calendars")]
+[Authorize]
 public class CalendarController(
     ICalendarService calendarService) : ControllerBase
 {
@@ -31,6 +34,8 @@ public class CalendarController(
 
     private Guid GetAuthenticatedUserId()
     {
-        return Guid.NewGuid(); //TODO: change to identity userId
+        var userId = User.FindFirstValue("id") 
+                     ?? throw new Exception("Cannot find userId on the authenticated user");
+        return Guid.Parse(userId);
     }
 }
