@@ -18,6 +18,13 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
             .Where(e => e.UserId == userId && e.StartDate >= start && e.EndDate <= end)
             .ToListAsync();
     }
+    
+    public async Task<List<CalendarEvent>> GetAllAsync(DateTime start, DateTime end)
+    {
+        return await context.CalendarEvents
+            .Where(e => e.StartDate >= start && e.EndDate <= end)
+            .ToListAsync();
+    }
 
     public async Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
@@ -57,9 +64,9 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
             e => e.AttributeData.HasAttribute<SingleOnlyEventAttribute>(attr => attr.IsSingleOnly));
     }
 
-    public async Task<bool> AnyWithLocationAsync(Guid userId, string location, DateTime start, DateTime end)
+    public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
     {
-        var calendarEvents = await GetAllByUserIdAsync(userId, start, end);
+        var calendarEvents = await GetAllAsync(start, end);
 
         return calendarEvents.Any(e =>
             e.AttributeData.HasAttribute<DependsOnLocationAttribute>(attr =>

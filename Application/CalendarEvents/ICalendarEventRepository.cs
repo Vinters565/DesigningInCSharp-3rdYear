@@ -18,7 +18,7 @@ public interface ICalendarEventRepository
 
     Task<bool> AnySingleOnlyAsync(Guid userId, DateTime start, DateTime end);
 
-    Task<bool> AnyWithLocationAsync(Guid userId, string location, DateTime start, DateTime end);
+    Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
 
     Task SaveChangesAsync();
 }
