@@ -1,4 +1,5 @@
 using SchedulePlanner.Domain.Common;
+using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.Entities;
@@ -54,6 +55,11 @@ public class CalendarEvent : Entity<Guid>
     public void UpdateAttributes(Dictionary<Type, IEventAttribute>? newAttributes)
     {
         if (newAttributes != null) AttributeData = new AttributeData(newAttributes);
+    }
+
+    public bool IsPublic()
+    {
+        return AttributeData.HasAttribute<PublicityAttribute>();
     }
 
     private void ValidateDates()

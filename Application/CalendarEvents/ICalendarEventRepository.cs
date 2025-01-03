@@ -20,7 +20,7 @@ public interface ICalendarEventRepository
 
     public Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end);
 
-    public Task<bool> AnySinglOnlyAsync(Guid userId, DateTime start, DateTime end);
+    public Task<bool> AnySingleOnlyAsync(Guid userId, DateTime start, DateTime end);
 
     public Task<bool> AnyWithLocationAsync(Guid userId, string location, DateTime start, DateTime end);
 
