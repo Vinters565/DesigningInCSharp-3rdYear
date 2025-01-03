@@ -30,13 +30,13 @@ public class UserService(
             return Error.Failure($"User with name {request.Username} already exists");
 
         var userID = Guid.NewGuid();
-        user = await userRepository.GetByIDAsync(userID);
+        user = await userRepository.GetByIdAsync(userID);
         if (user != null)
             return Error.Failure($"User with ID {userID} already exists");
 
         var passwordHash = passwordHasher.Hash(request.Password);
         user = new(userID, request.Username, request.DisplayedName, passwordHash);
-        await userRepository.CreateAsync(user);
+        userRepository.Create(user);
         await userRepository.SaveChangesAsync();
 
         return Result.Success();

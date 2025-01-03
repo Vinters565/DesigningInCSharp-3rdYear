@@ -3,24 +3,13 @@ using SchedulePlanner.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository, IUserRepository
 {
     private readonly AppDbContext context;
 
-    public UserRepository(AppDbContext context) => this.context = context;
+    public UserRepository(AppDbContext context) : base(context) => this.context = context;
 
-    public async Task CreateAsync(User user)
-    {
-        context.Users.Add(user);
-    }
-
-    public async Task DeleteAsync(Guid id)
-    {
-        var users = await context.Users.Where(user => user.Id == id).ToListAsync();
-        context.RemoveRange(users);
-    }
-
-    public async Task<User?> GetByIDAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
         return await context.Users.FirstOrDefaultAsync(user => user.Id == id);
     }
@@ -29,15 +18,14 @@ public class UserRepository : IUserRepository
     {
         return await context.Users.FirstOrDefaultAsync(user => user.Username == username);
     }
-
-    public async Task UpdateAsync(User user)
-    {
-        await DeleteAsync(user.Id);
-        await CreateAsync(user);
-    }
     
-    public async Task SaveChangesAsync()
+    public void Create(User user)
     {
-        await context.SaveChangesAsync();
+        context.Users.Add(user);
+    }
+
+    public void Delete(User user)
+    {
+        context.Remove(user);
     }
 }

@@ -14,7 +14,7 @@ public class CalendarService(
 {
     public async Task<Result<List<CalendarEventDto>>> GetPrivateCalendarAsync(Guid userId, DateTime start, CalendarView view)
     {
-        var user = await userRepository.GetByIDAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
 
         // TODO: Данный метод не смотрит на публичность события, соответственно в приватном календаре видно публичные события, норм ли это?

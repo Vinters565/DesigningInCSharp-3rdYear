@@ -22,7 +22,7 @@ public class CalendarEventService(
     public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, DateTime start, DateTime end,
         IReadOnlyDictionary<Type, IEventAttribute> attributes)
     {
-        var user = await userRepository.GetByIDAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
         
         var calendarEvent = new CalendarEvent(userId, start, end);
@@ -30,7 +30,7 @@ public class CalendarEventService(
         var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, attributes.ToDictionary());
         if (attributesResult.IsError) return attributesResult.Error;
 
-        await calendarEventRepository.AddEventAsync(calendarEvent);
+        calendarEventRepository.Create(calendarEvent);
         await calendarEventRepository.SaveChangesAsync();
         
         return calendarEvent.ToDto();
@@ -49,7 +49,6 @@ public class CalendarEventService(
             if (attributesResult.IsError) return attributesResult.Error;
         }
 
-        calendarEventRepository.UpdateEvent(calendarEvent);
         await calendarEventRepository.SaveChangesAsync();
         
         return calendarEvent.ToDto();

@@ -69,6 +69,12 @@ public class AttributeData
 
     public bool HasAttribute<T>() where T : IEventAttribute => attributes.ContainsKey(typeof(T));
 
+    public bool HasAttribute<T>(Func<T, bool> predicate) where T : IEventAttribute
+    {
+        return TryGetAttribute<T>(out var attribute)
+               && predicate(attribute!);
+    }
+
     public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
         where TAttribute : IEventAttribute
     {
