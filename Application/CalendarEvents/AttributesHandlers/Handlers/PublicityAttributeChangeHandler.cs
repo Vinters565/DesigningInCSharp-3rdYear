@@ -1,11 +1,11 @@
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 
-namespace SchedulePlanner.Application.CalendarEvents.AttributeActions;
+namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 
-public class PublicityAttributeAction : IAttributeAction
+public class PublicityAttributeChangeHandler : IAttributeChangeHandler
 {
-    public async Task ProcessAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
+    public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
     {
         if (AttributeData.IsAttributeDeleted<PublicityAttribute>(existedAttributes, newAttributes))
             await OnDeleteAsync(existedAttributes, newAttributes, calendarEvent);
