@@ -1,4 +1,4 @@
-namespace SchedulePlanner.Domain.Common.Results;
+namespace SchedulePlanner.Utils.Result;
 
 public class Result<T>
 {

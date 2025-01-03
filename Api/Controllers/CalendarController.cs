@@ -1,10 +1,10 @@
 using System.Security.Claims;
-using Api.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Application.CalendarEvents.Dtos;
 using SchedulePlanner.Application.Calendars;
 using SchedulePlanner.Domain.Enums;
+using SchedulePlanner.Utils.Result;
 
 namespace Api.Controllers;
 

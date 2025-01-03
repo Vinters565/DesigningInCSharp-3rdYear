@@ -1,6 +1,7 @@
 ﻿using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using SchedulePlanner.Infrastructure.Common;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 public class UserRepository : BaseRepository, IUserRepository

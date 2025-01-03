@@ -1,6 +1,6 @@
 using SchedulePlanner.Application.Users.Requests;
-using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Users;
 

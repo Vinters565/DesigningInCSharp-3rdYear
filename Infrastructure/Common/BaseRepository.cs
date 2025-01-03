@@ -1,4 +1,4 @@
-namespace SchedulePlanner.Infrastructure.Repositories;
+namespace SchedulePlanner.Infrastructure.Common;
 
 public abstract class BaseRepository(AppDbContext context)
 {
