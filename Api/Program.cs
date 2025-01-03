@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using System;
+using Api.Extensions;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.JsonConverters;
@@ -19,7 +20,7 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGenWithJwtSecurity();
 
 builder.Services.AddInfrastructureLayer();
 builder.Services.AddJwtAuth(builder.Configuration.GetSection("JwtOptions"));
