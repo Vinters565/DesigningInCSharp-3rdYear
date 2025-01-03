@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Infrastructure.Repositories;
-using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Infrastructure;
 
@@ -21,7 +20,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=calendar_app.db"));
         services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
 
-        services.AddScoped<IUserRepository, InMemoryUserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
