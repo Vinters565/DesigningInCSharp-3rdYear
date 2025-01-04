@@ -7,6 +7,7 @@ using SchedulePlanner.Application.Users;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 using SchedulePlanner.Application.Calendars;
+using SchedulePlanner.Application.Subscriptions;
 
 namespace SchedulePlanner.Application;
 
@@ -22,6 +23,8 @@ public static class DependencyInjection
         services.AddSingleton<IAttributeChangeHandler[]>([new PublicityAttributeChangeHandler()]);
         services.AddScoped<IAttributeChangesHandler, AttributeChangesHandler>();
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
+
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
 
         services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
         services.AddScoped<IUserService, UserService>();

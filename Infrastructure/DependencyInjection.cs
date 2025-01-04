@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Application.Subscriptions;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Infrastructure.Repositories;
 
@@ -22,6 +23,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+        
         return services;
     }
 }

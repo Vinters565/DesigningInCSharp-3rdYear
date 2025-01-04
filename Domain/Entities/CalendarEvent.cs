@@ -59,7 +59,7 @@ public class CalendarEvent : Entity<Guid>
 
     public bool IsPublic()
     {
-        return AttributeData.HasAttribute<PublicityAttribute>();
+        return AttributeData.HasAttribute<PublicityAttribute>(attr => attr.IsEventPublic);
     }
 
     private void ValidateDates()

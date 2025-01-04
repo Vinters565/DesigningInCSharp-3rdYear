@@ -15,4 +15,12 @@ public class Subscription : Entity<Guid>
         UserId = userId;
         CalendarEventId = calendarEventId;
     }
+    
+    public Subscription(User user, CalendarEvent calendarEvent) : base(Guid.NewGuid())
+    {
+        UserId = user.Id;
+        User = user;
+        CalendarEventId = calendarEvent.Id;
+        CalendarEvent = calendarEvent;
+    }
 }
