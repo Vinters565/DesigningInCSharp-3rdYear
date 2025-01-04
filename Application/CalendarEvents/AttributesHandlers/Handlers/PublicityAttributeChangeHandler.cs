@@ -1,9 +1,11 @@
+using SchedulePlanner.Application.Subscriptions;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 
-public class PublicityAttributeChangeHandler : IAttributeChangeHandler
+public class PublicityAttributeChangeHandler(
+    ISubscriptionRepository subscriptionRepository) : IAttributeChangeHandler
 {
     public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
     {
@@ -11,12 +13,12 @@ public class PublicityAttributeChangeHandler : IAttributeChangeHandler
             await OnDeleteAsync(existedAttributes, newAttributes, calendarEvent);
     }
 
-    private async Task OnDeleteAsync(
+    private Task OnDeleteAsync(
         AttributeData existedAttributes, 
         AttributeData newAttributes, 
         CalendarEvent calendarEvent)
     {
-        //TODO: удалять записи в таблице Subscriptions по данному событию
-        return;
+        subscriptionRepository.DeleteByCalendarEventId(calendarEvent.Id);
+        return Task.CompletedTask;
     } 
 }

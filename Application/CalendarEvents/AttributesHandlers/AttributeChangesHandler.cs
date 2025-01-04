@@ -4,9 +4,9 @@ namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 
 public class AttributeChangesHandler : IAttributeChangesHandler
 {
-    private readonly IAttributeChangeHandler[] attributeChangeHandlers;
+    private readonly IEnumerable<IAttributeChangeHandler> attributeChangeHandlers;
 
-    public AttributeChangesHandler(IAttributeChangeHandler[] attributeChangeHandlers)
+    public AttributeChangesHandler(IEnumerable<IAttributeChangeHandler> attributeChangeHandlers)
     {
         this.attributeChangeHandlers = attributeChangeHandlers;
     }

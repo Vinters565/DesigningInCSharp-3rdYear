@@ -12,7 +12,7 @@ public interface ISubscriptionRepository
     
     void Delete(Subscription subscription);
     
-    void DeleteAllByCalendarEventId(Guid calendarEventId);
+    void DeleteByCalendarEventId(Guid calendarEventId);
 
     Task SaveChangesAsync();
 }

@@ -26,7 +26,7 @@ public class SubscriptionRepository(AppDbContext context) : BaseRepository(conte
         throw new NotImplementedException();
     }
 
-    public void DeleteAllByCalendarEventId(Guid calendarEventId)
+    public void DeleteByCalendarEventId(Guid calendarEventId)
     {
         throw new NotImplementedException();
     }
