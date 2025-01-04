@@ -65,7 +65,7 @@
            
             </Ellipse>
             
-            <TextBlock Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14"></TextBlock>
+            <TextBlock Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenPersonalAccountWindow_MouseDown"></TextBlock>
             
             <Button Margin="20 2 2 2" BorderThickness="0" Background="Transparent">
                 <Image Source="/Images/notification.png" Width="20" Height="20"></Image>

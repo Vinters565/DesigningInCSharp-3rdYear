@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,8 +24,8 @@ namespace UI.UserControls
         public DayView()
         {
             InitializeComponent();
-            currentDate = DateTime.Today; 
-            UpdateDateText(); 
+            currentDate = DateTime.Today;
+            UpdateDateText();
         }
 
         private void PreviousDay_Click(object sender, RoutedEventArgs e)
