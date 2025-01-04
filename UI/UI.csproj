@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Syncfusion.Shared.WPF" Version="28.1.37" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\notification.png" />
   </ItemGroup>
 	

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
         xmlns:local="clr-namespace:UI.Windows"
         mc:Ignorable="d"
         Title="Personal Account" Height="450" Width="860"
@@ -47,18 +48,18 @@
 
         <StackPanel Grid.Column="1" Margin="10" VerticalAlignment="Top">
             <TextBlock Text="Имя Пользователя:" FontWeight="Bold"/>
-            <TextBlock Text="fff" Width="250" Margin="0,6"/>
+            <TextBox Text="fff" Margin="6,6"/>
             <Border Height="1" Background="DarkGray"/>
 
             <TextBlock Text="Основной цвет:" FontWeight="Bold" Margin="0,10,0,0"/>
             <StackPanel Orientation="Horizontal">
-                <Rectangle Width="20" Height="20" Fill="DarkBlue" Margin="0,5,5,0" MouseDown="Rectangle_MouseDown"/>
+                <syncfusion:ColorPickerPalette x:Name="colorPickerPaletteMain" Width="60" Height="40" />
             </StackPanel>
             <Border Height="1" Background="DarkGray" Margin="0,6"/>
 
             <TextBlock Text="Дополнительный цвет:" FontWeight="Bold" Margin="0,10,0,0"/>
             <StackPanel Orientation="Horizontal">
-                <Rectangle Width="20" Height="20" Fill="GreenYellow" Margin="0,5,5,0" MouseDown="Rectangle_MouseDown"/>
+                <syncfusion:ColorPickerPalette x:Name="colorPickerPaletteAdditional" Width="60" Height="40" />
             </StackPanel>
             <Border Height="1" Background="DarkGray" Margin="0,5"/>
         </StackPanel>
