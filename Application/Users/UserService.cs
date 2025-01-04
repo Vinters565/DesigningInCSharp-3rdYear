@@ -1,5 +1,8 @@
+using System.Drawing;
 using SchedulePlanner.Application.Users.Requests;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Domain.ValueTypes;
 using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Users;
@@ -10,6 +13,9 @@ public class UserService(
     JwtService jwtService
 ) : IUserService
 {
+    private readonly Color DefaultPrimaryColor = Color.Cyan;
+    private readonly Color DefaultSecondaryColor = Color.DarkCyan;
+
     public async Task<Result<string>> LoginAsync(LoginUserRequest request)
     {
         var user = await userRepository.GetByUsernameAsync(request.Username);
@@ -35,10 +41,15 @@ public class UserService(
             return Error.Failure($"User with ID {userID} already exists");
 
         var passwordHash = passwordHasher.Hash(request.Password);
-        user = new(userID, request.Username, request.DisplayedName, passwordHash);
+        var userSettings = new UserSettings(
+            request.Username,
+            DefaultPrimaryColor,
+            DefaultSecondaryColor
+        );
+        user = new User(userID, request.Username, passwordHash, userSettings);
         userRepository.Create(user);
         await userRepository.SaveChangesAsync();
-        
+
         var token = jwtService.GenerateToken(user);
         return token;
     }
