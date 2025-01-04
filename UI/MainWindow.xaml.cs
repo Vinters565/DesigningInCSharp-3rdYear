@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.Windows;
 
 namespace UI
 {
@@ -19,6 +20,12 @@ namespace UI
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void OpenPersonalAccountWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var personalAccountWindow = new PersonalAccountWindow();
+            personalAccountWindow.Show();
         }
     }
 }
