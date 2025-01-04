@@ -26,6 +26,7 @@ public static class DependencyInjection
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
 
         services.AddScoped<ISubscriptionService, SubscriptionService>();
+        services.AddScoped<ISubscribedCalendarEventService, SubscribedCalendarEventService>();
 
         services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
         services.AddScoped<IUserService, UserService>();

@@ -7,19 +7,23 @@ using SchedulePlanner.Utils.Result;
 namespace SchedulePlanner.Application.Calendars;
 
 public class CalendarService(
+    ISubscribedCalendarEventService subscribedCalendarEventService,
     IUserRepository userRepository,
     ICalendarEventRepository calendarEventRepository) : ICalendarService
 {
-    public async Task<Result<List<CalendarEventDto>>> GetPrivateCalendarAsync(Guid userId, DateTime start, CalendarView view)
+    public async Task<Result<List<CalendarEventDto>>> GetPrivateCalendarAsync(Guid userId, DateTime start,
+        CalendarView view)
     {
         var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
-
-        // TODO: Данный метод не смотрит на публичность события, соответственно в приватном календаре видно публичные события, норм ли это?
+ 
         var end = GetEndDate(start, view);
-        var events = await calendarEventRepository.GetAllByUserIdAsync(userId, start, end);
+        var events = await calendarEventRepository.GetByUserIdAsync(userId, start, end);
 
-        return events.Select(e => e.ToDto()).ToList();
+        var dtos = events.Select(e => e.ToDto()).ToList();
+        dtos.AddRange(await subscribedCalendarEventService.GetByUserAsync(user, start, end));
+
+        return dtos;
     }
 
     public async Task<Result<List<CalendarEventDto>>> GetPublicCalendarByUsernameAsync(string username, DateTime start, CalendarView view)
