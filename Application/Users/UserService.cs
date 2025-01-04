@@ -23,7 +23,7 @@ public class UserService(
         return token;
     }
 
-    public async Task<Result> RegisterAsync(RegisterUserRequest request)
+    public async Task<Result<string>> RegisterAsync(RegisterUserRequest request)
     {
         var user = await userRepository.GetByUsernameAsync(request.Username);
         if (user != null)
@@ -38,7 +38,8 @@ public class UserService(
         user = new(userID, request.Username, request.DisplayedName, passwordHash);
         userRepository.Create(user);
         await userRepository.SaveChangesAsync();
-
-        return Result.Success();
+        
+        var token = jwtService.GenerateToken(user);
+        return token;
     }
 }

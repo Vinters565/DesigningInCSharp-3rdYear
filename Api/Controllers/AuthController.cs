@@ -11,14 +11,14 @@ namespace Api.Controllers;
 public class AuthController(IUserService userService) : ControllerBase
 {
     [HttpPost("/register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserRequest request)
+    public async Task<ActionResult<string>> RegisterAsync([FromBody] RegisterUserRequest request)
     {
         var result = await userService.RegisterAsync(request);
         return result.ToActionResult(this);
     }
 
     [HttpPost("/login")]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginUserRequest request)
+    public async Task<ActionResult<string>> LoginAsync([FromBody] LoginUserRequest request)
     {
         var result = await userService.LoginAsync(request);
         return result.ToActionResult(this);

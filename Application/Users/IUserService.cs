@@ -5,6 +5,6 @@ namespace SchedulePlanner.Application.Users;
 
 public interface IUserService
 {
-    Task<Result> RegisterAsync(RegisterUserRequest request);
+    Task<Result<string>> RegisterAsync(RegisterUserRequest request);
     Task<Result<string>> LoginAsync(LoginUserRequest request);
 }
