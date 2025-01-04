@@ -1,8 +1,8 @@
 using SchedulePlanner.Application.CalendarEvents.Dtos;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
-using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.CalendarEvents;
 
@@ -22,7 +22,7 @@ public class CalendarEventService(
     public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, DateTime start, DateTime end,
         IReadOnlyDictionary<Type, IEventAttribute> attributes)
     {
-        var user = await userRepository.GetByIDAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
         
         var calendarEvent = new CalendarEvent(userId, start, end);
@@ -30,8 +30,10 @@ public class CalendarEventService(
         var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, attributes.ToDictionary());
         if (attributesResult.IsError) return attributesResult.Error;
 
-        calendarEventRepository.AddEvent(calendarEvent);
-        return await Task.FromResult(calendarEvent.ToDto());
+        calendarEventRepository.Create(calendarEvent);
+        await calendarEventRepository.SaveChangesAsync();
+        
+        return calendarEvent.ToDto();
     }
 
     public async Task<Result<CalendarEventDto>> UpdateAsync(Guid id, UpdateCalendarEventRequest request)
@@ -47,7 +49,7 @@ public class CalendarEventService(
             if (attributesResult.IsError) return attributesResult.Error;
         }
 
-        calendarEventRepository.UpdateEvent(calendarEvent);
+        await calendarEventRepository.SaveChangesAsync();
         
         return calendarEvent.ToDto();
     }
@@ -58,6 +60,8 @@ public class CalendarEventService(
         if (calendarEvent == null) return Error.NotFound("Календарное событие не найдено");
         
         calendarEventRepository.Delete(calendarEvent);
+        await calendarEventRepository.SaveChangesAsync();
+        
         return Result.Success();
     }
 }

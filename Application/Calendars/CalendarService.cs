@@ -1,10 +1,8 @@
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.Dtos;
-using SchedulePlanner.Application.CalendarEvents.EventAttributes;
-using SchedulePlanner.Domain.Common.Results;
-using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Enums;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Calendars;
 
@@ -14,7 +12,7 @@ public class CalendarService(
 {
     public async Task<Result<List<CalendarEventDto>>> GetPrivateCalendarAsync(Guid userId, DateTime start, CalendarView view)
     {
-        var user = await userRepository.GetByIDAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
 
         // TODO: Данный метод не смотрит на публичность события, соответственно в приватном календаре видно публичные события, норм ли это?

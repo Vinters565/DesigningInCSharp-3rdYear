@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using SchedulePlanner.Domain.Common.Results;
 
-namespace Api.Extensions;
+namespace SchedulePlanner.Utils.Result;
 
-public static class ResultExtensions
+public static class MvcResultExtensions
 {
     public static ActionResult ToActionResult<T>(
         this Result<T> result, ControllerBase thisController, Func<T, ActionResult>? onValue = null)

@@ -1,5 +1,5 @@
 using SchedulePlanner.Application.Users.Requests;
-using SchedulePlanner.Domain.Common.Results;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Users;
 

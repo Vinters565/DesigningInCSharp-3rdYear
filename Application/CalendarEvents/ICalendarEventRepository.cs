@@ -9,16 +9,16 @@ public interface ICalendarEventRepository
     Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end);
 
     Task<CalendarEvent?> GetByIdAsync(Guid id);
-
-    void Delete(CalendarEvent calendarEvent);
     
-    public void AddEvent(CalendarEvent newEvent);
-    public List<CalendarEvent> GetAllEvents();
-    public void UpdateEvent(CalendarEvent updatedEvent);
-    public void DeleteEventById(string id);
-    public List<CalendarEvent> GetEvents(DateTime start, DateTime end);
+    void Create(CalendarEvent newEvent);
+    
+    void Delete(CalendarEvent calendarEvent);
 
-    public bool Any(DateTime start, DateTime end);
+    Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end);
 
-    public Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
+    Task<bool> AnySingleOnlyAsync(Guid userId, DateTime start, DateTime end);
+
+    Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end);
+
+    Task SaveChangesAsync();
 }

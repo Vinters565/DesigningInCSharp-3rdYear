@@ -1,8 +1,8 @@
 using SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
-using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.CalendarEvents.EventAttributes;
 
@@ -18,7 +18,7 @@ public class EventAttributeManager(
 
         if (failedRule != null)
         {
-            return Error.Failure($"Правило '{failedRule}' нарушено");
+            return Error.Failure(failedRule.FailMessage);
         }
 
         await attributeChangesHandler.HandleAsync(oldAttributes, calendarEvent.AttributeData, calendarEvent);

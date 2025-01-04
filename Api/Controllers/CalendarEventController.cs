@@ -1,8 +1,8 @@
-using Api.Extensions;
-using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.Dtos;
+using SchedulePlanner.Utils.Result;
 
 namespace Api.Controllers;
 
@@ -49,6 +49,8 @@ public class CalendarEventController(
 
     private Guid GetAuthenticatedUserId()
     {
-        return Guid.NewGuid(); //TODO: change to identity userId
+        var userId = User.FindFirstValue("id") 
+                     ?? throw new Exception("Cannot find userId on the authenticated user");
+        return Guid.Parse(userId);
     }
 }

@@ -1,14 +1,16 @@
 using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Infrastructure.Common;
 
 namespace SchedulePlanner.Infrastructure.Repositories;
 
-public class CalendarEventRepository : ICalendarEventRepository
+public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
 {
     private readonly AppDbContext context;
 
-    public CalendarEventRepository(AppDbContext context) => this.context = context;
+    public CalendarEventRepository(AppDbContext context) : base(context) => this.context = context;
 
     public async Task<List<CalendarEvent>> GetAllByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
@@ -16,10 +18,21 @@ public class CalendarEventRepository : ICalendarEventRepository
             .Where(e => e.UserId == userId && e.StartDate >= start && e.EndDate <= end)
             .ToListAsync();
     }
-
-    public Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
+    
+    public async Task<List<CalendarEvent>> GetAllAsync(DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        return await context.CalendarEvents
+            .Where(e => e.StartDate >= start && e.EndDate <= end)
+            .ToListAsync();
+    }
+
+    public async Task<List<CalendarEvent>> GetPublicByUserIdAsync(Guid userId, DateTime start, DateTime end)
+    {
+        var calendarEvents = await GetAllByUserIdAsync(userId, start, end);
+
+        return calendarEvents
+            .Where(e => e.IsPublic())
+            .ToList();
     }
 
     public async Task<CalendarEvent?> GetByIdAsync(Guid id)
@@ -27,54 +40,36 @@ public class CalendarEventRepository : ICalendarEventRepository
         return await context.CalendarEvents.FindAsync(id);
     }
 
+    public void Create(CalendarEvent newEvent)
+    {
+        context.CalendarEvents.Add(newEvent);
+    }
+    
     public void Delete(CalendarEvent calendarEvent)
     {
         context.CalendarEvents.Remove(calendarEvent);
-        context.SaveChangesAsync();
     }
 
-    public void AddEvent(CalendarEvent newEvent)
+    public async Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end)
     {
-        context.CalendarEvents.Add(newEvent);
-        context.SaveChangesAsync();
+        return await context.CalendarEvents
+            .AnyAsync(e => e.UserId == userId && e.StartDate < end && e.EndDate > start);
     }
 
-    public List<CalendarEvent> GetAllEvents()
+    public async Task<bool> AnySingleOnlyAsync(Guid userId, DateTime start, DateTime end)
     {
-        return context.CalendarEvents.ToList();
-    }
+        var calendarEvents = await GetAllByUserIdAsync(userId, start, end);
 
-    public void UpdateEvent(CalendarEvent updatedEvent)
-    {
-        context.CalendarEvents.Update(updatedEvent);
-        context.SaveChangesAsync();
-    }
-
-    public void DeleteEventById(string id)
-    {
-        var eventToDelete = context.CalendarEvents.FirstOrDefault(e => e.Id.ToString() == id);
-        if (eventToDelete != null)
-        {
-            context.CalendarEvents.Remove(eventToDelete);
-        }
-        context.SaveChangesAsync();
-    }
-
-    public List<CalendarEvent> GetEvents(DateTime start, DateTime end)
-    {
-        return context.CalendarEvents
-            .Where(e => e.StartDate >= start && e.EndDate <= end)
-            .ToList();
-    }
-
-    public bool Any(DateTime start, DateTime end)
-    {
-        return context.CalendarEvents
-            .Any(e => e.StartDate < end && e.EndDate > start);
+        return calendarEvents.Any(
+            e => e.AttributeData.HasAttribute<SingleOnlyEventAttribute>(attr => attr.IsSingleOnly));
     }
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        var calendarEvents = await GetAllAsync(start, end);
+
+        return calendarEvents.Any(e =>
+            e.AttributeData.HasAttribute<DependsOnLocationAttribute>(attr =>
+                attr.IsDependsOnLocation && attr.Location!.Equals(location)));
     }
 }

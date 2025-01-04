@@ -1,11 +1,13 @@
-using Api.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchedulePlanner.Application.Users;
 using SchedulePlanner.Application.Users.Requests;
+using SchedulePlanner.Utils.Result;
 
 namespace Api.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 public class AuthController(IUserService userService) : ControllerBase
 {
     [HttpPost("/register")]

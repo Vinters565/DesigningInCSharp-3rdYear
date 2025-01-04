@@ -1,6 +1,6 @@
 using SchedulePlanner.Application.CalendarEvents.Dtos;
-using SchedulePlanner.Domain.Common.Results;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.CalendarEvents;
 
