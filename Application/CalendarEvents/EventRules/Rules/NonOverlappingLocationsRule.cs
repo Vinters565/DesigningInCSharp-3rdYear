@@ -11,8 +11,8 @@ public class NonOverlappingLocationsRule(
 
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.AttributeData.TryGetAttribute<DependsOnLocationAttribute>(out var dependsOnLocationAttribute)
-            || !dependsOnLocationAttribute!.IsDependsOnLocation)
+        if (!calendarEvent.AttributeData.TryGetAttribute<DependsOnLocationEventAttribute>(out var dependsOnLocationAttribute)
+            || !dependsOnLocationAttribute!.IsActive)
         {
             return true;
         }

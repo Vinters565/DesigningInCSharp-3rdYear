@@ -7,7 +7,7 @@ public class PublicityAttributeChangeHandler : IAttributeChangeHandler
 {
     public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
     {
-        if (AttributeData.IsAttributeDeleted<PublicityAttribute>(existedAttributes, newAttributes))
+        if (AttributeData.IsAttributeDeleted<PublicityEventAttribute>(existedAttributes, newAttributes))
             await OnDeleteAsync(existedAttributes, newAttributes, calendarEvent);
     }
 

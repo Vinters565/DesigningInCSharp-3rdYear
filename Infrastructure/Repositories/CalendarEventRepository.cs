@@ -61,7 +61,7 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
         var calendarEvents = await GetAllByUserIdAsync(userId, start, end);
 
         return calendarEvents.Any(
-            e => e.AttributeData.HasAttribute<SingleOnlyEventAttribute>(attr => attr.IsSingleOnly));
+            e => e.AttributeData.HasActiveAttribute<MandatoryEventAttribute>());
     }
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
@@ -69,7 +69,7 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
         var calendarEvents = await GetAllAsync(start, end);
 
         return calendarEvents.Any(e =>
-            e.AttributeData.HasAttribute<DependsOnLocationAttribute>(attr =>
-                attr.IsDependsOnLocation && attr.Location!.Equals(location)));
+            e.AttributeData.HasActiveAttribute<DependsOnLocationEventAttribute>(attr =>
+                attr.Location!.Equals(location)));
     }
 }

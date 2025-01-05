@@ -75,6 +75,16 @@ public class AttributeData
                && predicate(attribute!);
     }
 
+    public bool HasActiveAttribute<T>() where T : IEventAttribute
+    {
+        return HasAttribute<T>(attr => attr.IsActive);
+    }
+
+    public bool HasActiveAttribute<T>(Func<T, bool> predicate) where T : IEventAttribute
+    {
+        return HasAttribute<T>(attr => attr.IsActive && predicate(attr));
+    }
+
     public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
         where TAttribute : IEventAttribute
     {

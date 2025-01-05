@@ -1,21 +1,15 @@
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Utils.Extensions;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 
-public class AttributeChangesHandler : IAttributeChangesHandler
+public class AttributeChangesHandler(
+    IAttributeChangeHandler[] attributeChangeHandlers) : IAttributeChangesHandler
 {
-    private readonly IAttributeChangeHandler[] attributeChangeHandlers;
-
-    public AttributeChangesHandler(IAttributeChangeHandler[] attributeChangeHandlers)
+    public async Task HandleAsync(
+        AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
     {
-        this.attributeChangeHandlers = attributeChangeHandlers;
-    }
-
-    public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
-    {
-        foreach (var attributeAction in attributeChangeHandlers)
-        {
-            await attributeAction.HandleAsync(existedAttributes, newAttributes, calendarEvent);
-        }
+        await attributeChangeHandlers.ForEachAsync(handler =>
+            handler.HandleAsync(existedAttributes, newAttributes, calendarEvent));
     }
 }
