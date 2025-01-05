@@ -1,23 +1,28 @@
+using System.Text.Json.Serialization;
+
 namespace SchedulePlanner.Utils.Result;
 
 public class Result<T>
 {
     private readonly T? value;
     
+    [JsonIgnore]
     public T Value => value!;
 
     private readonly Error? error;
  
+    [JsonIgnore]
     public Error Error => error!;
 
+    [JsonIgnore]
     public bool IsError => error != null;
 
-    private Result(T value)
+    protected Result(T value)
     {
         this.value = value;
     }
 
-    private Result(Error error)
+    protected Result(Error error)
     {
         this.error = error;
     }
@@ -43,11 +48,11 @@ public class Result
     
     public bool IsError => error != null;
     
-    private Result()
+    protected Result()
     {
     }
 
-    private Result(Error error)
+    protected Result(Error error)
     {
         this.error = error;
     }
