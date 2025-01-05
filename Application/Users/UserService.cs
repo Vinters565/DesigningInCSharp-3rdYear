@@ -13,9 +13,6 @@ public class UserService(
     JwtService jwtService
 ) : IUserService
 {
-    private readonly Color DefaultPrimaryColor = Color.Cyan;
-    private readonly Color DefaultSecondaryColor = Color.DarkCyan;
-
     public async Task<Result<string>> LoginAsync(LoginUserRequest request)
     {
         var user = await userRepository.GetByUsernameAsync(request.Username);
@@ -41,11 +38,7 @@ public class UserService(
             return Error.Failure($"User with ID {userID} already exists");
 
         var passwordHash = passwordHasher.Hash(request.Password);
-        var userSettings = new UserSettings(
-            request.Username,
-            DefaultPrimaryColor,
-            DefaultSecondaryColor
-        );
+        var userSettings = new UserSettings(request.DisplayedName);
         user = new User(userID, request.Username, passwordHash, userSettings);
         userRepository.Create(user);
         await userRepository.SaveChangesAsync();
