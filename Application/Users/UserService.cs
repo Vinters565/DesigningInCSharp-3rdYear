@@ -1,7 +1,6 @@
-using System.Drawing;
 using SchedulePlanner.Application.Users.Requests;
+using SchedulePlanner.Application.Users.Responses;
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Domain.ValueTypes;
 using SchedulePlanner.Utils.Result;
 
@@ -10,8 +9,7 @@ namespace SchedulePlanner.Application.Users;
 public class UserService(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
-    JwtService jwtService
-) : IUserService
+    JwtService jwtService) : IUserService
 {
     public async Task<Result<string>> LoginAsync(LoginUserRequest request)
     {
@@ -45,5 +43,13 @@ public class UserService(
 
         var token = jwtService.GenerateToken(user);
         return token;
+    }
+    
+    public async Task<Result<PaginatedResult<UserDto>>> GetUsers(int pageNumber, int count)
+    {
+        var enumeration = await userRepository.EnumerateAsync(pageNumber, count);
+
+        var dtos = enumeration.Items.Select(u => u.ToDto()).ToList();
+        return new PaginatedResult<UserDto>(dtos, enumeration.TotalCount, pageNumber, enumeration.PageSize);
     }
 }

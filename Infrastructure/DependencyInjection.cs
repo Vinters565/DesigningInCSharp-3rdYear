@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Application.Users;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Infrastructure.Repositories;
 

@@ -1,7 +1,7 @@
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.Dtos;
+using SchedulePlanner.Application.Users;
 using SchedulePlanner.Domain.Enums;
-using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Calendars;

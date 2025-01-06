@@ -1,20 +1,15 @@
-using System.Text.Json.Serialization;
-
 namespace SchedulePlanner.Utils.Result;
 
 public class Result<T>
 {
     private readonly T? value;
     
-    [JsonIgnore]
     public T Value => value!;
 
     private readonly Error? error;
  
-    [JsonIgnore]
     public Error Error => error!;
 
-    [JsonIgnore]
     public bool IsError => error != null;
 
     protected Result(T value)
