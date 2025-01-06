@@ -1,6 +1,6 @@
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.Entities;
+namespace SchedulePlanner.Domain.ValueTypes;
 
 public class AttributeData
 {

@@ -1,6 +1,7 @@
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Domain.ValueTypes;
 
 namespace SchedulePlanner.Domain.Entities;
 

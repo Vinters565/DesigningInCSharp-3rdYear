@@ -1,7 +1,6 @@
-﻿using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.Users;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Infrastructure.Common;
 using SchedulePlanner.Utils.Result;
 

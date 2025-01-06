@@ -1,8 +1,9 @@
 ﻿using System.Text.Json;
-using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Domain.JsonConverters;
+using SchedulePlanner.Domain.ValueTypes;
 using SchedulePlanner.Infrastructure.ValueConverters;
 
 namespace SchedulePlanner.Infrastructure

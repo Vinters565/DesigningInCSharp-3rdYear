@@ -1,4 +1,5 @@
 using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.ValueTypes;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 

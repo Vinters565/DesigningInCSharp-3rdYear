@@ -1,6 +1,6 @@
-using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Infrastructure.Common;
 
