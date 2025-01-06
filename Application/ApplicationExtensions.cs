@@ -16,7 +16,6 @@ public static class ApplicationExtensions
     {
         var jwtOptions = new JwtOptions();
         jwtSection.Bind(jwtOptions);
-        jwtOptions.SecretKey = "zosdfglkzjdsfgl3541f353dgzdkjmdfgnzldjnzd65415412"; // Todo move to env
 
         services.Configure<JwtOptions>(options =>
         {

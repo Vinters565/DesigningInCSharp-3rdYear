@@ -1,22 +1,15 @@
+using SchedulePlanner.Application.Subscriptions;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 
-public class PublicityAttributeChangeHandler : IAttributeChangeHandler
+public class PublicityAttributeChangeHandler(
+    ISubscriptionRepository subscriptionRepository) : AttributeChangeHandler<PublicityEventAttribute>
 {
-    public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
+    protected override Task OnDeleteAsync(PublicityEventAttribute deletedAttribute, CalendarEvent calendarEvent)
     {
-        if (AttributeData.IsAttributeDeleted<PublicityAttribute>(existedAttributes, newAttributes))
-            await OnDeleteAsync(existedAttributes, newAttributes, calendarEvent);
+        subscriptionRepository.DeleteByCalendarEventId(calendarEvent.Id);
+        return Task.CompletedTask;
     }
-
-    private async Task OnDeleteAsync(
-        AttributeData existedAttributes, 
-        AttributeData newAttributes, 
-        CalendarEvent calendarEvent)
-    {
-        //TODO: удалять записи в таблице Subscriptions по данному событию
-        return;
-    } 
 }

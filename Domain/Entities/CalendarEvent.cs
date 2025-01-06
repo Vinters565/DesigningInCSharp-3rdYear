@@ -1,6 +1,7 @@
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Domain.ValueTypes;
 
 namespace SchedulePlanner.Domain.Entities;
 
@@ -59,7 +60,7 @@ public class CalendarEvent : Entity<Guid>
 
     public bool IsPublic()
     {
-        return AttributeData.HasAttribute<PublicityAttribute>();
+        return AttributeData.HasActiveAttribute<PublicityEventAttribute>();
     }
 
     private void ValidateDates()

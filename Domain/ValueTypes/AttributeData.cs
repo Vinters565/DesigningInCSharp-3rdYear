@@ -1,6 +1,6 @@
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.Entities;
+namespace SchedulePlanner.Domain.ValueTypes;
 
 public class AttributeData
 {
@@ -73,6 +73,16 @@ public class AttributeData
     {
         return TryGetAttribute<T>(out var attribute)
                && predicate(attribute!);
+    }
+
+    public bool HasActiveAttribute<T>() where T : IEventAttribute
+    {
+        return HasAttribute<T>(attr => attr.IsActive);
+    }
+
+    public bool HasActiveAttribute<T>(Func<T, bool> predicate) where T : IEventAttribute
+    {
+        return HasAttribute<T>(attr => attr.IsActive && predicate(attr));
     }
 
     public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)

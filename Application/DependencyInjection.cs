@@ -3,10 +3,11 @@ using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 using SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
-using SchedulePlanner.Application.Users;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 using SchedulePlanner.Application.Calendars;
+using SchedulePlanner.Application.Subscriptions;
+using SchedulePlanner.Application.Users;
 
 namespace SchedulePlanner.Application;
 
@@ -19,9 +20,13 @@ public static class DependencyInjection
         
         services.AddEventRuleChain();
 
-        services.AddSingleton<IAttributeChangeHandler[]>([new PublicityAttributeChangeHandler()]);
+        services.AddScoped<IAttributeChangeHandler, PublicityAttributeChangeHandler>();
+        
         services.AddScoped<IAttributeChangesHandler, AttributeChangesHandler>();
         services.AddScoped<IEventAttributeManager, EventAttributeManager>();
+
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
+        services.AddScoped<ISubscribedCalendarEventService, SubscribedCalendarEventService>();
 
         services.AddScoped<IPasswordHasher, SHA256PasswordHasher>();
         services.AddScoped<IUserService, UserService>();
