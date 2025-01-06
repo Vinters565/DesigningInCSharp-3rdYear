@@ -1,8 +1,7 @@
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.Subscriptions.Dtos;
+using SchedulePlanner.Application.Users;
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventAttributes;
-using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Subscriptions;

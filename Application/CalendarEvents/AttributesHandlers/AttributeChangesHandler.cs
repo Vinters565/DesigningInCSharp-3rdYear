@@ -10,6 +10,11 @@ public class AttributeChangesHandler : IAttributeChangesHandler
 
     public AttributeChangesHandler(IEnumerable<IAttributeChangeHandler> attributeChangeHandlers)
     {
+        this.attributeChangeHandlers = attributeChangeHandlers;
+    }
+
+    public async Task HandleAsync(AttributeData existedAttributes, AttributeData newAttributes, CalendarEvent calendarEvent)
+    {
         await attributeChangeHandlers.ForEachAsync(handler =>
             handler.HandleAsync(existedAttributes, newAttributes, calendarEvent));
     }
