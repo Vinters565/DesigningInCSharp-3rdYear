@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UI.Dto;
 
 namespace UI.Windows
 {
@@ -25,6 +26,26 @@ namespace UI.Windows
         {
             RegisterWindow registerWindow = new RegisterWindow();
             registerWindow.Show(); 
+        }
+
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var authService = new ApiClient();
+            var loginRequest = new LoginUserRequest
+            {
+                Username = UsernameTextBox.Text,
+                Password = PasswordBox.Password
+            };
+
+            try
+            {
+                string token = await authService.LoginAsync(loginRequest);
+                MessageBox.Show($"Успешный вход! Токен: {token}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
         }
     }
 }

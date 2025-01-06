@@ -17,15 +17,24 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly ApiClient client;
+
         public MainWindow()
         {
             InitializeComponent();
+            client = new ApiClient();
         }
 
         private void OpenPersonalAccountWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var personalAccountWindow = new PersonalAccountWindow();
             personalAccountWindow.Show();
+        }
+
+        private void OpenAuthWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var loginWindow = new LoginWindow();
+            loginWindow.Show();
         }
     }
 }
