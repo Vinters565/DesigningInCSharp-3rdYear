@@ -1,8 +1,10 @@
 ﻿using System.Text.Json;
-using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Domain.JsonConverters;
+using SchedulePlanner.Domain.ValueTypes;
+using SchedulePlanner.Infrastructure.ValueConverters;
 
 namespace SchedulePlanner.Infrastructure
 {
@@ -17,7 +19,15 @@ namespace SchedulePlanner.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.OwnsOne(u => u.Settings, settings =>
+                {
+                    settings.Property(s => s.DisplayedName).IsRequired();
+                    settings.Property(s => s.PrimaryColor).HasConversion(new ColorValueConverter());
+                    settings.Property(s => s.SecondaryColor).HasConversion(new ColorValueConverter());
+                });
+            });
 
             modelBuilder.Entity<CalendarEvent>(entity =>
             {
@@ -42,6 +52,8 @@ namespace SchedulePlanner.Infrastructure
                             new Dictionary<Type, IEventAttribute>())
                     );
             });
+            
+            base.OnModelCreating(modelBuilder);
         }
     } 
 }

@@ -1,6 +1,6 @@
-using SchedulePlanner.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
+using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Infrastructure.Common;
 
@@ -66,7 +66,7 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
         var calendarEvents = await GetByUserIdAsync(userId, start, end);
 
         return calendarEvents.Any(
-            e => e.AttributeData.HasAttribute<SingleOnlyEventAttribute>(attr => attr.IsSingleOnly));
+            e => e.AttributeData.HasActiveAttribute<MandatoryEventAttribute>());
     }
 
     public async Task<bool> AnyWithLocationAsync(string location, DateTime start, DateTime end)
@@ -74,7 +74,7 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
         var calendarEvents = await GetAllAsync(start, end);
 
         return calendarEvents.Any(e =>
-            e.AttributeData.HasAttribute<DependsOnLocationAttribute>(attr =>
-                attr.IsDependsOnLocation && attr.Location!.Equals(location)));
+            e.AttributeData.HasActiveAttribute<DependsOnLocationEventAttribute>(attr =>
+                attr.Location!.Equals(location)));
     }
 }

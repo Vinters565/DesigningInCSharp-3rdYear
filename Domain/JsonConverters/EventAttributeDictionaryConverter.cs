@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Application.JsonConverters
+namespace SchedulePlanner.Domain.JsonConverters
 {
     public class EventAttributeDictionaryConverter: JsonConverter<Dictionary<Type, IEventAttribute>>
     {

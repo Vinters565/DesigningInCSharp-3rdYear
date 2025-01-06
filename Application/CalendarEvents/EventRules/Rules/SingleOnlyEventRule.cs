@@ -14,8 +14,8 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
         
-        if (!calendarEvent.AttributeData.TryGetAttribute<SingleOnlyEventAttribute>(out var singleOnlyEventAttribute) 
-            || !singleOnlyEventAttribute!.IsSingleOnly)
+        if (!calendarEvent.AttributeData.TryGetAttribute<MandatoryEventAttribute>(out var singleOnlyEventAttribute) 
+            || !singleOnlyEventAttribute!.IsActive)
         {
             return !await calendarEventRepository.AnySingleOnlyAsync(userId, start, end);
         }

@@ -3,11 +3,11 @@ using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.AttributesHandlers;
 using SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
-using SchedulePlanner.Application.Users;
 using SchedulePlanner.Application.CalendarEvents.EventRules;
 using SchedulePlanner.Application.CalendarEvents.EventRules.Rules;
 using SchedulePlanner.Application.Calendars;
 using SchedulePlanner.Application.Subscriptions;
+using SchedulePlanner.Application.Users;
 
 namespace SchedulePlanner.Application;
 

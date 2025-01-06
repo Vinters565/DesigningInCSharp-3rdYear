@@ -1,11 +1,15 @@
 using SchedulePlanner.Domain.Entities;
-namespace SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Utils.Result;
+
+namespace SchedulePlanner.Application.Users;
 
 public interface IUserRepository
 {
     Task<User?> GetByIdAsync(Guid id);
     
     Task<User?> GetByUsernameAsync(string username);
+
+    Task<PaginatedResult<User>> EnumerateAsync(int pageNumber, int count);
     
     void Create(User user);
     

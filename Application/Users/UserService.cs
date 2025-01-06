@@ -1,5 +1,7 @@
 using SchedulePlanner.Application.Users.Requests;
-using SchedulePlanner.Domain.Interfaces;
+using SchedulePlanner.Application.Users.Responses;
+using SchedulePlanner.Domain.Entities;
+using SchedulePlanner.Domain.ValueTypes;
 using SchedulePlanner.Utils.Result;
 
 namespace SchedulePlanner.Application.Users;
@@ -7,8 +9,7 @@ namespace SchedulePlanner.Application.Users;
 public class UserService(
     IUserRepository userRepository,
     IPasswordHasher passwordHasher,
-    JwtService jwtService
-) : IUserService
+    JwtService jwtService) : IUserService
 {
     public async Task<Result<string>> LoginAsync(LoginUserRequest request)
     {
@@ -23,7 +24,7 @@ public class UserService(
         return token;
     }
 
-    public async Task<Result> RegisterAsync(RegisterUserRequest request)
+    public async Task<Result<string>> RegisterAsync(RegisterUserRequest request)
     {
         var user = await userRepository.GetByUsernameAsync(request.Username);
         if (user != null)
@@ -35,10 +36,20 @@ public class UserService(
             return Error.Failure($"User with ID {userID} already exists");
 
         var passwordHash = passwordHasher.Hash(request.Password);
-        user = new(userID, request.Username, request.DisplayedName, passwordHash);
+        var userSettings = new UserSettings(request.DisplayedName);
+        user = new User(userID, request.Username, passwordHash, userSettings);
         userRepository.Create(user);
         await userRepository.SaveChangesAsync();
 
-        return Result.Success();
+        var token = jwtService.GenerateToken(user);
+        return token;
+    }
+    
+    public async Task<Result<PaginatedResult<UserDto>>> GetUsers(int pageNumber, int count)
+    {
+        var enumeration = await userRepository.EnumerateAsync(pageNumber, count);
+
+        var dtos = enumeration.Items.Select(u => u.ToDto()).ToList();
+        return new PaginatedResult<UserDto>(dtos, enumeration.TotalCount, pageNumber, enumeration.PageSize);
     }
 }
