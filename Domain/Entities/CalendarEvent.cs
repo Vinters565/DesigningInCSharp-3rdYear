@@ -1,5 +1,6 @@
 using SchedulePlanner.Domain.Common;
 using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.EventAttributes.Attributes;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Domain.ValueTypes;
 

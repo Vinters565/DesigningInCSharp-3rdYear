@@ -1,6 +1,7 @@
 using SchedulePlanner.Application.Subscriptions;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.EventAttributes.Attributes;
 
 namespace SchedulePlanner.Application.CalendarEvents.AttributesHandlers.Handlers;
 
