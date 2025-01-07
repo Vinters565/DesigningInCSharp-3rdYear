@@ -26,7 +26,7 @@ public class EventAttributesRegistry : IEventAttributesRegistry
 
     public IReadOnlyDictionary<string, Type> GetTypeMapping() => typeMapping;
 
-    public IReadOnlyCollection<(Type Type, string Name, IReadOnlyCollection<FieldMetadata> Metadata)> 
+    public IReadOnlyCollection<(Type Type, string Description, IReadOnlyCollection<FieldMetadata> Metadata)> 
         GetEventAttributesWithMetadata() => eventAttributesWithMetadata;
     
     private static List<Type> LoadEventAttributeTypes()
@@ -42,7 +42,7 @@ public class EventAttributesRegistry : IEventAttributesRegistry
         return eventAttributeTypes.ToDictionary(t => t.Name, t => t);
     }
 
-    private List<(Type Type, string Name, IReadOnlyCollection<FieldMetadata> Metadata)>
+    private List<(Type Type, string Description, IReadOnlyCollection<FieldMetadata> Metadata)>
         LoadEventAttributesWithMetadata()
     {
         var result = new List<(Type Type, string Name, IReadOnlyCollection<FieldMetadata> Metadata)>();
@@ -51,7 +51,7 @@ public class EventAttributesRegistry : IEventAttributesRegistry
         {
             if (Activator.CreateInstance(type, true) is IEventAttribute instance)
             {
-                result.Add((type, instance.Name, instance.GetFieldsMetadata()));
+                result.Add((type, instance.Description, instance.GetFieldsMetadata()));
             }
         }
         

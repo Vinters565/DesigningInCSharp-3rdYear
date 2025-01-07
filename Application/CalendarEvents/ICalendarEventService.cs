@@ -9,6 +9,7 @@ public interface ICalendarEventService
     Task<Result<CalendarEventDto>> GetByIdAsync(Guid id);
 
     Task<Result<CalendarEventDto>> CreateAsync(
+        string name,
         Guid userId, 
         DateTime start, 
         DateTime end, 

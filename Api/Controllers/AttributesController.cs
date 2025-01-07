@@ -10,14 +10,19 @@ public class AttributesController(
     IEventAttributesRegistry eventAttributesRegistry) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<EventAttributeDto>>> GetAll()
+    public Task<ActionResult<List<EventAttributeDto>>> GetAll()
     {
         var attributes = eventAttributesRegistry.GetEventAttributesWithMetadata();
 
-        return Ok(attributes.Select(a => new EventAttributeDto
-        {
-            Name = a.Name,
-            Fields = a.Metadata
-        }).ToList());
+        var dtos = attributes
+            .Select(a => new EventAttributeDto
+            {
+                Name = a.Type.Name,
+                Description = a.Description,
+                Fields = a.Metadata
+            })
+            .ToList();
+        
+        return Task.FromResult<ActionResult<List<EventAttributeDto>>>(Ok(dtos));
     }
 }

@@ -4,7 +4,7 @@ namespace SchedulePlanner.Domain.Interfaces;
 
 public interface IEventAttribute
 {
-    string Name { get; }
+    string Description { get; }
     
     bool IsActive { get; }
 

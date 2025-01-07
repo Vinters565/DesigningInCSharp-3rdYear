@@ -8,7 +8,7 @@ public class MandatoryEventAttribute : EventAttribute
     
     private MandatoryEventAttribute() { }
     
-    public override string Name => "Обязательное событие";
+    public override string Description => "Обязательное событие";
     
     protected override IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata()
     {

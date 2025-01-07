@@ -9,6 +9,6 @@ public interface IEventAttributesRegistry
 
     IReadOnlyDictionary<string, Type> GetTypeMapping();
 
-    IReadOnlyCollection<(Type Type, string Name, IReadOnlyCollection<FieldMetadata> Metadata)>
+    IReadOnlyCollection<(Type Type, string Description, IReadOnlyCollection<FieldMetadata> Metadata)>
         GetEventAttributesWithMetadata();
 }

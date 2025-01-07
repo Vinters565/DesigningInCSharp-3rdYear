@@ -16,7 +16,7 @@ public class RecurrenceEventAttribute : EventAttribute
 
     private RecurrenceEventAttribute() { }
     
-    public override string Name => "Повторяемое событие";
+    public override string Description => "Повторяемое событие";
     
     protected override IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata()
     {

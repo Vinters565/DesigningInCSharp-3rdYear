@@ -1,5 +1,4 @@
 using SchedulePlanner.Domain.Common;
-using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.EventAttributes.Attributes;
 using SchedulePlanner.Domain.Interfaces;
 using SchedulePlanner.Domain.ValueTypes;
@@ -8,6 +7,8 @@ namespace SchedulePlanner.Domain.Entities;
 
 public class CalendarEvent : Entity<Guid>
 {
+    public string Name { get; }
+    
     public Guid UserId { get; }
     
     public DateTime StartDate { get; private set; }
@@ -16,21 +17,13 @@ public class CalendarEvent : Entity<Guid>
     
     public AttributeData AttributeData { get; private set; }
 
-    public CalendarEvent(Guid userId, DateTime startDate, DateTime endDate)
-        : this(userId, Guid.NewGuid(), startDate, endDate)
+    public CalendarEvent(string name, Guid userId, DateTime startDate, DateTime endDate)
+        : this(name, userId, Guid.NewGuid(), startDate, endDate)
     {
     }
 
     public CalendarEvent(
-        Guid userId, 
-        DateTime startDate, 
-        DateTime endDate, 
-        Dictionary<Type, IEventAttribute> attributes) 
-        : this(userId, Guid.NewGuid(), startDate, endDate, attributes)
-    {
-    }
-
-    public CalendarEvent(
+        string name,
         Guid userId, 
         Guid entityId, 
         DateTime startDate, 
@@ -38,6 +31,7 @@ public class CalendarEvent : Entity<Guid>
         Dictionary<Type, IEventAttribute>? attributes = null) 
         : base(entityId)
     {
+        Name = name;
         UserId = userId;
         
         StartDate = startDate;
@@ -46,6 +40,8 @@ public class CalendarEvent : Entity<Guid>
 
         AttributeData = new AttributeData(attributes);
     }
+    
+    private CalendarEvent() : base(Guid.NewGuid()) { } // EF Core
 
     public void Update(DateTime? start, DateTime? end)
     {

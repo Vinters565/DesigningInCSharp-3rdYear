@@ -20,13 +20,13 @@ public class CalendarEventService(
         return calendarEvent.ToDto();
     }
 
-    public async Task<Result<CalendarEventDto>> CreateAsync(Guid userId, DateTime start, DateTime end,
+    public async Task<Result<CalendarEventDto>> CreateAsync(string name, Guid userId, DateTime start, DateTime end,
         IReadOnlyDictionary<Type, IEventAttribute> attributes)
     {
         var user = await userRepository.GetByIdAsync(userId);
         if (user == null) return Error.NotFound("User not found");
         
-        var calendarEvent = new CalendarEvent(userId, start, end);
+        var calendarEvent = new CalendarEvent(name, userId, start, end);
 
         var attributesResult = await eventAttributeManager.UpdateAsync(calendarEvent, attributes.ToDictionary());
         if (attributesResult.IsError) return attributesResult.Error;

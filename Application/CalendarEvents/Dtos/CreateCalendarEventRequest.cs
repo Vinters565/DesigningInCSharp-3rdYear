@@ -4,6 +4,8 @@ namespace SchedulePlanner.Application.CalendarEvents.Dtos;
 
 public class CreateCalendarEventRequest
 {
+    public string Name { get; init; }
+    
     public DateTime Start { get; init; }
     
     public DateTime End { get; init; }
