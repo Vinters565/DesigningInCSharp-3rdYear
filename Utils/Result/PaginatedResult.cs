@@ -1,20 +1,22 @@
 namespace SchedulePlanner.Utils.Result;
 
-public class PaginatedResult<T>
+public class PaginatedResult<T> : Result<PaginatedResponse<T>>
 {
-    public List<T> Items { get; set; }
-    
-    public int TotalCount { get; set; }
-    
-    public int PageNumber { get; set; }
-    
-    public int PageSize { get; set; }
-
-    public PaginatedResult(List<T> items, int totalCount, int pageNumber, int pageSize)
+    protected PaginatedResult(PaginatedResponse<T> value) : base(value)
     {
-        Items = items;
-        TotalCount = totalCount;
-        PageNumber = pageNumber;
-        PageSize = pageSize;
+    }
+
+    protected PaginatedResult(Error error) : base(error)
+    {
+    }
+
+    public static implicit operator PaginatedResult<T>(PaginatedResponse<T> value)
+    {
+        return new PaginatedResult<T>(value);
+    }
+    
+    public static implicit operator PaginatedResult<T>(Error error)
+    {
+        return new PaginatedResult<T>(error);
     }
 }

@@ -8,5 +8,5 @@ public interface IUserService
 {
     Task<Result<string>> RegisterAsync(RegisterUserRequest request);
     Task<Result<string>> LoginAsync(LoginUserRequest request);
-    Task<Result<PaginatedResult<UserDto>>> GetUsers(int pageNumber, int count);
+    Task<PaginatedResult<UserDto>> GetUsers(int pageNumber, int count);
 }

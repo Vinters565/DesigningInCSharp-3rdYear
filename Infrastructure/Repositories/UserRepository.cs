@@ -23,7 +23,7 @@ public class UserRepository : BaseRepository, IUserRepository
         return await context.Users.FirstOrDefaultAsync(user => user.Username == username);
     }
 
-    public async Task<PaginatedResult<User>> EnumerateAsync(int pageNumber, int count)
+    public async Task<PaginatedResponse<User>> EnumerateAsync(int pageNumber, int count)
     {
         count = Math.Min(count, maxEnumerationCount);
         
@@ -34,7 +34,7 @@ public class UserRepository : BaseRepository, IUserRepository
             .Take(count)
             .ToListAsync();
 
-        return new PaginatedResult<User>(users, totalCount, pageNumber, count);
+        return new PaginatedResponse<User>(users, totalCount, pageNumber, count);
     }
  
     public void Create(User user)

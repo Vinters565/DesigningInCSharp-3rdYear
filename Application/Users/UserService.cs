@@ -45,11 +45,11 @@ public class UserService(
         return token;
     }
     
-    public async Task<Result<PaginatedResult<UserDto>>> GetUsers(int pageNumber, int count)
+    public async Task<PaginatedResult<UserDto>> GetUsers(int pageNumber, int count)
     {
-        var enumeration = await userRepository.EnumerateAsync(pageNumber, count);
-
-        var dtos = enumeration.Items.Select(u => u.ToDto()).ToList();
-        return new PaginatedResult<UserDto>(dtos, enumeration.TotalCount, pageNumber, enumeration.PageSize);
+        var paginatedUsers = await userRepository.EnumerateAsync(pageNumber, count);
+    
+        var dtos = paginatedUsers.Items.Select(u => u.ToDto()).ToList();
+        return new PaginatedResponse<UserDto>(dtos, paginatedUsers.TotalCount, pageNumber, paginatedUsers.PageSize);
     }
 }

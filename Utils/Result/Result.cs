@@ -22,8 +22,6 @@ public class Result<T>
         this.error = error;
     }
 
-    public static Result<T> Success(T value) => new(value);
-
     public static implicit operator Result<T>(T value)
     {
         return new Result<T>(value);
