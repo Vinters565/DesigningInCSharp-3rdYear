@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using UI.Dto;
 
 namespace UI.Windows
@@ -25,7 +16,8 @@ namespace UI.Windows
         private void OpenRegisterWindow_Click(object sender, RoutedEventArgs e)
         {
             RegisterWindow registerWindow = new RegisterWindow();
-            registerWindow.Show(); 
+            registerWindow.Show();
+            Close();
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -41,6 +33,10 @@ namespace UI.Windows
             {
                 string token = await authService.LoginAsync(loginRequest);
                 MessageBox.Show($"Успешный вход! Токен: {token}");
+                TokenFileStorage.SaveToken(token);
+                var mainWindow = new MainWindow();
+                mainWindow.Show();
+                Close();
             }
             catch (Exception ex)
             {

@@ -8,7 +8,6 @@ namespace UI;
 public class ApiClient
 {
     private readonly HttpClient httpClient;
-    private static string token;
 
     public ApiClient()
     {
@@ -16,14 +15,14 @@ public class ApiClient
         {
             BaseAddress = new Uri("http://localhost:5201")
         };
-
+        var token = TokenFileStorage.GetToken();
         if (token != null)
         {
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
     }
 
-    private async Task<T> PostAsync<T>(string endpoint, object data)
+    private async Task<string> PostAsync<T>(string endpoint, object data)
     {
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -31,8 +30,9 @@ public class ApiClient
         var response = await httpClient.PostAsync(endpoint, content);
         response.EnsureSuccessStatusCode();
 
-        var responseJson = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(responseJson);
+        var responseString = await response.Content.ReadAsStringAsync();
+        return responseString;
+        //return JsonSerializer.Deserialize<T>(responseJson);
     }
 
     public async Task<string> RegisterAsync(RegisterUserRequest request)

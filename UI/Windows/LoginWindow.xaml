@@ -35,7 +35,7 @@
             <TextBox x:Name="UsernameTextBox" Margin="0,0,0,10"/>
             <TextBlock Text="Пароль:"/>
             <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10"/>
-            <Button Content="Войти" Style="{StaticResource RoundButtonStyle}" Width="150" HorizontalAlignment="Center"/>
+            <Button Content="Войти" Style="{StaticResource RoundButtonStyle}" Width="150" HorizontalAlignment="Center" Click="LoginButton_Click"/>
             <Button Content="Зарегистрироваться" Style="{StaticResource RoundButtonStyle}" Width="150" HorizontalAlignment="Center" Margin="0,10,0,0" Click="OpenRegisterWindow_Click"/>
         </StackPanel>
     </Grid>

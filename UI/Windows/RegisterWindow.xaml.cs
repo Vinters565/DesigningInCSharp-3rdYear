@@ -29,18 +29,23 @@ namespace UI.Windows
             var registrRequest = new RegisterUserRequest
             {
                 Username = UsernameTextBox.Text,
-                Password = PasswordBox.Password,
                 DisplayedName = DisplayedNameBox.Text,
+                Password = PasswordBox.Password
             };
 
             try
             {
-                await authService.RegisterAsync(registrRequest);
+                string token = await authService.RegisterAsync(registrRequest);
+                MessageBox.Show($"Успешный вход! Токен: {token}");
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }
+
         }
     }
 }

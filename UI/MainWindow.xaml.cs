@@ -22,19 +22,26 @@ namespace UI
         public MainWindow()
         {
             InitializeComponent();
+            if (TokenFileStorage.GetToken() == null)
+            {
+                var loginWindow = new LoginWindow();
+                loginWindow.Show();
+                Close();
+            }
             client = new ApiClient();
         }
 
-        private void OpenPersonalAccountWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OpenPersonalAccountWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var personalAccountWindow = new PersonalAccountWindow();
             personalAccountWindow.Show();
         }
 
-        private void OpenAuthWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OpenAuthWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var loginWindow = new LoginWindow();
             loginWindow.Show();
+            Close();
         }
     }
 }
