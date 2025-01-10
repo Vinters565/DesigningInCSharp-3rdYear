@@ -22,7 +22,7 @@ public class ApiClient
         }
     }
 
-    private async Task<string> PostAsync<T>(string endpoint, object data)
+    private async Task<string> PostAsync(string endpoint, object data)
     {
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -47,11 +47,21 @@ public class ApiClient
 
     public async Task<string> RegisterAsync(RegisterUserRequest request)
     {
-        return await PostAsync<string>("/register", request);
+        return await PostAsync("/register", request);
     }
 
     public async Task<string> LoginAsync(LoginUserRequest request)
     {
-        return await PostAsync<string>("/login", request);
+        return await PostAsync("/login", request);
+    }
+
+    public async Task<List<CalendarEventDto>> GetEventsAsync(Guid request)
+    {
+        return await PostAsyncJson<List<CalendarEventDto>>("/calendars/private/events", request);
+    }
+
+    public async Task<string> CreateEventsAsync(CreateCalendarEventRequest request)
+    {
+        return await PostAsyncJson<string>("/events/", request);
     }
 }

@@ -15,17 +15,17 @@
 
         <Grid Grid.Row="0" Height="45" Margin="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition x:Name="ColumnList" Width="*"></ColumnDefinition>
+                <ColumnDefinition x:Name="ColumnDay" Width="*"></ColumnDefinition>
+                <ColumnDefinition x:Name="ColumnWeek" Width="*"></ColumnDefinition>
+                <ColumnDefinition x:Name="ColumnMonth" Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Content="Лист" Grid.Column="0" Height="25" Click="ListButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
-            <Button Content="День" Grid.Column="1" Height="25" Click="DayButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
-            <Button Content="Неделя" Grid.Column="2" Height="25" Click="WeekButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
-            <Button Content="Месяц" Grid.Column="3" Height="25" Click="MonthButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
-            <Button Content="Создать событие" Grid.Column="4" Height="25" Click="CreateNewEvent_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
+            <Button x:Name="ListViewButton" Content="Лист" Grid.Column="0" Height="25" Click="ListButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
+            <Button x:Name="DayViewButton" Content="День" Grid.Column="1" Height="25" Click="DayButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
+            <Button x:Name="WeekViewButton" Content="Неделя" Grid.Column="2" Height="25" Click="WeekButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
+            <Button x:Name="MonthViewButton" Content="Месяц" Grid.Column="3" Height="25" Click="MonthButton_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
+            <Button x:Name="CreateEventButton" Content="Создать событие" Grid.Column="4" Height="25" Click="CreateNewEvent_Click" Style="{StaticResource RoundButtonStyleCalendar}"></Button>
         </Grid>
 
 
