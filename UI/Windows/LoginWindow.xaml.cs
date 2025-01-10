@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Configuration;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Windows.Controls;
-using UI.Dto;
+using UI.ElementPage;
+using UI.Messages;
 
 namespace UI.Windows
 {
@@ -11,37 +13,26 @@ namespace UI.Windows
         public LoginWindow()
         {
             InitializeComponent();
+            OpenLoginPage();
+            WeakReferenceMessenger.Default.Register<OpenLoginPageMessage>(this, (r, m) => OpenLoginPage());
+            WeakReferenceMessenger.Default.Register<OpenMainWindowMessage>(this, (r, m) => OpenMainWindow());
+            WeakReferenceMessenger.Default.Register<OpenRegisterPageMessage>(this, (r, m) => OpenRegisterPage());
         }
 
-        private void OpenRegisterWindow_Click(object sender, RoutedEventArgs e)
+        private void OpenRegisterPage()
         {
-            RegisterWindow registerWindow = new RegisterWindow();
-            registerWindow.Show();
+            LoginFrame.NavigationService.Navigate(new RegistrPage());
+        }
+
+        private void OpenMainWindow()
+        {
+            new MainWindow().Show();
             Close();
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void OpenLoginPage()
         {
-            var authService = new ApiClient();
-            var loginRequest = new LoginUserRequest
-            {
-                Username = UsernameTextBox.Text,
-                Password = PasswordBox.Password
-            };
-
-            try
-            {
-                string token = await authService.LoginAsync(loginRequest);
-                MessageBox.Show($"Успешный вход! Токен: {token}");
-                TokenFileStorage.SaveToken(token);
-                var mainWindow = new MainWindow();
-                mainWindow.Show();
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}");
-            }
+            LoginFrame.NavigationService.Navigate(new LoginPage());
         }
     }
 }

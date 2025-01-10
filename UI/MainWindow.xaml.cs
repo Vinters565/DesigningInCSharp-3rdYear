@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.ElementPage;
+using UI.Messages;
 using UI.Windows;
 
 namespace UI
@@ -24,24 +27,26 @@ namespace UI
             InitializeComponent();
             if (TokenFileStorage.GetToken() == null)
             {
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
-                Close();
+                OpenAuthWindow();
             }
             client = new ApiClient();
+
+            OpenPage(new CalendarPage());
+            WeakReferenceMessenger.Default.Register<OpenPersonalPageMessage>(this, (r, m) => OpenPage(new PersonalAccountPage()));
+            WeakReferenceMessenger.Default.Register<ExitAccountMessage>(this, (r, m) => OpenAuthWindow());
         }
 
-        private void OpenPersonalAccountWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        private void OpenAuthWindow()
         {
-            var personalAccountWindow = new PersonalAccountWindow();
-            personalAccountWindow.Show();
-        }
-
-        private void OpenAuthWindow_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+            TokenFileStorage.DeleteToken();
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             Close();
+        }
+
+        private void OpenPage(Page page)
+        {
+            MainFrame.NavigationService.Navigate(page);
         }
     }
 }

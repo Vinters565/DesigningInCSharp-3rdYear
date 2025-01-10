@@ -32,7 +32,17 @@ public class ApiClient
 
         var responseString = await response.Content.ReadAsStringAsync();
         return responseString;
-        //return JsonSerializer.Deserialize<T>(responseJson);
+    }
+
+    private async Task<T> PostAsyncJson<T>(string endpoint, object data)
+    {
+        var json = JsonSerializer.Serialize(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await httpClient.PostAsync(endpoint, content);
+        response.EnsureSuccessStatusCode();
+        var responseJson = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<T>(responseJson);
     }
 
     public async Task<string> RegisterAsync(RegisterUserRequest request)

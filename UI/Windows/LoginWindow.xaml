@@ -7,36 +7,8 @@
         mc:Ignorable="d"
         Title="Авторизация" Height="300" Width="400"
         Background="LightGray">
-    <Window.Resources>
-        <Style x:Key="RoundButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Gray"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
 
     <Grid>
-        <StackPanel Margin="10">
-            <TextBlock Text="Имя пользователя:"/>
-            <TextBox x:Name="UsernameTextBox" Margin="0,0,0,10"/>
-            <TextBlock Text="Пароль:"/>
-            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10"/>
-            <Button Content="Войти" Style="{StaticResource RoundButtonStyle}" Width="150" HorizontalAlignment="Center" Click="LoginButton_Click"/>
-            <Button Content="Зарегистрироваться" Style="{StaticResource RoundButtonStyle}" Width="150" HorizontalAlignment="Center" Margin="0,10,0,0" Click="OpenRegisterWindow_Click"/>
-        </StackPanel>
+        <Frame x:Name="LoginFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

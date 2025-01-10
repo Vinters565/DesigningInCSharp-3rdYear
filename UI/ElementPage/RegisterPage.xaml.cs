@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using UI.Windows;
 using UI.Dto;
+using CommunityToolkit.Mvvm.Messaging;
+using UI.Messages;
 
-namespace UI.Windows
+namespace UI.ElementPage
 {
-    public partial class RegisterWindow : Window
+    /// <summary>
+    /// Логика взаимодействия для RegisterPage.xaml
+    /// </summary>
+    public partial class RegistrPage : Page
     {
-        public RegisterWindow()
+        public RegistrPage()
         {
             InitializeComponent();
         }
@@ -36,16 +30,13 @@ namespace UI.Windows
             try
             {
                 string token = await authService.RegisterAsync(registrRequest);
-                MessageBox.Show($"Успешный вход! Токен: {token}");
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
-                Close();
+                MessageBox.Show($"Успешная регистрация!");
+                WeakReferenceMessenger.Default.Send(new OpenLoginPageMessage());
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }
-
         }
     }
 }

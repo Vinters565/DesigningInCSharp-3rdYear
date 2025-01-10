@@ -6,85 +6,8 @@
         xmlns:local="clr-namespace:UI.UserControls"
         mc:Ignorable="d"
         Title="EVCalendar" Height="450" Width="860">
-    
-    <Window.Resources>
-        <Style x:Key="RoundButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Gray"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
-        <Style x:Key="BlueRoundButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="CadetBlue"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="0.5"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="LightGray" Margin="5">
-            <Ellipse Width="30" Height="30" VerticalAlignment="Center" Fill="Gray">
-           
-            </Ellipse>
-            
-            <TextBlock Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenPersonalAccountWindow_MouseDown"></TextBlock>
-            
-            <Button Margin="20 2 2 2" BorderThickness="0" Background="Transparent">
-                <Image Source="/Images/notification.png" Width="20" Height="20"></Image>
-            </Button>
-        </StackPanel>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5">
-            <Button Content="Мой календарь" MinWidth="270" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Мой публичный календарь" MinWidth="115" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Моя лента календарей" MinWidth="115" Height="25" Margin="5 0 0 0" Style="{StaticResource RoundButtonStyle}"></Button>
-        </StackPanel>
-
-        <StackPanel Orientation="Vertical" Grid.Row ="1" Grid.RowSpan="2" Grid.Column="0" Background="LightGray" Margin="5">
-            <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
-            <TextBlock Text="Аутентификация" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenAuthWindow_MouseDown"></TextBlock>
-        </StackPanel>
-
-        <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Background="LightGray" Margin="5">
-            <local:CalendarView/>
-        </Grid> 
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

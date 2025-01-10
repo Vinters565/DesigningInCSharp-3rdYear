@@ -81,6 +81,10 @@ namespace UI.UserControls
             {
                 var dayBorder = CreateDayBorder();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
+                if (day == currentDate.Day)
+                {
+                    dayBorder.Background = Brushes.Brown;
+                }
                 dayBorder.Child = dayBlock;
 
                 var column = (startDay + day - 1) % 7;
