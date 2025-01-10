@@ -10,6 +10,7 @@ public static class CalendarEventExtensions
         return new CalendarEventDto
         {
             Id = calendarEvent.Id,
+            Name = calendarEvent.Name,
             UserId = calendarEvent.UserId,
             Start = calendarEvent.StartDate,
             End = calendarEvent.EndDate,

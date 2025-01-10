@@ -9,7 +9,7 @@ public interface IUserRepository
     
     Task<User?> GetByUsernameAsync(string username);
 
-    Task<PaginatedResult<User>> EnumerateAsync(int pageNumber, int count);
+    Task<PaginatedResponse<User>> EnumerateAsync(int pageNumber, int count);
     
     void Create(User user);
     

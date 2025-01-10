@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.EventAttributes;
+using SchedulePlanner.Domain.EventAttributes.Attributes;
 using SchedulePlanner.Infrastructure.Common;
 
 namespace SchedulePlanner.Infrastructure.Repositories;

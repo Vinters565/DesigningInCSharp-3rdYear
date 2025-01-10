@@ -2,9 +2,33 @@ using SchedulePlanner.Domain.Interfaces;
 
 namespace SchedulePlanner.Domain.EventAttributes;
 
-public abstract class EventAttribute(bool isActive) : IEventAttribute
+public abstract class EventAttribute : IEventAttribute
 {
-    public abstract string Name { get; }
+    protected EventAttribute() : this(false) { }
 
-    public bool IsActive { get; protected set; } = isActive;
+    protected EventAttribute(bool isActive)
+    {
+        IsActive = isActive;
+    }
+
+    public abstract string Description { get; }
+ 
+    public bool IsActive { get; protected set; }
+
+    public IReadOnlyCollection<FieldMetadata> GetFieldsMetadata()
+    {
+        var metadata = new List<FieldMetadata>
+        {
+            new()
+            {
+                FieldName = nameof(IsActive),
+                FieldType = FieldTypes.Boolean,
+                Description = Description
+            }
+        };
+        metadata.AddRange(GetAttributeFieldsMetadata());
+        return metadata;
+    }
+    
+    protected abstract IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata();
 }

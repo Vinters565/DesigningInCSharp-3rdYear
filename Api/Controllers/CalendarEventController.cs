@@ -17,6 +17,7 @@ public class CalendarEventController(
         var userId = GetAuthenticatedUserId();
 
         var result = await calendarEventService.CreateAsync(
+            request.Name,
             userId, 
             request.Start, 
             request.End, 

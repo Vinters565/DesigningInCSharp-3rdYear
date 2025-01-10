@@ -9,12 +9,12 @@ public class User : Entity<Guid>
     public string PasswordHash { get; init; } = null!;
     public UserSettings Settings { get; init; } = null!;
     
-    public User() : base(Guid.NewGuid()) { } // EF Core
-    
     public User(Guid id, string username, string passwordHash, UserSettings userSettings) : base(id)
     {
         Username = username;
         PasswordHash = passwordHash;
         Settings = userSettings;
     }
+    
+    private User() : base(Guid.NewGuid()) { } // EF Core
 }

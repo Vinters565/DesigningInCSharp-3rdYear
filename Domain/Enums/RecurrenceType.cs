@@ -4,6 +4,5 @@ public enum RecurrenceType
 {
     EveryDay,
     EveryWeek,
-    EveryMonth,
-    EveryYear
+    EveryMonth
 }
