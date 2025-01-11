@@ -30,7 +30,7 @@ namespace UI.UserControls
 
         private void ClearOldCells()
         {
-            for (int i = 2; i < MonthCalendar.RowDefinitions.Count; i++)
+            for (int i = 1; i < MonthCalendar.RowDefinitions.Count; i++)
             {
                 for (int j = 0; j < 7; j++)
                 {

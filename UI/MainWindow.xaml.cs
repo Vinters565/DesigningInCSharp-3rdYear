@@ -1,14 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using UI.ElementPage;
 using UI.Messages;
 using UI.Windows;
@@ -21,6 +13,7 @@ namespace UI
     public partial class MainWindow : Window
     {
         private readonly ApiClient client;
+        private readonly SubscribePage subscribePage;
 
         public MainWindow()
         {
@@ -30,10 +23,14 @@ namespace UI
                 OpenAuthWindow();
             }
             client = new ApiClient();
+            subscribePage = new SubscribePage();
+            OpenPage(MainFrame, new CalendarPage());
+            OpenPage(SecondFrame, subscribePage);
 
-            OpenPage(new CalendarPage());
-            WeakReferenceMessenger.Default.Register<OpenPersonalPageMessage>(this, (r, m) => OpenPage(new PersonalAccountPage()));
+            WeakReferenceMessenger.Default.Register<OpenPersonalPageMessage>(this, (r, m) => OpenPage(MainFrame, new PersonalAccountPage()));
             WeakReferenceMessenger.Default.Register<ExitAccountMessage>(this, (r, m) => OpenAuthWindow());
+            WeakReferenceMessenger.Default.Register<ViewCalendarMessage>(this, (recipient, message) => ShowPublicCalendar(message.Value));
+            WeakReferenceMessenger.Default.Register<CloseSubscribePageMessage>(this, (r, m) => SecondFrame.Visibility = Visibility.Hidden);
         }
 
         private void OpenAuthWindow()
@@ -44,9 +41,15 @@ namespace UI
             Close();
         }
 
-        private void OpenPage(Page page)
+        private void OpenPage(Frame frame, Page page)
         {
-            MainFrame.NavigationService.Navigate(page);
+            frame.NavigationService.Navigate(page);
+        }
+
+        private void ShowPublicCalendar(UserControl calendar)
+        {
+            SecondFrame.Visibility = Visibility.Visible;
+            subscribePage.Show(calendar);
         }
     }
 }

@@ -10,3 +10,4 @@ public record OpenLoginPageMessage;
 public record OpenRegisterPageMessage;
 public record OpenPersonalPageMessage;
 public record ExitAccountMessage;
+public record CloseSubscribePageMessage;

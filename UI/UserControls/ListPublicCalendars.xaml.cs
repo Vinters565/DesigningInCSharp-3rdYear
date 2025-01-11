@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace UI.UserControls;
 /// <summary>
@@ -22,6 +10,7 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
     private List<MonthView> monthViewsCalendars;
     private List<WeekView> weekViewsCalendars;
     private readonly List<ContentControl> contentContolersCalendar = new();
+    private readonly List<ButtonShowPublicCalendar> buttons = new();
     private List<IViewCalendar> currentCalendars;
     public DateTime CurrentDate { get; set; } = DateTime.Now;
 
@@ -31,7 +20,7 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
         monthViewsCalendars = CreateCalendars<MonthView>(column * row);
         weekViewsCalendars = CreateCalendars<WeekView>(column * row);
         CreateAreaCalendars(column, row);
-        FillFramesView(monthViewsCalendars);
+        FillContentContolersView(monthViewsCalendars);
     }
 
     private void CreateAreaCalendars(int column, int row)
@@ -63,21 +52,30 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
                 Grid.SetColumn(contentControl, i);
                 Grid.SetRow(contentControl, j);
                 AreaGrid.Children.Add(contentControl);
+
+                var button = new ButtonShowPublicCalendar();
+                Grid.SetColumn(button, i);
+                Grid.SetRow(button, j);
+                AreaGrid.Children.Add(button);
+
                 contentContolersCalendar.Add(contentControl);
+                buttons.Add(button);
             }
         }
     }
 
-    private void FillFramesView<T>(List<T> currentCalendars) where T : UserControl, IViewCalendar
+    private void FillContentContolersView<T>(List<T> currentCalendars) where T : UserControl, IViewCalendar
     {
         this.currentCalendars = new List<IViewCalendar>(currentCalendars);
         for (int i = 0; i < contentContolersCalendar.Count; i++)
         {
             contentContolersCalendar[i].Content = currentCalendars[i];
+            buttons[i].Calendar = currentCalendars[i];
         }
         UpdateView();
     }
 
+    //TO-DO
     private List<T> CreateCalendars<T>(int count) where T : IViewCalendar
     {
         var result = new List<T>();
@@ -112,13 +110,13 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
 
     private void MonthButton_Click(object sender, RoutedEventArgs e)
     {
-        FillFramesView(monthViewsCalendars);
+        FillContentContolersView(monthViewsCalendars);
         UpdateView();
     }
 
     private void WeekButton_Click(object sender, RoutedEventArgs e)
     {
-        FillFramesView(weekViewsCalendars);
+        FillContentContolersView(weekViewsCalendars);
         UpdateView();
     }
 
