@@ -11,8 +11,8 @@ public interface ISubscriptionRepository
     void Create(Subscription subscription);
     
     void Delete(Subscription subscription);
-    
-    void DeleteByCalendarEventId(Guid calendarEventId);
+
+    void DeleteRange(List<Subscription> subscriptions);
 
     Task SaveChangesAsync();
 }
