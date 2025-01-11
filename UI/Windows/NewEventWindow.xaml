@@ -7,8 +7,9 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:local="clr-namespace:UI.Windows"
         mc:Ignorable="d"
-        Title="Создать событие" Height="300" Width="400"
+        Title="Создать событие" Height="380" Width="420"
         Background="LightGray">
+
     <Window.Resources>
         <Style x:Key="RoundButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Gray"/>
@@ -31,14 +32,67 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
-        <StackPanel Margin="10">
+    <Grid Margin="10">
+        <StackPanel>
             <TextBlock Text="Название события:"/>
             <TextBox x:Name="EventNameTextBox" Margin="0,0,0,10"/>
             <TextBlock Text="Дата начала:"/>
-            <syncfusion:DateTimeEdit x:Name="StartDatePicker" Pattern ="FullDateTime"  Margin="0,0,0,10" />
+            <syncfusion:DateTimeEdit x:Name="StartDatePicker" Pattern="FullDateTime" Margin="0,0,0,10"/>
+
             <TextBlock Text="Дата конца:"/>
-            <syncfusion:DateTimeEdit x:Name="EndDatePicker" Pattern ="FullDateTime"  Margin="0,0,0,10" />
+            <syncfusion:DateTimeEdit x:Name="EndDatePicker" Pattern="FullDateTime" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Выберите атрибут события:"/>
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="eventComboBox" SelectionChanged="EventComboBox_SelectionChanged" 
+              HorizontalAlignment="Stretch" Grid.Column="0">
+                    <ComboBoxItem Content="Может быть выполнено" Tag="CanBeCompletedEventAttribute"/>
+                    <ComboBoxItem Content="Зависит от места проведения" Tag="DependsOnLocationEventAttribute"/>
+                    <ComboBoxItem Content="Обязательное событие" Tag="MandatoryEventAttribute"/>
+                    <ComboBoxItem Content="Публичное событие" Tag="PublicityEventAttribute"/>
+                    <ComboBoxItem Content="Повторяемое событие" Tag="RecurrenceEventAttribute"/>
+                </ComboBox>
+
+                <Button Content="✖" Width="20" Height="20" Margin="5,0,0,0" Click="ResetAttribute_Click" Style="{StaticResource RoundButtonStyle}" 
+            Grid.Column="1"/>
+            </Grid>
+
+            <StackPanel x:Name="CanBeCompletedPanel" Visibility="Collapsed" Margin="0,10,0,10">
+                <CheckBox Content="Выполнено"/>
+            </StackPanel>
+
+            <StackPanel x:Name="DependsOnLocationPanel" Visibility="Collapsed" Margin="0,10,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Место проведения:" VerticalAlignment="Center" Grid.Column="0"/>
+                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Margin="5,0,0,0"/>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel x:Name="RecurrencePanel" Visibility="Collapsed" Margin="0,10,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Повторяемость:" VerticalAlignment="Center" Grid.Column="0"/>
+                    <ComboBox HorizontalAlignment="Stretch" Grid.Column ="1" VerticalAlignment="Center" Margin="5,0,0,0">
+                        <ComboBoxItem Content="Каждый день"/>
+                        <ComboBoxItem Content="Каждую неделю"/>
+                        <ComboBoxItem Content="Каждый месяц"/>
+                    </ComboBox>
+                </Grid>
+                <TextBlock Text="Повторять до:" Margin="0,10,0,0"/>
+                <syncfusion:DateTimeEdit Pattern="FullDateTime" Margin="0,0,0,10"/>
+            </StackPanel>
             <Button Content="Сохранить" Style="{StaticResource RoundButtonStyle}" Width="100" HorizontalAlignment="Center" Click="CreateEvent_Click"/>
         </StackPanel>
     </Grid>
