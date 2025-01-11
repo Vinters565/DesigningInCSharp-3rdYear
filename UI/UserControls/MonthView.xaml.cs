@@ -6,21 +6,18 @@ using System.Windows.Media;
 
 namespace UI.UserControls
 {
-    public partial class MonthView : UserControl
+    public partial class MonthView : UserControl, IViewCalendar
     {
-        private DateTime currentDate;
+        private readonly TextBlock dateTextBlock;
 
-        public MonthView()
+        public DateTime CurrentDate { get; set; }
+
+        public MonthView(TextBlock dateTextBlock)
         {
             InitializeComponent();
-            currentDate = DateTime.Now;
-            UpdateCalendar();
-        }
-
-        private void UpdateCalendar()
-        {
-            MonthTextBlock.Text = currentDate.ToString("MMMM yyyy");
-            LoadCalendar();
+            this.dateTextBlock = dateTextBlock;
+            CurrentDate = DateTime.Now;
+            UpdateView();
         }
 
         private void LoadCalendar()
@@ -48,12 +45,12 @@ namespace UI.UserControls
 
         private void FillPreviousMonthDays()
         {
-            var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+            var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
             var startDay = (int)firstDayOfMonth.DayOfWeek;
 
             startDay = startDay == 0 ? 6 : startDay - 1;
 
-            var prevMonthDays = DateTime.DaysInMonth(currentDate.Year, currentDate.Month == 1 ? 12 : currentDate.Month - 1);
+            var prevMonthDays = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month == 1 ? 12 : CurrentDate.Month - 1);
 
             for (int i = 0; i < startDay; i++)
             {
@@ -63,7 +60,7 @@ namespace UI.UserControls
                 var dayBlock = CreateDayTextBlock(prevDay.ToString(), Brushes.DarkGray);
                 dayBorder.Child = dayBlock;
 
-                Grid.SetRow(dayBorder, 2);
+                Grid.SetRow(dayBorder, 1);
                 Grid.SetColumn(dayBorder, i);
                 MonthCalendar.Children.Add(dayBorder);
             }
@@ -71,8 +68,8 @@ namespace UI.UserControls
 
         private void FillCurrentMonthDays()
         {
-            var daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
-            var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month);
+            var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
             var startDay = (int)firstDayOfMonth.DayOfWeek;
 
             startDay = startDay == 0 ? 6 : startDay - 1;
@@ -81,14 +78,14 @@ namespace UI.UserControls
             {
                 var dayBorder = CreateDayBorder();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
-                if (day == currentDate.Day)
+                if (day == CurrentDate.Day)
                 {
                     dayBorder.Background = Brushes.Brown;
                 }
                 dayBorder.Child = dayBlock;
 
                 var column = (startDay + day - 1) % 7;
-                var row = (startDay + day - 1) / 7 + 2;
+                var row = (startDay + day - 1) / 7 + 1;
                 Grid.SetRow(dayBorder, row);
                 Grid.SetColumn(dayBorder, column);
                 MonthCalendar.Children.Add(dayBorder);
@@ -97,8 +94,8 @@ namespace UI.UserControls
 
         private void FillNextMonthDays()
         {
-            var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var daysInMonth = DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+            var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month);
             var startDay = (int)firstDayOfMonth.DayOfWeek;
 
             startDay = startDay == 0 ? 6 : startDay - 1;
@@ -111,7 +108,7 @@ namespace UI.UserControls
                 dayBorder.Child = dayBlock;
 
                 var column = (startDay + daysInMonth + day - 1) % 7;
-                var row = (startDay + daysInMonth + day - 1) / 7 + 2;
+                var row = (startDay + daysInMonth + day - 1) / 7 + 1;
                 Grid.SetRow(dayBorder, row);
                 Grid.SetColumn(dayBorder, column);
                 MonthCalendar.Children.Add(dayBorder);
@@ -139,14 +136,12 @@ namespace UI.UserControls
 
         private void PreviousMonth_Click(object sender, RoutedEventArgs e)
         {
-            currentDate = currentDate.AddMonths(-1);
-            UpdateCalendar();
+            PrevView();
         }
 
         private void NextMonth_Click(object sender, RoutedEventArgs e)
         {
-            currentDate = currentDate.AddMonths(1);
-            UpdateCalendar();
+            NextView();
         }
 
         private UIElement GetChildAt(Grid grid, int row, int column)
@@ -159,6 +154,24 @@ namespace UI.UserControls
                 }
             }
             return null;
+        }
+
+        public void NextView()
+        {
+            CurrentDate = CurrentDate.AddMonths(1);
+            UpdateView();
+        }
+
+        public void PrevView()
+        {
+            CurrentDate = CurrentDate.AddMonths(-1);
+            UpdateView();
+        }
+
+        public void UpdateView()
+        {
+            dateTextBlock.Text = CurrentDate.ToString("MMMM yyyy");
+            LoadCalendar();
         }
     }
 }

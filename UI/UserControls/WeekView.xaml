@@ -7,17 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="LightSlateGray">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-            <Button Content="&#x276E;" Margin="5" Click="PreviousWeek_Click" Style="{StaticResource WeekViewButtonStyle}"/>
-            <TextBlock x:Name="WeekDateText" FontSize="16" VerticalAlignment="Center" Margin="5" Style="{StaticResource WeekViewTextBlockStyle}"/>
-            <Button Content="&#x276F;" Margin="5" Click="NextWeek_Click" Style="{StaticResource WeekViewButtonStyle}"/>
-        </StackPanel>
-        <ScrollViewer x:Name="ScrollViwerContainer" Grid.Row="1">
+        
+        <ScrollViewer x:Name="ScrollViwerContainer">
             <Grid x:Name="GridArea">
 
                 <Grid.ColumnDefinitions>
@@ -83,26 +74,26 @@
                     <RowDefinition Height="Auto" MinHeight="40"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateMon" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateMon" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateTue" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateTue" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateWed" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateWed" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateThu" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="4" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateThu" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateFri" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateFri" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateSat" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="6" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateSat" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
-                <Border Grid.Row="0" Grid.Column="7" Style="{StaticResource WeekViewBorderStyle}">
-                    <TextBlock x:Name="DateSun" Style="{StaticResource WeekViewTextBlockStyle}"/>
+                <Border Grid.Row="0" Grid.Column="7" Style="{StaticResource ViewBorderStyle}">
+                    <TextBlock x:Name="DateSun" Style="{StaticResource ViewTextBlockStyle}"/>
                 </Border>
 
                 <Grid x:Name="EventsGrid" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="7" Grid.RowSpan="48">

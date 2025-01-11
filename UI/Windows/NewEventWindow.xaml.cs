@@ -1,18 +1,30 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using UI.Dto;
+using UI.UserControls;
 
 namespace UI.Windows;
 public partial class NewEventWindow : Window
 {
+    private static NewEventWindow Instance = null!;
+
+    public bool Public { get; set; } = false;
+
+    public DateTime? StartDate
+    {
+        get => StartDatePicker.DateTime;
+        set => StartDatePicker.DateTime = value;
+    }
+
     public NewEventWindow()
     {
         InitializeComponent();
+        Instance?.Close();
+        Instance = this;
     }
 
-
-    private async void CreateEvent_Click(object sender, RoutedEventArgs e)
+    private void CreateEvent_Click(object sender, RoutedEventArgs e)
     {
-        var client = new ApiClient();
-        await client.CreateEventsAsync(new CreateCalendarEventRequest() { Start = StartDatePicker.SelectedDate.Value, End = EndDatePicker.SelectedDate.Value, Attributes = null });
+
     }
 }

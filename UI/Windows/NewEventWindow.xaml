@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:local="clr-namespace:UI.Windows"
         mc:Ignorable="d"
         Title="Создать событие" Height="300" Width="400"
@@ -34,9 +36,9 @@
             <TextBlock Text="Название события:"/>
             <TextBox x:Name="EventNameTextBox" Margin="0,0,0,10"/>
             <TextBlock Text="Дата начала:"/>
-            <DatePicker x:Name="StartDatePicker" Margin="0,0,0,10"/>
+            <syncfusion:DateTimeEdit x:Name="StartDatePicker" Pattern ="FullDateTime"  Margin="0,0,0,10" />
             <TextBlock Text="Дата конца:"/>
-            <DatePicker x:Name="EndDatePicker" Margin="0,0,0,10"/>
+            <syncfusion:DateTimeEdit x:Name="EndDatePicker" Pattern ="FullDateTime"  Margin="0,0,0,10" />
             <Button Content="Сохранить" Style="{StaticResource RoundButtonStyle}" Width="100" HorizontalAlignment="Center" Click="CreateEvent_Click"/>
         </StackPanel>
     </Grid>

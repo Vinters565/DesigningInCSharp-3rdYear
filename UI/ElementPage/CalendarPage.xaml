@@ -30,16 +30,22 @@
             </Button>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5">
-            <Button Content="Мой календарь" MinWidth="270" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Мой публичный календарь" MinWidth="115" Height="25" Margin="5 0 10 0" Style="{StaticResource RoundButtonStyle}"></Button>
-            <Button Content="Моя лента календарей" MinWidth="115" Height="25" Margin="5 0 0 0" Style="{StaticResource RoundButtonStyle}"></Button>
-        </StackPanel>
+        <Grid Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="ColumnPrivateCalendar" Width="*" />
+                <ColumnDefinition x:Name="ColumnPublicCalendar" Width="*" />
+                <ColumnDefinition x:Name="ColumnListPublicCalendars" Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <Button Content="Мой календарь" Grid.Column="0" Margin="10 5" Style="{StaticResource RoundButtonStyle}" Click="OpenPrivateCalendar_Click"></Button>
+            <Button Content="Мой публичный календарь" Grid.Column="1" Margin="10 5" Style="{StaticResource RoundButtonStyle}" Click="OpenPublicCalendar_Click"></Button>
+            <Button Content="Моя лента календарей" Grid.Column="2" Margin="10 5" Style="{StaticResource RoundButtonStyle}" Click="OpenListPublicCalendars_Click" ></Button>
+        </Grid>
 
         <StackPanel Orientation="Vertical" Grid.Row ="1" Grid.RowSpan="2" Grid.Column="0" Background="LightGray" Margin="5">
             <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
         </StackPanel>
 
-        <Frame x:Name="CalendarFrame" Grid.Column="1" Grid.Row="1" NavigationUIVisibility="Hidden" Background="AliceBlue" Margin="5"/>
+        <Frame x:Name="CalendarFrame" Grid.Column="1" Grid.Row="1" NavigationUIVisibility="Hidden" Background="LightGray" Margin="5"/>
     </Grid>
 </Page>

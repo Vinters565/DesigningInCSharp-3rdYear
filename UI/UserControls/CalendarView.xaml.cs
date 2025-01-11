@@ -1,81 +1,66 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using UI.ElementPage;
 using UI.Windows;
 
 namespace UI.UserControls
 {
-    public partial class CalendarView : UserControl
+    public partial class CalendarView : UserControl, IViewCalendar
     {
+        public bool IsPublic { get; set; } = false;
+        public string UserName { get; set; } = string.Empty;
+        public DateTime CurrentDate { get; set; } = DateTime.Now;
+
+        public IViewCalendar CurrentView
+        {
+            get => (IViewCalendar)CalendarContentArea.Content;
+            private set => CalendarContentArea.Content = value;
+        }
+
+        private readonly MonthView monthView;
+        private readonly WeekView weekView;
+
         public CalendarView()
         {
             InitializeComponent();
-            ShowMonthView();
+            monthView = new(DateTextBlock);
+            weekView = new(DateTextBlock);
+            CurrentView = monthView;
         }
 
         private void MonthButton_Click(object sender, RoutedEventArgs e) 
         {
-            ShowMonthView();
-            SetStandartSizeAllColumn();
-            SetSizeColumn(ColumnMonth, 2);
+            CurrentView = monthView;
         }
 
         private void WeekButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowWeekView();
-            SetStandartSizeAllColumn();
-            SetSizeColumn(ColumnWeek, 2);
-        }
-        private void DayButton_Click(object sender, RoutedEventArgs e)
-        {
-            ShowDayView();
-            SetStandartSizeAllColumn();
-            SetSizeColumn(ColumnDay, 2);
+            CurrentView = weekView;
         }
 
-        private void ListButton_Click(object sender, RoutedEventArgs e) 
+        private void Next_Click(object sender, RoutedEventArgs e)
         {
-            ShowListView();
-            SetStandartSizeAllColumn();
-            SetSizeColumn(ColumnList, 2);
+            NextView();
         }
 
-        private void CreateNewEvent_Click(object sender, RoutedEventArgs e) 
+        private void Previous_Click(object sender, RoutedEventArgs e)
         {
-            var eventWindow = new NewEventWindow();
-            eventWindow.Show();
+            PrevView();
         }
 
-        private void ShowMonthView() 
+        public void NextView()
         {
-            CalendarContentArea.Content = new MonthView();
+            CurrentView.NextView();
         }
 
-        private void ShowWeekView() 
+        public void PrevView()
         {
-            CalendarContentArea.Content = new WeekView();
+            CurrentView.PrevView();
         }
 
-        private void ShowDayView() 
+        public void UpdateView()
         {
-            CalendarContentArea.Content = new DayView();
-        }
-
-        private void ShowListView() 
-        {
-            CalendarContentArea.Content = new ListView();
-        }
-
-        private void SetStandartSizeAllColumn()
-        {
-            SetSizeColumn(ColumnList, 1);
-            SetSizeColumn(ColumnDay, 1);
-            SetSizeColumn(ColumnWeek, 1);
-            SetSizeColumn(ColumnMonth, 1);
-        }
-
-        private void SetSizeColumn(ColumnDefinition column, double value)
-        {
-            column.Width = new GridLength(value, GridUnitType.Star);
+            CurrentView.UpdateView();
         }
     }
 }

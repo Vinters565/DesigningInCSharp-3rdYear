@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:UI.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="40">
-    <Border BorderBrush="Black" BorderThickness="1" Background="DimGray">
-        <TextBlock />
-    </Border>
+    <Button BorderBrush="Black" BorderThickness="1" Background="DimGray" Click="CreateNewCalendarEvent_Click">
+        
+    </Button>
 </UserControl>

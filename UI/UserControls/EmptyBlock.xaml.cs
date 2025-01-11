@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.Windows;
 
 namespace UI.UserControls
 {
@@ -20,9 +21,17 @@ namespace UI.UserControls
     /// </summary>
     public partial class EmptyBlock : UserControl
     {
+        public bool IsPublic { get; set; } = false;
+
         public EmptyBlock()
         {
             InitializeComponent();
+        }
+
+        private void CreateNewCalendarEvent_Click(object sender, RoutedEventArgs e)
+        {
+            var eventWindow = new NewEventWindow() { StartDate = DateTime.Now, Public = IsPublic};
+            eventWindow.Show();
         }
     }
 }

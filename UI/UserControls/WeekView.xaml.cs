@@ -5,16 +5,20 @@ using System.Windows.Media;
 
 namespace UI.UserControls
 {
-    public partial class WeekView : UserControl
+    public partial class WeekView : UserControl, IViewCalendar
     {
-        private DateTime currentDate;
         private readonly ApiClient client;
+        private readonly TextBlock dateTextBlock;
 
-        public WeekView()
+        public DateTime CurrentDate { get; set; }
+
+
+        public WeekView(TextBlock dateTextBlock)
         {
             InitializeComponent();
             client = new ApiClient();
-            currentDate = DateTime.Now;
+            this.dateTextBlock = dateTextBlock;
+            CurrentDate = DateTime.Now;
             FillTimeColumn();
             FillCalendarArea();
             UpdateWeekView();
@@ -40,7 +44,7 @@ namespace UI.UserControls
         {
             return new Border
             {
-                Style = (Style)Application.Current.FindResource("WeekViewBorderStyle")
+                Style = (Style)Application.Current.FindResource("ViewBorderStyle")
             };
         }
 
@@ -50,7 +54,7 @@ namespace UI.UserControls
             {
                 Text = text,
 
-                Style = (Style)Application.Current.FindResource("WeekViewTextBlockStyle")
+                Style = (Style)Application.Current.FindResource("ViewTextBlockStyle")
             };
         }
 
@@ -60,17 +64,12 @@ namespace UI.UserControls
             {
                 for (int j = 0; j <= 48; j++)
                 {
-                    var block = new EmptyBlock();
+                    var block = new EmptyBlock { IsPublic = false };
                     Grid.SetColumn(block, 1 + i);
                     Grid.SetRow(block, 1 + j);
                     GridArea.Children.Add(block);
                 }
             }
-        }
-
-        private void FillEvents()
-        {
-            
         }
 
         private void AddEvent(string title, int startRow, int duration)
@@ -90,7 +89,7 @@ namespace UI.UserControls
 
         private void UpdateWeekView()
         {
-            DateTime startOfWeek = currentDate.AddDays(-(int)currentDate.DayOfWeek + 1); 
+            DateTime startOfWeek = CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1); 
             DateMon.Text = $"Mon {startOfWeek:dd/MM}";
             DateTue.Text = $"Tue {startOfWeek.AddDays(1):dd/MM}";
             DateWed.Text = $"Wed {startOfWeek.AddDays(2):dd/MM}";
@@ -99,18 +98,33 @@ namespace UI.UserControls
             DateSat.Text = $"Sat {startOfWeek.AddDays(5):dd/MM}";
             DateSun.Text = $"Sun {startOfWeek.AddDays(6):dd/MM}";
 
-            WeekDateText.Text = $"{startOfWeek:dd/MM/yyyy} - {startOfWeek.AddDays(6):dd/MM/yyyy}";
+            dateTextBlock.Text = $"{startOfWeek:dd/MM/yyyy} - {startOfWeek.AddDays(6):dd/MM/yyyy}";
         }
 
         private void PreviousWeek_Click(object sender, RoutedEventArgs e)
         {
-            currentDate = currentDate.AddDays(-7);
-            UpdateWeekView();
+            PrevView();
         }
 
         private void NextWeek_Click(object sender, RoutedEventArgs e)
         {
-            currentDate = currentDate.AddDays(7);
+            NextView();
+        }
+
+        public void NextView()
+        {
+            CurrentDate = CurrentDate.AddDays(7);
+            UpdateWeekView();
+        }
+
+        public void PrevView()
+        {
+            CurrentDate = CurrentDate.AddDays(-7);
+            UpdateWeekView();
+        }
+
+        public void UpdateView()
+        {
             UpdateWeekView();
         }
     }

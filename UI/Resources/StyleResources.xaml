@@ -27,8 +27,8 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="0.5"/>
-        <Setter Property="Padding" Value="10,5"/>
-        <Setter Property="Margin" Value="5 10"/>
+        <Setter Property="Margin" Value="2.5 5"/>
+        <Setter Property="Height" Value="25"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -64,20 +64,27 @@
         </Setter>
     </Style>
 
-    <Style x:Key="WeekViewButtonStyle" TargetType="Button">
+    <Style x:Key="ViewButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
-    <Style x:Key="WeekViewBorderStyle" TargetType="Border">
+    <Style x:Key="ViewBorderStyle" TargetType="Border">
         <Setter Property="BorderBrush" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
-    <Style x:Key="WeekViewTextBlockStyle" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="Black"/>
+    <Style x:Key="ViewTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10"/>
     </Style>
+
+    <Style x:Key="ViewContentControlStyle" TargetType="ContentControl">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Background" Value="LightGray"/>
+    </Style>
+
 </ResourceDictionary>
