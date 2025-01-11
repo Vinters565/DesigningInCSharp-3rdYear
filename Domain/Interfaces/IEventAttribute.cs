@@ -4,9 +4,9 @@ namespace SchedulePlanner.Domain.Interfaces;
 
 public interface IEventAttribute
 {
-    string Description { get; }
-    
     bool IsActive { get; }
+    
+    string GetDescription();
 
     IReadOnlyCollection<FieldMetadata> GetFieldsMetadata();
 }

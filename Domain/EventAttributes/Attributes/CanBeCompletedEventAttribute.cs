@@ -11,7 +11,7 @@ public class CanBeCompletedEventAttribute : EventAttribute
     
     private CanBeCompletedEventAttribute() { }
 
-    public override string Description => "Может быть выполнено";
+    public override string GetDescription() => "Может быть выполнено";
 
     protected override IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata()
     {

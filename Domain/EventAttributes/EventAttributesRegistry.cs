@@ -41,7 +41,7 @@ public static class EventAttributesRegistry
         {
             if (Activator.CreateInstance(type, true) is IEventAttribute instance)
             {
-                result.Add((type, instance.Description, instance.GetFieldsMetadata()));
+                result.Add((type, instance.GetDescription(), instance.GetFieldsMetadata()));
             }
         }
         
