@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Domain.Interfaces;
-using SchedulePlanner.Domain.JsonConverters;
 using SchedulePlanner.Domain.ValueTypes;
 using SchedulePlanner.Infrastructure.ValueConverters;
 
@@ -10,12 +10,18 @@ namespace SchedulePlanner.Infrastructure
 {
     public class AppDbContext : DbContext
     {
+        private readonly JsonSerializerOptions jsonSerializerOptions;
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<User> Users { get; set; }
 
         public DbSet<Subscription> Subscriptions { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) => Database.EnsureCreated();
+        public AppDbContext(DbContextOptions<AppDbContext> options, IOptions<JsonSerializerOptions> jsonSerializerOptions) 
+            : base(options)
+        {
+            this.jsonSerializerOptions = jsonSerializerOptions.Value;
+            Database.EnsureCreated();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,21 +42,9 @@ namespace SchedulePlanner.Infrastructure
                 entity.Property(e => e.StartDate).IsRequired();
                 entity.Property(e => e.EndDate).IsRequired();
 
-                var serializeOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                serializeOptions.Converters.Add(new EventAttributeIReadOnlyDictionaryConverter());
-                serializeOptions.Converters.Add(new EventAttributeDictionaryConverter());
-
                 entity.Property(e => e.AttributeData)
                     .HasColumnName("Attributes")
-                    .HasConversion(
-                        v => JsonSerializer.Serialize(v.Attributes, serializeOptions),
-                        v => new AttributeData(
-                            JsonSerializer.Deserialize<Dictionary<Type, IEventAttribute>>(v, serializeOptions) ??
-                            new Dictionary<Type, IEventAttribute>())
-                    );
+                    .HasConversion(new AttributeDataValueConverter(jsonSerializerOptions));
             });
             
             base.OnModelCreating(modelBuilder);

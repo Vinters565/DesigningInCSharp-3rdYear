@@ -1,23 +1,25 @@
 using Api.Extensions;
+using Microsoft.OpenApi.Models;
 using SchedulePlanner.Application;
-using SchedulePlanner.Domain.JsonConverters;
 using SchedulePlanner.Infrastructure;
+using SchedulePlanner.Utils.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new EventAttributeIReadOnlyDictionaryConverter());
-        options.JsonSerializerOptions.Converters.Add(new EventAttributeDictionaryConverter());
-    });
-
+builder.Services.AddControllers();
+builder.Services.ConfigureGlobalJsonConverters();
+  
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGenWithJwtSecurity();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Calendar App API", Version = "v1" });
+    options.AddJwtSecurity();
+});
 
 builder.Services.AddInfrastructureLayer();
 builder.Services.AddJwtAuth(builder.Configuration.GetSection("JwtOptions"));
 builder.Services.AddApplicationLayer();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
