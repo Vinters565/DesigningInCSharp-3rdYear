@@ -1,11 +1,8 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SchedulePlanner.Application.CalendarEvents;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes;
-using SchedulePlanner.Application.Users;
-using SchedulePlanner.Application.Subscriptions;
-using SchedulePlanner.Infrastructure.Repositories;
-using SchedulePlanner.Infrastructure.Services;
+using SchedulePlanner.Utils.Extensions;
 
 namespace SchedulePlanner.Infrastructure;
 
@@ -13,21 +10,17 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services)
     {
+        var assembly = Assembly.GetExecutingAssembly();
+        
+        services.AddRepositories(assembly);
         services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=calendar_app.db"));
-        services.AddRepositories();
-        services.AddSingleton<IEventAttributesRegistry, EventAttributesRegistry>();
 
         return services;
     }
 
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    private static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
     {
-        services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
-
-        services.AddScoped<IUserRepository, UserRepository>();
-
-        services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
-        
+        services.AddByConvention(assembly, "Repository", ServiceLifetime.Scoped);
         return services;
     }
 }

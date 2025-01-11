@@ -1,38 +1,33 @@
-using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
+using SchedulePlanner.Application.JsonConverters;
+using SchedulePlanner.Utils.Extensions;
 
 namespace Api.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddSwaggerGenWithJwtSecurity(this IServiceCollection services)
+    public static IServiceCollection ConfigureGlobalJsonConverters(this IServiceCollection services)
     {
-        services.AddSwaggerGen(options =>
+        var converters = Assembly.Load("SchedulePlanner.Application")
+            .GetAllImplementationsOf<JsonConverter>()
+            .Select(converterType => 
+                (JsonConverter?)Activator.CreateInstance(converterType) 
+                ?? throw new Exception("Cannot create JsonConverter from assembly"))
+            .ToList();
+        
+        services.Configure<JsonSerializerOptions>(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Calendar App API", Version = "v1" });
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                In = ParameterLocation.Header,
-                Description = "Please enter a valid token",
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                BearerFormat = "JWT",
-                Scheme = "Bearer"
-            });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+            converters.ForEach(c => options.Converters.Add(c));
         });
+        
+        services.Configure<JsonOptions>(options =>
+        {
+            converters.ForEach(c => options.JsonSerializerOptions.Converters.Add(c));
+        });
+
         return services;
     }
 }

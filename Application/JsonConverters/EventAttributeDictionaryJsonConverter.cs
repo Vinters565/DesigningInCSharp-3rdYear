@@ -1,22 +1,12 @@
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.Interfaces;
 
-namespace SchedulePlanner.Domain.JsonConverters
+namespace SchedulePlanner.Application.JsonConverters
 {
-    public class EventAttributeDictionaryConverter: JsonConverter<Dictionary<Type, IEventAttribute>>
+    public class EventAttributeDictionaryJsonConverter : JsonConverter<Dictionary<Type, IEventAttribute>>
     {
-        private readonly Dictionary<string, Type> typeMapping;
-
-        public EventAttributeDictionaryConverter()
-        {
-            typeMapping = Assembly.Load("SchedulePlanner.Domain")
-                .GetTypes()
-                .Where(t => typeof(IEventAttribute).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                .ToDictionary(t => t.Name, t => t);
-        }
-
         public override Dictionary<Type, IEventAttribute> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var result = new Dictionary<Type, IEventAttribute>();
@@ -34,7 +24,7 @@ namespace SchedulePlanner.Domain.JsonConverters
                 var typeName = property.Name;
                 var rawJson = property.Value.GetRawText();
 
-                if (typeMapping.TryGetValue(typeName, out var targetType))
+                if (EventAttributesRegistry.GetTypeMapping().TryGetValue(typeName, out var targetType))
                 {
                     var attribute = JsonSerializer.Deserialize(rawJson, targetType, options) as IEventAttribute
                                     ?? throw new Exception(

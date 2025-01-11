@@ -1,18 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using SchedulePlanner.Application.CalendarEvents.EventAttributes;
 using SchedulePlanner.Application.CalendarEvents.EventAttributes.Dtos;
+using SchedulePlanner.Domain.EventAttributes;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("events/attributes")]
-public class AttributesController(
-    IEventAttributesRegistry eventAttributesRegistry) : ControllerBase
+public class AttributesController : ControllerBase
 {
     [HttpGet]
     public Task<ActionResult<List<EventAttributeDto>>> GetAll()
     {
-        var attributes = eventAttributesRegistry.GetEventAttributesWithMetadata();
+        var attributes = EventAttributesRegistry.GetEventAttributesWithMetadata();
 
         var dtos = attributes
             .Select(a => new EventAttributeDto
