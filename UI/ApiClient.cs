@@ -21,11 +21,67 @@ public class ApiClient
         {
             BaseAddress = new Uri(apiUrl)
         };
-        
-        PutToken();
     }
 
-    public async Task<T> GetAsync<T>(string endpoint, Dictionary<string, string>? queryParams = null)
+    public async Task<string> RegisterAsync(RegisterUserRequest request)
+    {
+        return await PostAsync<string>("/register", request);
+    }
+
+    public async Task<string> LoginAsync(LoginUserRequest request)
+    {
+        return await PostAsync<string>("/login", request);
+    }
+
+    public async Task<List<AttributeMetadata>> GetEventAttributesAsync()
+    {
+        return await GetAsync<List<AttributeMetadata>>("/events/attributes");
+    }
+
+    public async Task<List<CalendarEventDto>> GetPrivateEventsAsync(DateTime fromDate, int? calendarView = null)
+    {
+        var queryParams = new Dictionary<string, string>();
+        
+        queryParams.Add("start", fromDate.ToString(CultureInfo.InvariantCulture));
+        if (calendarView != null) 
+            queryParams.Add("view", calendarView.Value.ToString());
+        
+        return await GetAsync<List<CalendarEventDto>>("/calendars/private/events", queryParams);
+    }
+
+    public async Task<List<CalendarEventDto>> GetPublicEventsAsync(string username, 
+        DateTime fromDate, int? calendarView = null)
+    {
+        var queryParams = new Dictionary<string, string>();
+
+        queryParams.Add("start", fromDate.ToString(CultureInfo.InvariantCulture));
+        if (calendarView != null)
+            queryParams.Add("view", calendarView.Value.ToString());
+
+        return await GetAsync<List<CalendarEventDto>>($"/calendars/public/{username}/events", queryParams);
+    }
+
+    public async Task<CalendarEventDto> CreateEventsAsync(CreateCalendarEventRequest request)
+    {
+        return await PostAsync<CalendarEventDto>("/events", request);
+    }
+
+    public async Task<CalendarEventDto> GetEventAsync(Guid eventId)
+    {
+        return await GetAsync<CalendarEventDto>($"events/{eventId}");
+    }
+
+    public async Task<CalendarEventDto> UpdateEventAsync(Guid eventId, UpdateCalendarEventRequest request)
+    {
+        return await PutAsync<CalendarEventDto>($"/events/{eventId}", request);
+    }
+
+    public async Task DeleteEventAsync(Guid eventId)
+    {
+        await DeleteAsync($"/events/{eventId}");
+    }
+    
+    private async Task<T> GetAsync<T>(string endpoint, Dictionary<string, string>? queryParams = null)
     {
         PutToken();
         var url = BuildUrlWithQuery(endpoint, queryParams);
@@ -41,7 +97,7 @@ public class ApiClient
     {
         PutToken();
         
-        var json = JsonSerializer.Serialize(data);
+        var json = JsonSerializer.Serialize(data, jsonSerializerOptions);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await httpClient.PostAsync(endpoint, content);
@@ -67,11 +123,12 @@ public class ApiClient
                ?? throw new JsonException($"Cannot deserialize API response from url: POST {endpoint}");
     }
     
-    public async Task<T> PutAsync<T>(string endpoint, object body)
+    private async Task<T> PutAsync<T>(string endpoint, object body)
     {
         PutToken();
-        
-        var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+        var json = JsonSerializer.Serialize(body, jsonSerializerOptions);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await httpClient.PutAsync(endpoint, content);
 
         response.EnsureSuccessStatusCode();
@@ -80,39 +137,12 @@ public class ApiClient
                ?? throw new JsonException($"Cannot deserialize API response from url: PUT {endpoint}");
     }
     
-    public async Task DeleteAsync(string endpoint)
+    private async Task DeleteAsync(string endpoint)
     {
         PutToken();
         
         var response = await httpClient.DeleteAsync(endpoint);
         response.EnsureSuccessStatusCode();
-    }
-
-    public async Task<string> RegisterAsync(RegisterUserRequest request)
-    {
-        return await PostAsync<string>("/register", request);
-    }
-
-    public async Task<string> LoginAsync(LoginUserRequest request)
-    {
-        return await PostAsync<string>("/login", request);
-    }
-
-    public async Task<List<CalendarEventDto>> GetEventsAsync(DateTime fromDate, int? calendarView = null)
-    {
-        var queryParams = new Dictionary<string, string>();
-        
-        queryParams.Add("start", fromDate.ToString(CultureInfo.InvariantCulture));
-        if (calendarView != null) 
-            queryParams.Add("view", calendarView.Value.ToString());
-        
-        return await GetAsync<List<CalendarEventDto>>("/calendars/private/events", queryParams);
-    }
-
-    public async Task<string> CreateEventsAsync(CreateCalendarEventRequest request)
-    {
-        throw new NotImplementedException();
-        return await PostAsync<string>("/events/", request);
     }
     
     private static string BuildUrlWithQuery(string endpoint, Dictionary<string, string>? queryParams)
