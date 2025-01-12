@@ -1,7 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+
+namespace UI;
 
 public static class TokenFileStorage
 {
@@ -13,7 +14,7 @@ public static class TokenFileStorage
         File.WriteAllText(FilePath, encrypted);
     }
 
-    public static string GetToken()
+    public static string? GetToken()
     {
         if (!File.Exists(FilePath)) return null;
         var encrypted = File.ReadAllText(FilePath);
