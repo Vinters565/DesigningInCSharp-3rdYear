@@ -31,6 +31,6 @@
         </Grid>
 
 
-        <ContentControl x:Name="CalendarContentArea" Grid.Row="1" Background="AliceBlue"></ContentControl>
+        <ContentControl x:Name="CalendarContentArea" Grid.Row="1" Style="{StaticResource ViewContentControlStyle}"></ContentControl>
     </Grid>
 </UserControl>

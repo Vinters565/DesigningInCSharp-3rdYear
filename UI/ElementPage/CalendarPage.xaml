@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UI.ElementPage" xmlns:local1="clr-namespace:UI.UserControls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1080" d:DesignWidth="1920"
       Title="CalendarPage">
 
     <Grid Style="{StaticResource MainBackground}">
@@ -18,19 +18,17 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Background="LightGray" Margin="5">
-            <Ellipse Width="30" Height="30" VerticalAlignment="Center" Fill="Gray">
-
-            </Ellipse>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Style="{ StaticResource MainElementStyleStackPanel}">
+            <Ellipse Width="30" Height="30" VerticalAlignment="Center" Fill="Gray"/>
 
             <TextBlock Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenPersonalAccountPage_MouseDown"></TextBlock>
 
-            <Button Margin="20 2 2 2" BorderThickness="0" Background="Transparent">
+            <Button Margin="20 2 2 2" BorderThickness="0" Background="Transparent" Visibility="Hidden">
                 <Image Source="/Images/notification.png" Width="20" Height="20"></Image>
             </Button>
         </StackPanel>
 
-        <Grid Grid.Row="0" Grid.Column="1" Background="LightGray" Margin="5">
+        <Grid Grid.Row="0" Grid.Column="1" Style="{ StaticResource MainElementStyleGrid}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="ColumnPrivateCalendar" Width="*" />
                 <ColumnDefinition x:Name="ColumnPublicCalendar" Width="*" />
@@ -42,10 +40,12 @@
             <Button Content="Моя лента календарей" Grid.Column="2" Margin="10 5" Style="{StaticResource RoundButtonStyle}" Click="OpenListPublicCalendars_Click" ></Button>
         </Grid>
 
-        <StackPanel Orientation="Vertical" Grid.Row ="1" Grid.RowSpan="2" Grid.Column="0" Background="LightGray" Margin="5">
+        <StackPanel Orientation="Vertical" Grid.Row ="1" Grid.Column="0" Style="{StaticResource MainElementStyleStackPanel}">
             <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
         </StackPanel>
 
-        <Frame x:Name="CalendarFrame" Grid.Column="1" Grid.Row="1" NavigationUIVisibility="Hidden" Background="LightGray" Margin="5"/>
+        <Grid Grid.Column="1" Grid.Row="1" Style="{StaticResource MainElementStyleGrid}">
+            <Frame x:Name="CalendarFrame" Grid.Column="1" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+        </Grid>
     </Grid>
 </Page>

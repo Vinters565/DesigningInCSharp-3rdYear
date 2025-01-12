@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI.UserControls"
         mc:Ignorable="d"
-        Title="EVCalendar" Height="450" Width="860">
+        WindowState="Maximized"
+        Title="EVCalendar" 
+        d:DesignHeight="1080" d:DesignWidth="1920">
 
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>

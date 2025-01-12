@@ -5,8 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UI.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="40">
-    <Button BorderBrush="Black" BorderThickness="1" Background="DimGray" Click="CreateNewCalendarEvent_Click">
-        
-    </Button>
+             d:DesignHeight="40" d:DesignWidth="40"
+             Style="{StaticResource EmptyBlock}">
+    
+    <Grid>
+        <Grid x:Name="GridElement" />
+        <Button Opacity="0" Click="CreateNewCalendarEvent_Click" />
+    </Grid>
 </UserControl>

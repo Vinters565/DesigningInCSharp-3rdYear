@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI.Windows"
         mc:Ignorable="d"
-        Title="Авторизация" Height="300" Width="400"
-        Background="LightGray">
+        Title="Авторизация" Height="300" Width="400">
 
-    <Grid>
+    <Grid Style="{StaticResource MainBackground}">
         <Frame x:Name="LoginFrame" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

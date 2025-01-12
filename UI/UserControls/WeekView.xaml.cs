@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.DirectoryServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -11,7 +12,6 @@ namespace UI.UserControls
 
         public DateTime CurrentDate { get; set; }
 
-
         public WeekView(TextBlock dateTextBlock)
         {
             InitializeComponent();
@@ -19,7 +19,9 @@ namespace UI.UserControls
             this.dateTextBlock = dateTextBlock;
             CurrentDate = DateTime.Now;
             FillTimeColumn();
-            FillCalendarArea();
+            FillGridCells();
+            FillCellsGridArea();
+            AddEvent("sdfsd", 2, 4);
             UpdateWeekView();
         }
 
@@ -27,10 +29,14 @@ namespace UI.UserControls
         {
             for (int i = 0; i < 48; i++)
             {
-                var border = CreateTimeBorder();
+                var border = new Border {
+                    Style = (Style)Application.Current.FindResource("ViewBorderStyle") };
+
                 var record = (i/2).ToString();
                 record += i % 2 == 0 ? ":00" : ":30";
-                var block = CreateTimeTextBlock(record, Brushes.DarkGray);
+                var block = new TextBlock { 
+                    Text = record, Style = (Style)Application.Current.FindResource("ViewTextBlockStyle") };
+
                 border.Child = block;
 
                 Grid.SetRow(border, i+1);
@@ -39,48 +45,40 @@ namespace UI.UserControls
             }
         }
 
-        private Border CreateTimeBorder()
+        private void FillGridCells()
         {
-            return new Border
+            for (int i = 0; i < 7; i++)
             {
-                Style = (Style)Application.Current.FindResource("ViewBorderStyle")
-            };
+                var columnDefinition = new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)};
+                EventsGrid.ColumnDefinitions.Add(columnDefinition);
+            }
+            for (int i = 0; i < 48 * 3; i++)
+            {
+                var rowDefinition = new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) };
+                EventsGrid.RowDefinitions.Add(rowDefinition);
+            }
         }
 
-        private TextBlock CreateTimeTextBlock(string text, Brush foreground)
+        private void FillCellsGridArea()
         {
-            return new TextBlock
+            for (int i = 0; i < 7; i++)
             {
-                Text = text,
-
-                Style = (Style)Application.Current.FindResource("ViewTextBlockStyle")
-            };
-        }
-
-        private void FillCalendarArea()
-        {
-            for (int i = 0; i <= 7; i++)
-            {
-                for (int j = 0; j <= 48; j++)
+                for (int j = 0; j < 48 * 3; j += 3)
                 {
                     var block = new EmptyBlock { IsPublic = false };
-                    Grid.SetColumn(block, 1 + i);
-                    Grid.SetRow(block, 1 + j);
-                    GridArea.Children.Add(block);
+                    Grid.SetColumn(block, i);
+                    Grid.SetRowSpan(block, 3);
+                    Grid.SetRow(block, j);
+                    EventsGrid.Children.Add(block);
                 }
             }
         }
 
         private void AddEvent(string title, int startRow, int duration)
         {
-            var eventBlock = new EventBlock
-            {
-                EventTitle = title,
-                StartRow = startRow,
-                Duration = duration
-            };
-
-            Grid.SetRow(eventBlock, startRow);
+            var eventBlock = new EventBlock(title, 0, startRow, duration);
+            Grid.SetRow(eventBlock, startRow * 6);
+            Grid.SetColumn(eventBlock, 0);
             Grid.SetRowSpan(eventBlock, duration);
 
             EventsGrid.Children.Add(eventBlock);

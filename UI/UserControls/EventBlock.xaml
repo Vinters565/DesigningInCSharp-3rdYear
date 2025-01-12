@@ -8,6 +8,6 @@
              d:DesignHeight="40" d:DesignWidth="40">
     
     <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" CornerRadius="5" Padding="5">
-        <TextBlock Text="{Binding EventTitle}" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="Title" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center"/>
     </Border>
 </UserControl>

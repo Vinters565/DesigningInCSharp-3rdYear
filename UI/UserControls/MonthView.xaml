@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:UI.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="MonthCalendar" Background="LightBlue">
+    <Grid x:Name="MonthCalendar" Style="{StaticResource MainElementStyleGrid}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>

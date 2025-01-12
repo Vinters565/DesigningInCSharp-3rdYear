@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 using System.Net.Http.Json;
+using System.Windows;
 
 namespace UI;
 public class ApiClient
@@ -30,18 +31,16 @@ public class ApiClient
         var response = await httpClient.PostAsync(endpoint, content);
         response.EnsureSuccessStatusCode();
 
-        var responseString = await response.Content.ReadAsStringAsync();
-        return responseString;
+        return await response.Content.ReadAsStringAsync();
     }
 
     private async Task<T> PostAsyncJson<T>(string endpoint, object data)
     {
-        var json = JsonSerializer.Serialize(data);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var response = await httpClient.PostAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
-        var responseJson = await response.Content.ReadAsStringAsync();
+        var responseJson = await PostAsync(endpoint, data);
+        if (responseJson == null)
+        {
+            throw new ArgumentNullException("Ошибка получения данных из БД");
+        }
         return JsonSerializer.Deserialize<T>(responseJson);
     }
 

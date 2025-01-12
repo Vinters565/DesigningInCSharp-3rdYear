@@ -52,15 +52,15 @@ namespace UI.UserControls
 
             for (int i = 0; i < startDay; i++)
             {
-                var dayBorder = CreateDayBorder();
+                var dayEmptyBlock = new EmptyBlock();
                 var prevDay = prevMonthDays - startDay + 1 + i;
 
                 var dayBlock = CreateDayTextBlock(prevDay.ToString(), Brushes.DarkGray);
-                dayBorder.Child = dayBlock;
+                dayEmptyBlock.GridElement.Children.Add(dayBlock);
 
-                Grid.SetRow(dayBorder, 1);
-                Grid.SetColumn(dayBorder, i);
-                MonthCalendar.Children.Add(dayBorder);
+                Grid.SetRow(dayEmptyBlock, 1);
+                Grid.SetColumn(dayEmptyBlock, i);
+                MonthCalendar.Children.Add(dayEmptyBlock);
             }
         }
 
@@ -74,19 +74,19 @@ namespace UI.UserControls
 
             for (int day = 1; day <= daysInMonth; day++)
             {
-                var dayBorder = CreateDayBorder();
+                var dayEmptyBlock = new EmptyBlock();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
                 if (day == CurrentDate.Day && CurrentDate.Month == DateTime.Now.Month)
                 {
-                    dayBorder.Background = Brushes.Brown;
+                    dayEmptyBlock.Background = Brushes.Brown;
                 }
-                dayBorder.Child = dayBlock;
+                dayEmptyBlock.GridElement.Children.Add(dayBlock);
 
                 var column = (startDay + day - 1) % 7;
                 var row = (startDay + day - 1) / 7 + 1;
-                Grid.SetRow(dayBorder, row);
-                Grid.SetColumn(dayBorder, column);
-                MonthCalendar.Children.Add(dayBorder);
+                Grid.SetRow(dayEmptyBlock, row);
+                Grid.SetColumn(dayEmptyBlock, column);
+                MonthCalendar.Children.Add(dayEmptyBlock);
             }
         }
 
@@ -101,25 +101,16 @@ namespace UI.UserControls
             var nextDaysToShow = 42 - (startDay + daysInMonth);
             for (int day = 1; day <= nextDaysToShow; day++)
             {
-                var dayBorder = CreateDayBorder();
+                var dayEmptyBlock = new EmptyBlock();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.DarkGray);
-                dayBorder.Child = dayBlock;
+                dayEmptyBlock.GridElement.Children.Add(dayBlock);
 
                 var column = (startDay + daysInMonth + day - 1) % 7;
                 var row = (startDay + daysInMonth + day - 1) / 7 + 1;
-                Grid.SetRow(dayBorder, row);
-                Grid.SetColumn(dayBorder, column);
-                MonthCalendar.Children.Add(dayBorder);
+                Grid.SetRow(dayEmptyBlock, row);
+                Grid.SetColumn(dayEmptyBlock, column);
+                MonthCalendar.Children.Add(dayEmptyBlock);
             }
-        }
-
-        private Border CreateDayBorder()
-        {
-            return new Border
-            {
-                BorderBrush = Brushes.White,
-                BorderThickness = new Thickness(1)
-            };
         }
 
         private TextBlock CreateDayTextBlock(string text, Brush foreground)
@@ -128,7 +119,8 @@ namespace UI.UserControls
             {
                 Text = text,
                 Background = Brushes.Transparent,
-                Foreground = foreground
+                Foreground = foreground,
+                Margin = new Thickness(3)
             };
         }
 

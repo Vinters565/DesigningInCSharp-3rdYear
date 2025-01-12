@@ -8,36 +8,18 @@ namespace UI.UserControls
     /// </summary>
     public partial class EventBlock : UserControl
     {
-        public EventBlock()
+        public EventBlock(string title, int startColumn, int startRow, int duration)
         {
             InitializeComponent();
+            StartColumn = startColumn;
+            StartRow = startRow;
+            Duration = duration;
+            Title.Text = title;
         }
 
-        public string EventTitle
-        {
-            get => (string)GetValue(EventTitleProperty);
-            set => SetValue(EventTitleProperty, value);
-        }
+        public int StartRow;
 
-        public static readonly DependencyProperty EventTitleProperty =
-            DependencyProperty.Register(nameof(EventTitle), typeof(string), typeof(EventBlock), new PropertyMetadata(string.Empty));
-
-        public int StartRow
-        {
-            get => (int)GetValue(StartRowProperty);
-            set => SetValue(StartRowProperty, value);
-        }
-
-        public static readonly DependencyProperty StartRowProperty =
-            DependencyProperty.Register(nameof(StartRow), typeof(int), typeof(EventBlock), new PropertyMetadata(0));
-
-        public int Duration
-        {
-            get => (int)GetValue(DurationProperty);
-            set => SetValue(DurationProperty, value);
-        }
-
-        public static readonly DependencyProperty DurationProperty =
-            DependencyProperty.Register(nameof(Duration), typeof(int), typeof(EventBlock), new PropertyMetadata(1));
+        public int Duration;
+        public int StartColumn;
     }
 }

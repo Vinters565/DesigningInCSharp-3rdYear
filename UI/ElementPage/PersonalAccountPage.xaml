@@ -47,7 +47,7 @@
             <Border Height="1" Background="DarkGray" Margin="0,5"/>
         </StackPanel>
 
-        <StackPanel Grid.Column="2" Margin="10">
+        <StackPanel Grid.Column="2" Margin="10" Visibility="Hidden">
             <TextBlock Text="Выберите цвет темы:" Margin="5"/>
             <ComboBox Name="ColorPicker" SelectionChanged="ColorPicker_SelectionChanged" Width="150">
                 <sys:String>Красный</sys:String>
