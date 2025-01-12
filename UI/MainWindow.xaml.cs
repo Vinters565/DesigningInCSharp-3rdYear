@@ -14,6 +14,7 @@ namespace UI
     {
         private readonly ApiClient client;
         private readonly SubscribePage subscribePage;
+        private readonly CalendarPage calendarPage;
 
         public MainWindow()
         {
@@ -24,10 +25,12 @@ namespace UI
             }
             client = new ApiClient();
             subscribePage = new SubscribePage();
-            OpenPage(MainFrame, new CalendarPage());
+            calendarPage = new CalendarPage();
+            OpenPage(MainFrame, calendarPage);
             OpenPage(SecondFrame, subscribePage);
 
             WeakReferenceMessenger.Default.Register<OpenPersonalPageMessage>(this, (r, m) => OpenPage(MainFrame, new PersonalAccountPage()));
+            WeakReferenceMessenger.Default.Register<BackMessage>(this, (r, m) => OpenPage(MainFrame, calendarPage));
             WeakReferenceMessenger.Default.Register<ExitAccountMessage>(this, (r, m) => OpenAuthWindow());
             WeakReferenceMessenger.Default.Register<ViewCalendarMessage>(this, (recipient, message) => ShowPublicCalendar(message.Value));
             WeakReferenceMessenger.Default.Register<CloseSubscribePageMessage>(this, (r, m) => SecondFrame.Visibility = Visibility.Hidden);

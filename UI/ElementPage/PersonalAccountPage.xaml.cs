@@ -1,20 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Syncfusion.Windows.Shared;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using UI.Messages;
-using UI.Windows;
+using UI.Resources;
+using System.Windows.Media;
 
 namespace UI.ElementPage
 {
@@ -23,6 +13,17 @@ namespace UI.ElementPage
     /// </summary>
     public partial class PersonalAccountPage : Page
     {
+        private string _selectedColor;
+
+        public static readonly Dictionary<string, Color> ColorsVariant = new()
+    {
+        { "Красный", Colors.Red },
+        { "Синий", Colors.Blue },
+        { "Зелёный", Colors.Green },
+        { "Оранжевый", Colors.Orange },
+        { "Фиолетовый", Colors.Purple }
+    };
+
         public PersonalAccountPage()
         {
             InitializeComponent();
@@ -31,6 +32,27 @@ namespace UI.ElementPage
         private void ExitAccount_Click(object sender, RoutedEventArgs e)
         {
             WeakReferenceMessenger.Default.Send(new ExitAccountMessage());
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            WeakReferenceMessenger.Default.Send(new BackMessage());
+        }
+
+        private void ColorPicker_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ColorPicker.SelectedItem is string selectedColor)
+            {
+                _selectedColor = selectedColor;
+            }
+        }
+
+        private void ApplyColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_selectedColor) && ColorsVariant.TryGetValue(_selectedColor, out var color))
+            {
+                ThemeManager.ApplyPrimaryColor(color);
+            }
         }
     }
 }

@@ -69,7 +69,7 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
         this.currentCalendars = new List<IViewCalendar>(currentCalendars);
         for (int i = 0; i < contentContolersCalendar.Count; i++)
         {
-            contentContolersCalendar[i].Content = currentCalendars[i];
+            contentContolersCalendar[i].Content = this.currentCalendars[i];
             buttons[i].Calendar = currentCalendars[i];
         }
         UpdateView();
@@ -111,13 +111,11 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
     private void MonthButton_Click(object sender, RoutedEventArgs e)
     {
         FillContentContolersView(monthViewsCalendars);
-        UpdateView();
     }
 
     private void WeekButton_Click(object sender, RoutedEventArgs e)
     {
         FillContentContolersView(weekViewsCalendars);
-        UpdateView();
     }
 
     public void NextView()

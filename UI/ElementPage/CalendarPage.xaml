@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CalendarPage">
 
-    <Grid>
+    <Grid Style="{StaticResource MainBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"></RowDefinition>
             <RowDefinition></RowDefinition>

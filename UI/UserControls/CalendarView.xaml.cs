@@ -1,7 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using UI.ElementPage;
-using UI.Windows;
 
 namespace UI.UserControls
 {

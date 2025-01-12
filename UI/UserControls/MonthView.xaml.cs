@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -78,7 +76,7 @@ namespace UI.UserControls
             {
                 var dayBorder = CreateDayBorder();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
-                if (day == CurrentDate.Day)
+                if (day == CurrentDate.Day && CurrentDate.Month == DateTime.Now.Month)
                 {
                     dayBorder.Background = Brushes.Brown;
                 }
