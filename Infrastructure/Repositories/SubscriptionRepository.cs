@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SchedulePlanner.Application.Subscriptions;
 using SchedulePlanner.Domain.Entities;
 using SchedulePlanner.Infrastructure.Common;
@@ -6,28 +7,35 @@ namespace SchedulePlanner.Infrastructure.Repositories;
 
 public class SubscriptionRepository(AppDbContext context) : BaseRepository(context), ISubscriptionRepository
 {
-    public Task<List<Subscription>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
+    public async Task<List<Subscription>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
-        throw new NotImplementedException();
+        return await context.Subscriptions
+            .Where(s => s.UserId == userId
+                        && start <= s.CalendarEvent.StartDate && s.CalendarEvent.StartDate <= end)
+            .OrderBy(s => s.CalendarEvent.StartDate)
+            .ToListAsync();
     }
 
-    public Task<List<Subscription>> GetByCalendarEventIdAsync(Guid calendarEventId)
+    public async Task<List<Subscription>> GetByCalendarEventIdAsync(Guid calendarEventId)
     {
-        throw new NotImplementedException();
+        return await context.Subscriptions
+            .Where(s => s.CalendarEventId == calendarEventId)
+            .OrderBy(s => s.User.Settings.DisplayedName)
+            .ToListAsync();
     }
 
     public void Create(Subscription subscription)
     {
-        throw new NotImplementedException();
+        context.Subscriptions.Add(subscription);
     }
 
     public void Delete(Subscription subscription)
     {
-        throw new NotImplementedException();
+        context.Subscriptions.Remove(subscription);
     }
 
-    public void DeleteByCalendarEventId(Guid calendarEventId)
+    public void DeleteRange(List<Subscription> subscriptions)
     {
-        throw new NotImplementedException();
+        context.Subscriptions.RemoveRange(subscriptions);
     }
 }

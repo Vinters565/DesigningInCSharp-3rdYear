@@ -8,7 +8,7 @@ public class PublicityEventAttribute : EventAttribute
     
     private PublicityEventAttribute() { }
 
-    public override string Description => "Публичное событие";
+    public override string GetDescription() => "Публичное событие";
     
     protected override IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata()
     {

@@ -11,7 +11,7 @@ public abstract class EventAttribute : IEventAttribute
         IsActive = isActive;
     }
 
-    public abstract string Description { get; }
+    public abstract string GetDescription();
  
     public bool IsActive { get; protected set; }
 
@@ -23,7 +23,7 @@ public abstract class EventAttribute : IEventAttribute
             {
                 FieldName = nameof(IsActive),
                 FieldType = FieldTypes.Boolean,
-                Description = Description
+                Description = GetDescription()
             }
         };
         metadata.AddRange(GetAttributeFieldsMetadata());

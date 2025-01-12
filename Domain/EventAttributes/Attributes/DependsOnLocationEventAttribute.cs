@@ -11,7 +11,7 @@ public class DependsOnLocationEventAttribute : EventAttribute
     
     private DependsOnLocationEventAttribute() { }
 
-    public override string Description => "Зависит от места проведения";
+    public override string GetDescription() => "Зависит от места проведения";
     
     protected override IReadOnlyCollection<FieldMetadata> GetAttributeFieldsMetadata()
     {

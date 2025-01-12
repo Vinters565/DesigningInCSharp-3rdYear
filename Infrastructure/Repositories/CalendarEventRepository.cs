@@ -16,14 +16,14 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
     public async Task<List<CalendarEvent>> GetByUserIdAsync(Guid userId, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .Where(e => e.UserId == userId && e.StartDate >= start && e.EndDate <= end)
+            .Where(e => e.UserId == userId && e.EndDate >= start && e.StartDate <= end)
             .ToListAsync();
     }
     
     public async Task<List<CalendarEvent>> GetAllAsync(DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .Where(e => e.StartDate >= start && e.EndDate <= end)
+            .Where(e => e.EndDate >= start && e.StartDate <= end)
             .ToListAsync();
     }
 
@@ -59,7 +59,7 @@ public class CalendarEventRepository : BaseRepository, ICalendarEventRepository
     public async Task<bool> AnyAsync(Guid userId, DateTime start, DateTime end)
     {
         return await context.CalendarEvents
-            .AnyAsync(e => e.UserId == userId && e.StartDate < end && e.EndDate > start);
+            .AnyAsync(e => e.UserId == userId && e.EndDate < end && e.StartDate > start);
     }
 
     public async Task<bool> AnySingleOnlyAsync(Guid userId, DateTime start, DateTime end)
