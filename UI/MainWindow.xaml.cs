@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using System.Windows;
 using System.Windows.Controls;
+using UI.Dto;
 using UI.ElementPage;
 using UI.Messages;
 using UI.Windows;

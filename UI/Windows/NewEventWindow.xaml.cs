@@ -1,19 +1,22 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using CommunityToolkit.Mvvm.Messaging;
 using UI.Dto;
+using UI.ElementPage;
+using UI.Messages;
 using UI.UserControls;
 
 namespace UI.Windows;
 public partial class NewEventWindow : Window
 {
     private static NewEventWindow Instance = null!;
-
+    private EditEventPage editEventPage;
     public bool Public { get; set; } = false;
 
     public DateTime? StartDate
     {
-        get => StartDatePicker.DateTime;
-        set => StartDatePicker.DateTime = value;
+        get => editEventPage.StartDate;
+        set => editEventPage.StartDate = value;
     }
 
     public NewEventWindow()
@@ -21,42 +24,17 @@ public partial class NewEventWindow : Window
         InitializeComponent();
         Instance?.Close();
         Instance = this;
+        editEventPage = new EditEventPage();
+        OpenEditEventPage();
     }
 
-    private void CreateEvent_Click(object sender, RoutedEventArgs e)
+    private void OpenEditEventPage()
     {
-
+        EventFrame.NavigationService.Navigate(new EditEventPage());
     }
 
-    private void EventComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OpenEventInfoPage()
     {
-        CanBeCompletedPanel.Visibility = Visibility.Collapsed;
-        DependsOnLocationPanel.Visibility = Visibility.Collapsed;
-        RecurrencePanel.Visibility = Visibility.Collapsed;
-
-        var selectedItem = eventComboBox.SelectedItem as ComboBoxItem;
-
-        if (selectedItem != null)
-        {
-            var selectedTag = selectedItem.Tag.ToString();
-
-            switch (selectedTag)
-            {
-                case "CanBeCompletedEventAttribute":
-                    CanBeCompletedPanel.Visibility = Visibility.Visible;
-                    break;
-                case "DependsOnLocationEventAttribute":
-                    DependsOnLocationPanel.Visibility = Visibility.Visible;
-                    break;
-                case "RecurrenceEventAttribute":
-                    RecurrencePanel.Visibility = Visibility.Visible;
-                    break;
-            }
-        }
-    }
-
-    private void ResetAttribute_Click(object sender, RoutedEventArgs e)
-    {
-        eventComboBox.SelectedIndex = -1; 
+        EventFrame.NavigationService.Navigate(new EventInfoPage());
     }
 }
