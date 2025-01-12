@@ -31,7 +31,8 @@ namespace UI.ElementPage
             {
                 string token = await authService.RegisterAsync(registrRequest);
                 MessageBox.Show($"Успешная регистрация!");
-                WeakReferenceMessenger.Default.Send(new OpenLoginPageMessage());
+                TokenFileStorage.SaveToken(token);
+                WeakReferenceMessenger.Default.Send(new OpenMainWindowMessage());
             }
             catch (Exception ex)
             {

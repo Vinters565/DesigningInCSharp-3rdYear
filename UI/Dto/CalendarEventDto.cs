@@ -12,5 +12,5 @@ public class CalendarEventDto
 
     public DateTime End { get; init; }
 
-    public IReadOnlyDictionary<Type, object> Attributes { get; init; } = null!;
+    public Dictionary<string, Dictionary<string, object>> Attributes { get; init; } = null!;
 }
