@@ -25,7 +25,7 @@ public class RecurrenceEventAttribute : EventAttribute
             new()
             {
                 FieldName = nameof(Type),
-                FieldType = FieldTypes.String,
+                FieldType = FieldTypes.Enum,
                 DefaultValue = RecurrenceType.EveryWeek.ToString(),
                 Description = "Повторяемость",
                 PossibleChoices =
