@@ -18,7 +18,7 @@ namespace UI.UserControls
 
         private void CreateNewCalendarEvent_Click(object sender, RoutedEventArgs e)
         {
-            var eventWindow = new NewEventWindow() { StartDate = DateTime.Now, Public = IsPublic};
+            var eventWindow = new NewEventWindow(true, DateTime.Now, IsPublic);
             eventWindow.Show();
         }
     }

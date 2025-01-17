@@ -7,22 +7,32 @@ namespace UI.UserControls
 {
     public partial class WeekView : UserControl, IViewCalendar
     {
-        private readonly ApiClient client;
         private readonly TextBlock dateTextBlock;
+        private readonly ApiClient apiClient;
 
         public DateTime CurrentDate { get; set; }
 
         public WeekView(TextBlock dateTextBlock)
         {
             InitializeComponent();
-            client = new ApiClient();
             this.dateTextBlock = dateTextBlock;
+            apiClient = new ApiClient();
             CurrentDate = DateTime.Now;
             FillTimeColumn();
             FillGridCells();
             FillCellsGridArea();
-            AddEvent("sdfsd", 2, 4);
+            FillCalendarEvents();
             UpdateWeekView();
+        }
+
+        private async void FillCalendarEvents()
+        {
+            var events = await apiClient.GetPrivateEventsAsync(CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1), 3);
+            foreach (var e in events)
+            {
+                var date = (e.End - e.Start).Hours;
+                AddEvent(e.Name, (int)e.Start.DayOfWeek, e.Start.Hour, 1 * 6);
+            }
         }
 
         private void FillTimeColumn()
@@ -74,11 +84,11 @@ namespace UI.UserControls
             }
         }
 
-        private void AddEvent(string title, int startRow, int duration)
+        private void AddEvent(string title, int startColumn, int startRow, int duration)
         {
-            var eventBlock = new EventBlock(title, 0, startRow, duration);
+            var eventBlock = new EventBlock(title, startColumn, startRow, duration);
             Grid.SetRow(eventBlock, startRow * 6);
-            Grid.SetColumn(eventBlock, 0);
+            Grid.SetColumn(eventBlock, startColumn);
             Grid.SetRowSpan(eventBlock, duration);
 
             EventsGrid.Children.Add(eventBlock);

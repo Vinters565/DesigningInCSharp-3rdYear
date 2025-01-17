@@ -40,7 +40,7 @@
             <Button Content="Моя лента календарей" Grid.Column="2" Margin="10 5" Style="{StaticResource RoundButtonStyle}" Click="OpenListPublicCalendars_Click" ></Button>
         </Grid>
 
-        <StackPanel Orientation="Vertical" Grid.Row ="1" Grid.Column="0" Style="{StaticResource MainElementStyleStackPanel}">
+        <StackPanel x:Name="ForPanel" Orientation="Vertical" Grid.Row ="1" Grid.Column="0" Style="{StaticResource MainElementStyleStackPanel}">
             <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
         </StackPanel>
 

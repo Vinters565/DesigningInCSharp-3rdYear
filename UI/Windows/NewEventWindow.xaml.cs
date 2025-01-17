@@ -10,27 +10,30 @@ namespace UI.Windows;
 public partial class NewEventWindow : Window
 {
     private static NewEventWindow Instance = null!;
-    private EditEventPage editEventPage;
-    public bool Public { get; set; } = false;
+    public bool IsPublic { get; set; } = false;
 
-    public DateTime? StartDate
-    {
-        get => editEventPage.StartDate;
-        set => editEventPage.StartDate = value;
-    }
+    public DateTime StartDate;
 
-    public NewEventWindow()
+    public NewEventWindow(bool isEdit, DateTime startDate, bool isPublic)
     {
         InitializeComponent();
         Instance?.Close();
         Instance = this;
-        editEventPage = new EditEventPage();
-        OpenEditEventPage();
+        StartDate = startDate;
+        IsPublic = isPublic;
+        if (isEdit)
+        {
+            OpenEditEventPage();
+        }
+        else 
+        {
+            OpenEventInfoPage();
+        }
     }
 
     private void OpenEditEventPage()
     {
-        EventFrame.NavigationService.Navigate(new EditEventPage());
+        EventFrame.NavigationService.Navigate(new EditEventPage(StartDate));
     }
 
     private void OpenEventInfoPage()

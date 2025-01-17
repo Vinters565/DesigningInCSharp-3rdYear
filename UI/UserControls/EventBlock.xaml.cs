@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using UI.Windows;
 
 namespace UI.UserControls
 {
@@ -21,5 +22,11 @@ namespace UI.UserControls
 
         public int Duration;
         public int StartColumn;
+
+        private void OpenInfo_Click(object sender, RoutedEventArgs e)
+        {
+            var eventWindow = new NewEventWindow(false, DateTime.Now, false);
+            eventWindow.Show();
+        }
     }
 }

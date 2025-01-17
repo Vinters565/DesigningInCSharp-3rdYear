@@ -56,7 +56,7 @@ namespace UI.UserControls
                 var prevDay = prevMonthDays - startDay + 1 + i;
 
                 var dayBlock = CreateDayTextBlock(prevDay.ToString(), Brushes.DarkGray);
-                dayEmptyBlock.GridElement.Children.Add(dayBlock);
+                dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 
                 Grid.SetRow(dayEmptyBlock, 1);
                 Grid.SetColumn(dayEmptyBlock, i);
@@ -80,7 +80,7 @@ namespace UI.UserControls
                 {
                     dayEmptyBlock.Background = Brushes.Brown;
                 }
-                dayEmptyBlock.GridElement.Children.Add(dayBlock);
+                dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 
                 var column = (startDay + day - 1) % 7;
                 var row = (startDay + day - 1) / 7 + 1;
@@ -103,7 +103,7 @@ namespace UI.UserControls
             {
                 var dayEmptyBlock = new EmptyBlock();
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.DarkGray);
-                dayEmptyBlock.GridElement.Children.Add(dayBlock);
+                dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 
                 var column = (startDay + daysInMonth + day - 1) % 7;
                 var row = (startDay + daysInMonth + day - 1) / 7 + 1;

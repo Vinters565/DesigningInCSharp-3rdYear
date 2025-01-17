@@ -13,7 +13,7 @@ namespace UI.ElementPage
 
         private void EditEventButton_Click(object sender, RoutedEventArgs e)
         {
-            var editEventPage = new EditEventPage();
+            var editEventPage = new EditEventPage(DateTime.Now);
             NavigationService.Navigate(editEventPage);
         }
 

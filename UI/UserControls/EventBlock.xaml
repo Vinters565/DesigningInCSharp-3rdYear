@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:UI.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="40">
-    
-    <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" CornerRadius="5" Padding="5">
-        <TextBlock x:Name="Title" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center"/>
-    </Border>
+
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Background="LightBlue" CornerRadius="5" Padding="5">
+            <TextBlock x:Name="Title" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </Border>
+        <Button Opacity="0" Click="OpenInfo_Click">
+        </Button>
+    </Grid>
 </UserControl>

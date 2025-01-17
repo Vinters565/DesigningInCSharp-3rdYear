@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using UI.Dto;
@@ -29,7 +30,6 @@ namespace UI
             calendarPage = new CalendarPage();
             OpenPage(MainFrame, calendarPage);
             OpenPage(SecondFrame, subscribePage);
-
             WeakReferenceMessenger.Default.Register<OpenPersonalPageMessage>(this, (r, m) => OpenPage(MainFrame, new PersonalAccountPage()));
             WeakReferenceMessenger.Default.Register<BackMessage>(this, (r, m) => OpenPage(MainFrame, calendarPage));
             WeakReferenceMessenger.Default.Register<ExitAccountMessage>(this, (r, m) => OpenAuthWindow());

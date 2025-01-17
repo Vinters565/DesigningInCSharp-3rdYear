@@ -31,10 +31,10 @@ namespace UI.ElementPage
             {
                 string token = await authService.RegisterAsync(registrRequest);
                 MessageBox.Show($"Успешная регистрация!");
-                TokenFileStorage.SaveToken(token);
-                WeakReferenceMessenger.Default.Send(new OpenMainWindowMessage());
+                WeakReferenceMessenger.Default.Send(new OpenLoginPageMessage());
             }
             catch (Exception ex)
+
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }

@@ -21,13 +21,13 @@ public static class AttributeFormGenerator
         return panel;
     }
 
-    public static Tuple<StackPanel, Dictionary<string, Func<string>>> GenerateFullAtributeField(AttributeMetadata attribute)
+    public static Tuple<StackPanel, Dictionary<string, Func<object>>> GenerateFullAtributeField(AttributeMetadata attribute)
     {
         var areaField = new StackPanel()
         {
             Orientation = Orientation.Vertical
         };
-        var fieldWithFunction = new Dictionary<string, Func<string>>();
+        var fieldWithFunction = new Dictionary<string, Func<object>>();
 
         var headerField = GenerateHeaderFieldConttroll(attribute);
         areaField.Children.Add(headerField.Item1);
@@ -42,7 +42,7 @@ public static class AttributeFormGenerator
         return new (areaField, fieldWithFunction);
     }
 
-    public static Tuple<StackPanel, Func<string>> GenerateHeaderFieldConttroll(AttributeMetadata atribute)
+    public static Tuple<StackPanel, Func<object>> GenerateHeaderFieldConttroll(AttributeMetadata atribute)
     {
         var header = new TextBlock
         {
@@ -68,52 +68,52 @@ public static class AttributeFormGenerator
         headerField.Children.Add(header);
         headerField.Children.Add(setting);
 
-        return new(headerField, () => setting.IsChecked.ToString());
+        return new(headerField, () => setting.IsChecked);
     }
 
-    public static Tuple<StackPanel, Func<string>> GenerateFieldControl(AttributeField field)
+    public static Tuple<StackPanel, Func<object>> GenerateFieldControl(AttributeField field)
     {
         var fieldPanel = new StackPanel { Margin = new Thickness(0, 5, 0, 5) };
         var label = new TextBlock { Text = field.Description, FontWeight = System.Windows.FontWeights.SemiBold };
 
         UIElement inputElement;
-        Func<string> func;
+        Func<object> func;
         switch (field.FieldType.ToLower())
         {
             case "string":
                 var elementString = GenerateStringInputField(field);
                 inputElement = elementString;
-                func = new Func<string>(() => elementString.Text);
+                func = new Func<object>(() => elementString.Text);
                 break;
 
             case "int":
             case "double":
                 var elementNumeric = GenerateNumericInputField(field);
                 inputElement = elementNumeric;
-                func = new Func<string>(() => elementNumeric.Text);
+                func = new Func<object>(() => elementNumeric.Text);
                 break;
 
             case "bool":
                 var elementBool = GenerateBoolInputField(field);
                 inputElement = elementBool;
-                func = new Func<string>(() => elementBool!.IsChecked.ToString());
+                func = new Func<object>(() => elementBool!.IsChecked);
                 break;
 
             case "enum":
                 var elementCheckBox = GenerateEnumInputField(field);
                 inputElement = elementCheckBox;
-                func = new Func<string>(() => elementCheckBox.SelectedItem.ToString()!);
+                func = new Func<object>(() => elementCheckBox.SelectedItem);
                 break;
 
             case "datetime":
                 var elementDateTime = GenerateDateTimeInputField(field);
                 inputElement = elementDateTime;
-                func = new Func<string>(() => elementDateTime.DateTime.Value.ToString());
+                func = new Func<object>(() => elementDateTime.DateTime.Value);
                 break;
 
             default:
                 inputElement = new TextBlock { Text = "Неизвестный тип поля" };
-                func = new Func<string>(() => "");
+                func = new Func<object>(() => "");
                 break;
         }
 

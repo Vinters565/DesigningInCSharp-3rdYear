@@ -24,6 +24,7 @@ namespace UI.UserControls
             monthView = new(DateTextBlock);
             weekView = new(DateTextBlock);
             CurrentView = monthView;
+            UpdateView();
         }
 
         private void MonthButton_Click(object sender, RoutedEventArgs e) 
