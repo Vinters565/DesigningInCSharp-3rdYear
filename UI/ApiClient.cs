@@ -9,7 +9,9 @@ namespace UI;
 
 public class ApiClient
 {
-    private const string apiUrl = "http://127.0.0.1:5201";
+    //://localhost:5201
+    //://127.0.0.1:5201
+    private const string apiUrl = "http://localhost:5201";
 
     private readonly JsonSerializerOptions jsonSerializerOptions;
     private readonly HttpClient httpClient;
