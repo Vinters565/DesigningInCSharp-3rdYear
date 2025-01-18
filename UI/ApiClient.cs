@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text;
+using System.Windows;
 
 namespace UI;
 
@@ -103,26 +104,33 @@ public class ApiClient
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await httpClient.PostAsync(endpoint, content);
-        response.EnsureSuccessStatusCode();
-
-        var responseJson = await response.Content.ReadAsStringAsync();
-        
-        // TODO: Костыль из-за неправильного ответа API для типа string
-        if (typeof(T) == typeof(string))
+        try
         {
-            if (!responseJson.StartsWith("\""))
+            response.EnsureSuccessStatusCode();
+            var responseJson = await response.Content.ReadAsStringAsync();
+
+            // TODO: Костыль из-за неправильного ответа API для типа string
+            if (typeof(T) == typeof(string))
             {
-                responseJson = "\"" + responseJson;
+                if (!responseJson.StartsWith("\""))
+                {
+                    responseJson = "\"" + responseJson;
+                }
+
+                if (!responseJson.EndsWith("\""))
+                {
+                    responseJson += "\"";
+                }
             }
 
-            if (!responseJson.EndsWith("\""))
-            {
-                responseJson += "\"";
-            }
+            return JsonSerializer.Deserialize<T>(responseJson, jsonSerializerOptions)
+                   ?? throw new JsonException($"Cannot deserialize API response from url: POST {endpoint}");
         }
-        
-        return JsonSerializer.Deserialize<T>(responseJson, jsonSerializerOptions)
-               ?? throw new JsonException($"Cannot deserialize API response from url: POST {endpoint}");
+        catch(Exception ex)
+        {
+            MessageBox.Show(ex.Message);
+            return default(T);
+        }
     }
     
     private async Task<T> PutAsync<T>(string endpoint, object body)

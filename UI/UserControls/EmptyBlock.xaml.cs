@@ -10,15 +10,18 @@ namespace UI.UserControls
     public partial class EmptyBlock : UserControl
     {
         public bool IsPublic { get; set; } = false;
+        private DateTime currentDateTime;
 
-        public EmptyBlock()
+        public EmptyBlock(bool isPublic, DateTime dateTime)
         {
             InitializeComponent();
+            this.IsPublic = isPublic;
+            this.currentDateTime = dateTime;
         }
 
         private void CreateNewCalendarEvent_Click(object sender, RoutedEventArgs e)
         {
-            var eventWindow = new NewEventWindow(true, DateTime.Now, IsPublic);
+            var eventWindow = new NewEventWindow(currentDateTime, IsPublic);
             eventWindow.Show();
         }
     }

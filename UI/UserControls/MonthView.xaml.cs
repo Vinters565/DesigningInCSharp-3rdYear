@@ -7,14 +7,16 @@ namespace UI.UserControls
     public partial class MonthView : UserControl, IViewCalendar
     {
         private readonly TextBlock dateTextBlock;
+        private readonly bool isPublic;
 
         public DateTime CurrentDate { get; set; }
 
-        public MonthView(TextBlock dateTextBlock)
+        public MonthView(TextBlock dateTextBlock, bool isPublic)
         {
             InitializeComponent();
             this.dateTextBlock = dateTextBlock;
             CurrentDate = DateTime.Now;
+            this.isPublic = isPublic;
             UpdateView();
         }
 
@@ -52,10 +54,12 @@ namespace UI.UserControls
 
             for (int i = 0; i < startDay; i++)
             {
-                var dayEmptyBlock = new EmptyBlock();
-                var prevDay = prevMonthDays - startDay + 1 + i;
-
-                var dayBlock = CreateDayTextBlock(prevDay.ToString(), Brushes.DarkGray);
+                var prevDate = new DateTime(
+                    CurrentDate.Month == 1 ? CurrentDate.Year - 1 : CurrentDate.Year,
+                    CurrentDate.Month == 1 ? 12 : CurrentDate.Month - 1,
+                    prevMonthDays - startDay + 1 + i);
+                var dayEmptyBlock = new EmptyBlock(isPublic, prevDate);
+                var dayBlock = CreateDayTextBlock(prevDate.Day.ToString(), Brushes.DarkGray);
                 dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 
                 Grid.SetRow(dayEmptyBlock, 1);
@@ -74,7 +78,7 @@ namespace UI.UserControls
 
             for (int day = 1; day <= daysInMonth; day++)
             {
-                var dayEmptyBlock = new EmptyBlock();
+                var dayEmptyBlock = new EmptyBlock(isPublic, new DateTime(CurrentDate.Year, CurrentDate.Month, day));
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
                 if (day == CurrentDate.Day && CurrentDate.Month == DateTime.Now.Month)
                 {
@@ -101,7 +105,11 @@ namespace UI.UserControls
             var nextDaysToShow = 42 - (startDay + daysInMonth);
             for (int day = 1; day <= nextDaysToShow; day++)
             {
-                var dayEmptyBlock = new EmptyBlock();
+                var nextDate = new DateTime(
+                    CurrentDate.Month == 12 ? CurrentDate.Year + 1 : CurrentDate.Year,
+                    CurrentDate.Month == 12 ? 1 : CurrentDate.Month + 1,
+                    day);
+                var dayEmptyBlock = new EmptyBlock(isPublic, nextDate);
                 var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.DarkGray);
                 dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 

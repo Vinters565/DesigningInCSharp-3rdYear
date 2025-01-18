@@ -1,11 +1,12 @@
-﻿using System.Windows;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using System.Windows;
 using System.Windows.Controls;
+using UI.Messages;
 
 namespace UI.UserControls
 {
     public partial class CalendarView : UserControl, IViewCalendar
     {
-        public bool IsPublic { get; set; } = false;
         public string UserName { get; set; } = string.Empty;
         public DateTime CurrentDate { get; set; } = DateTime.Now;
 
@@ -18,23 +19,27 @@ namespace UI.UserControls
         private readonly MonthView monthView;
         private readonly WeekView weekView;
 
-        public CalendarView()
+        public CalendarView(bool isPublic)
         {
             InitializeComponent();
-            monthView = new(DateTextBlock);
-            weekView = new(DateTextBlock);
+            monthView = new(DateTextBlock, isPublic);
+            weekView = new(DateTextBlock, isPublic);
             CurrentView = monthView;
+
+            WeakReferenceMessenger.Default.Register<UpdateViewMessage>(this, (r, m) => UpdateView());
             UpdateView();
         }
 
         private void MonthButton_Click(object sender, RoutedEventArgs e) 
         {
             CurrentView = monthView;
+            UpdateView();
         }
 
         private void WeekButton_Click(object sender, RoutedEventArgs e)
         {
             CurrentView = weekView;
+            UpdateView();
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)

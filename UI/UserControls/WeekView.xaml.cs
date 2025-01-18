@@ -1,37 +1,62 @@
-﻿using System.DirectoryServices;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.DirectoryServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using UI.Dto;
+using UI.Repository;
 
 namespace UI.UserControls
 {
     public partial class WeekView : UserControl, IViewCalendar
     {
         private readonly TextBlock dateTextBlock;
-        private readonly ApiClient apiClient;
+        private readonly List<EmptyBlock> emptyBlock = new();
+        private bool isPublic;
 
         public DateTime CurrentDate { get; set; }
 
-        public WeekView(TextBlock dateTextBlock)
+        public WeekView(TextBlock dateTextBlock, bool isPublic)
         {
             InitializeComponent();
             this.dateTextBlock = dateTextBlock;
-            apiClient = new ApiClient();
             CurrentDate = DateTime.Now;
-            FillTimeColumn();
+            this.isPublic = isPublic;
             FillGridCells();
+            FillCalendar();
+        }
+
+        private void FillCalendar()
+        {
+            Clear();
+            FillTimeColumn();
             FillCellsGridArea();
             FillCalendarEvents();
             UpdateWeekView();
         }
 
+        private void Clear()
+        {
+            foreach (var block in emptyBlock)
+            {
+                GridArea.Children.Remove(block);
+            }
+            emptyBlock.Clear();
+            EventsGrid.Children.Clear();
+        }
+
         private async void FillCalendarEvents()
         {
-            var events = await apiClient.GetPrivateEventsAsync(CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1), 3);
+            var startDay = CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1);
+            var startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day);
+            var events = await App.ServiceProvider.GetRequiredService<ApiClient>()
+                .GetPrivateEventsAsync(startDate, 3);
             foreach (var e in events)
             {
-                var date = (e.End - e.Start).Hours;
-                AddEvent(e.Name, (int)e.Start.DayOfWeek, e.Start.Hour, 1 * 6);
+                if (e.End.Day <= CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 8).Day)
+                {
+                    AddEvent(e);
+                }
             }
         }
 
@@ -71,11 +96,14 @@ namespace UI.UserControls
 
         private void FillCellsGridArea()
         {
+            var startDate = new DateTime(CurrentDate.Year, CurrentDate.Month, CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1).Day);
             for (int i = 0; i < 7; i++)
             {
                 for (int j = 0; j < 48 * 3; j += 3)
                 {
-                    var block = new EmptyBlock { IsPublic = false };
+                    var date = startDate.AddDays(i);
+                    date = date.AddMinutes(j * 10);
+                    var block = new EmptyBlock(isPublic, date);
                     Grid.SetColumn(block, i);
                     Grid.SetRowSpan(block, 3);
                     Grid.SetRow(block, j);
@@ -84,12 +112,14 @@ namespace UI.UserControls
             }
         }
 
-        private void AddEvent(string title, int startColumn, int startRow, int duration)
+        private void AddEvent(CalendarEventDto calendarEvent)
         {
-            var eventBlock = new EventBlock(title, startColumn, startRow, duration);
-            Grid.SetRow(eventBlock, startRow * 6);
-            Grid.SetColumn(eventBlock, startColumn);
-            Grid.SetRowSpan(eventBlock, duration);
+            var duration = (calendarEvent.End - calendarEvent.Start).Hours * 6;
+            var startColumn = (int)calendarEvent.Start.DayOfWeek == 0 ? 7 : (int)calendarEvent.Start.DayOfWeek - 1;
+            var eventBlock = new EventBlock(startColumn, calendarEvent.Start.Hour, duration, calendarEvent);
+            Grid.SetRow(eventBlock, eventBlock.StartRow * 6);
+            Grid.SetColumn(eventBlock, eventBlock.StartColumn);
+            Grid.SetRowSpan(eventBlock, eventBlock.Duration);
 
             EventsGrid.Children.Add(eventBlock);
         }
@@ -121,18 +151,18 @@ namespace UI.UserControls
         public void NextView()
         {
             CurrentDate = CurrentDate.AddDays(7);
-            UpdateWeekView();
+            UpdateView();
         }
 
         public void PrevView()
         {
             CurrentDate = CurrentDate.AddDays(-7);
-            UpdateWeekView();
+            UpdateView();
         }
 
         public void UpdateView()
         {
-            UpdateWeekView();
+            FillCalendar();
         }
     }
 }

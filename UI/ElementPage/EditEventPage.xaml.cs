@@ -6,6 +6,8 @@ using UI.Repository;
 using UI.Windows;
 using UI.Dto;
 using System;
+using UI.Messages;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace UI.ElementPage
 {
@@ -70,6 +72,8 @@ namespace UI.ElementPage
                 Attributes = attributes
             };
             await App.ServiceProvider.GetRequiredService<ApiClient>().CreateEventsAsync(calendarEvent);
+            WeakReferenceMessenger.Default.Send(new UpdateViewMessage());
+            WeakReferenceMessenger.Default.Send(new CloseEventWindowMessage());
         }
 
         private async void EventComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

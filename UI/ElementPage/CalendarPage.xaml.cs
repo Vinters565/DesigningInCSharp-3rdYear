@@ -18,7 +18,7 @@ namespace UI.ElementPage
         public CalendarPage()
         {
             InitializeComponent();
-            OpenCalendarPage(new CalendarView() { IsPublic = false } );
+            OpenCalendarPage(new CalendarView(false));
         }
 
         private void OpenCalendarPage(UserControl page)
@@ -33,12 +33,12 @@ namespace UI.ElementPage
 
         private void OpenPrivateCalendar_Click(object sender, RoutedEventArgs e)
         {
-            OpenCalendarPage(new CalendarView() { IsPublic = false });
+            OpenCalendarPage(new CalendarView(false));
         }
 
         private void OpenPublicCalendar_Click(object sender, RoutedEventArgs e)
         {
-            OpenCalendarPage(new CalendarView() { IsPublic = true });
+            OpenCalendarPage(new CalendarView(true));
         }
 
         private void OpenListPublicCalendars_Click(object sender, RoutedEventArgs e)
