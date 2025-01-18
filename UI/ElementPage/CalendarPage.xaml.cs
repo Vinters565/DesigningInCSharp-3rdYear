@@ -6,7 +6,8 @@ using UI.Dto;
 using UI.Messages;
 using UI.UserControls;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace UI.ElementPage
 {
@@ -18,6 +19,14 @@ namespace UI.ElementPage
         public CalendarPage()
         {
             InitializeComponent();
+            var token = new JwtSecurityTokenHandler().ReadToken(TokenFileStorage.GetToken()) as JwtSecurityToken;
+            foreach (var claim in token.Claims)
+            {
+                if (claim.Type == "userName")
+                {
+                    UserName.Text = claim.Value;
+                }
+            }
             OpenCalendarPage(new CalendarView(false));
         }
 

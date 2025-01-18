@@ -21,7 +21,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Style="{ StaticResource MainElementStyleStackPanel}">
             <Ellipse Width="30" Height="30" VerticalAlignment="Center" Fill="Gray"/>
 
-            <TextBlock Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenPersonalAccountPage_MouseDown"></TextBlock>
+            <TextBlock x:Name="UserName" Text="Имя пользователя" VerticalAlignment="Center" Margin="15 0 5 0" FontSize="14" MouseDown="OpenPersonalAccountPage_MouseDown"></TextBlock>
 
             <Button Margin="20 2 2 2" BorderThickness="0" Background="Transparent" Visibility="Hidden">
                 <Image Source="/Images/notification.png" Width="20" Height="20"></Image>
