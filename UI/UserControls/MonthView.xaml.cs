@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
+using UI.Dto;
 
 namespace UI.UserControls
 {
@@ -20,12 +23,23 @@ namespace UI.UserControls
             UpdateView();
         }
 
-        private void LoadCalendar()
+        private async void LoadCalendar()
         {
             ClearOldCells();
-            FillPreviousMonthDays();
-            FillCurrentMonthDays();
-            FillNextMonthDays();
+            var events = await LoadEvents();
+            FillPreviousMonthDays(events);
+            FillCurrentMonthDays(events);
+            FillNextMonthDays(events);
+        }
+
+        private async Task<List<CalendarEventDto>> LoadEvents()
+        {
+            var prevDate = new DateTime(
+                    CurrentDate.Month == 1 ? CurrentDate.Year - 1 : CurrentDate.Year,
+                    CurrentDate.Month == 1 ? 12 : CurrentDate.Month - 1,
+                    21);
+            var events = await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(prevDate, 3);
+            return isPublic ? events.Where(e => e.Attributes.ContainsKey("PublicityEventAttribute")).ToList() : events;
         }
 
         private void ClearOldCells()
@@ -43,7 +57,7 @@ namespace UI.UserControls
             }
         }
 
-        private void FillPreviousMonthDays()
+        private void FillPreviousMonthDays(List<CalendarEventDto> events)
         {
             var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
             var startDay = (int)firstDayOfMonth.DayOfWeek;
@@ -58,17 +72,18 @@ namespace UI.UserControls
                     CurrentDate.Month == 1 ? CurrentDate.Year - 1 : CurrentDate.Year,
                     CurrentDate.Month == 1 ? 12 : CurrentDate.Month - 1,
                     prevMonthDays - startDay + 1 + i);
+                var text = $"{prevDate.Day} \n {GetEventsByDate(prevDate, events)}";
                 var dayEmptyBlock = new EmptyBlock(isPublic, prevDate);
-                var dayBlock = CreateDayTextBlock(prevDate.Day.ToString(), Brushes.DarkGray);
+                var dayBlock = CreateDayTextBlock(text, Brushes.DarkGray);
                 dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
-
+                
                 Grid.SetRow(dayEmptyBlock, 1);
                 Grid.SetColumn(dayEmptyBlock, i);
                 MonthCalendar.Children.Add(dayEmptyBlock);
             }
         }
 
-        private void FillCurrentMonthDays()
+        private void FillCurrentMonthDays(List<CalendarEventDto> events)
         {
             var daysInMonth = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month);
             var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
@@ -78,8 +93,10 @@ namespace UI.UserControls
 
             for (int day = 1; day <= daysInMonth; day++)
             {
-                var dayEmptyBlock = new EmptyBlock(isPublic, new DateTime(CurrentDate.Year, CurrentDate.Month, day));
-                var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.White);
+                var date = new DateTime(CurrentDate.Year, CurrentDate.Month, day);
+                var dayEmptyBlock = new EmptyBlock(isPublic, date);
+                var text = $"{day.ToString()} \n {GetEventsByDate(date, events)}";
+                var dayBlock = CreateDayTextBlock(text, Brushes.White);
                 if (day == CurrentDate.Day && CurrentDate.Month == DateTime.Now.Month)
                 {
                     dayEmptyBlock.Background = Brushes.Brown;
@@ -94,7 +111,7 @@ namespace UI.UserControls
             }
         }
 
-        private void FillNextMonthDays()
+        private void FillNextMonthDays(List<CalendarEventDto> events)
         {
             var firstDayOfMonth = new DateTime(CurrentDate.Year, CurrentDate.Month, 1);
             var daysInMonth = DateTime.DaysInMonth(CurrentDate.Year, CurrentDate.Month);
@@ -109,8 +126,9 @@ namespace UI.UserControls
                     CurrentDate.Month == 12 ? CurrentDate.Year + 1 : CurrentDate.Year,
                     CurrentDate.Month == 12 ? 1 : CurrentDate.Month + 1,
                     day);
+                var text = $"{day} \n {GetEventsByDate(nextDate, events)}";
                 var dayEmptyBlock = new EmptyBlock(isPublic, nextDate);
-                var dayBlock = CreateDayTextBlock(day.ToString(), Brushes.DarkGray);
+                var dayBlock = CreateDayTextBlock(text, Brushes.DarkGray);
                 dayEmptyBlock.GridElementRearward.Children.Add(dayBlock);
 
                 var column = (startDay + daysInMonth + day - 1) % 7;
@@ -119,6 +137,14 @@ namespace UI.UserControls
                 Grid.SetColumn(dayEmptyBlock, column);
                 MonthCalendar.Children.Add(dayEmptyBlock);
             }
+        }
+
+        private string GetEventsByDate(DateTime date, List<CalendarEventDto> events)
+        {
+            var count = events
+                .Where(x => x.Start.Day == date.Day && x.Start.Month == date.Month && x.Start.Year == date.Year)
+                .Count();
+            return count > 0 ? $"Событий в этот день: {count}" : "";
         }
 
         private TextBlock CreateDayTextBlock(string text, Brush foreground)

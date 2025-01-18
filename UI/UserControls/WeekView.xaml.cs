@@ -47,10 +47,8 @@ namespace UI.UserControls
 
         private async void FillCalendarEvents()
         {
-            var startDay = CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1);
-            var startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day);
-            var events = await App.ServiceProvider.GetRequiredService<ApiClient>()
-                .GetPrivateEventsAsync(startDate, 3);
+
+            var events = await LoadEvents();
             foreach (var e in events)
             {
                 if (e.End.Day <= CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 8).Day)
@@ -58,6 +56,14 @@ namespace UI.UserControls
                     AddEvent(e);
                 }
             }
+        }
+
+        private async Task<List<CalendarEventDto>> LoadEvents()
+        {
+            var startDay = CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1);
+            var startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day);
+            var events = await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(startDate, 3);
+            return isPublic ? events.Where(e => e.Attributes.ContainsKey("PublicityEventAttribute")).ToList() : events;
         }
 
         private void FillTimeColumn()
