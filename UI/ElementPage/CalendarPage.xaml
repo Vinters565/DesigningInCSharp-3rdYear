@@ -41,7 +41,7 @@
         </Grid>
 
         <StackPanel x:Name="ForPanel" Orientation="Vertical" Grid.Row ="1" Grid.Column="0" Style="{StaticResource MainElementStyleStackPanel}">
-            <Button Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
+            <Button Visibility="Hidden" Height="25" Content="Фильтры" Margin="5" Style="{StaticResource BlueRoundButtonStyle}"></Button>
         </StackPanel>
 
         <Grid Grid.Column="1" Grid.Row="1" Style="{StaticResource MainElementStyleGrid}">

@@ -24,16 +24,23 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
         InitializeComponent();
         pageNamber = 1;
         pageSize = column * row;
-        CreateCalendars();
+        CreateCalendars(true);
         CreateAreaCalendars(column, row);
     }
 
-    private async void CreateCalendars()
+    private async void CreateCalendars(bool isMonth)
     {
         var users = await App.ServiceProvider.GetRequiredService<ApiClient>().GetUsersAsync(pageNamber, pageSize);
         monthViewsCalendars = CreateCalendars<MonthView>(new(users.Items));
         weekViewsCalendars = CreateCalendars<WeekView>(new(users.Items));
-        FillContentContolersView(monthViewsCalendars);
+        if (isMonth)
+        {
+            FillContentContolersView(monthViewsCalendars);
+        }
+        else
+        {
+            FillContentContolersView(weekViewsCalendars);
+        }
     }
 
     private void CreateAreaCalendars(int column, int row)
@@ -126,13 +133,13 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
     private void NextCalendar_Click(object sender, RoutedEventArgs e)
     {
         pageNamber += 1;
-        CreateCalendars();
+        CreateCalendars(true);
     }
 
     private void PreviousCalendar_Click(object sender, RoutedEventArgs e)
     {
         pageNamber -= pageNamber > 1 ? 1 : 0;
-        CreateCalendars();
+        CreateCalendars(true);
     }
 
     private void MonthButton_Click(object sender, RoutedEventArgs e)

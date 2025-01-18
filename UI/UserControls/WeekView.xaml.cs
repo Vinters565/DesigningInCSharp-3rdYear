@@ -134,7 +134,8 @@ namespace UI.UserControls
 
         private void AddEvent(CalendarEventDto calendarEvent)
         {
-            var duration = (calendarEvent.End - calendarEvent.Start).Hours * 6;
+            var durationMinute = Math.Ceiling((double)((calendarEvent.End - calendarEvent.Start).Minutes / 10));
+            var duration = (calendarEvent.End - calendarEvent.Start).Hours * 6 + (int)durationMinute;
             var startColumn = (int)calendarEvent.Start.DayOfWeek == 0 ? 7 : (int)calendarEvent.Start.DayOfWeek - 1;
             var eventBlock = new EventBlock(startColumn, calendarEvent.Start.Hour, duration, calendarEvent);
             Grid.SetRow(eventBlock, eventBlock.StartRow * 6);

@@ -22,7 +22,7 @@ namespace UI.UserControls
             StartColumn = startColumn;
             StartRow = startRow;
             Duration = duration;
-            Title.Text = "Новое событие";
+            Title.Text = calendarEvent.Name == null ? "Новое событие" : calendarEvent.Name;
             CalendarEvent = calendarEvent;
         }
 

@@ -13,8 +13,11 @@ namespace UI.ElementPage
         private CalendarEventDto eventDto;
         public EventInfoPage(CalendarEventDto calendarEvent)
         {
-            eventDto = calendarEvent;
             InitializeComponent();
+            eventDto = calendarEvent;
+            EventNameTextBox.Text = "Новое событие";
+            StartDatePicker.DateTime = calendarEvent.Start;
+            EndDatePicker.DateTime = calendarEvent.End;
         }
 
         private void EditEventButton_Click(object sender, RoutedEventArgs e)
