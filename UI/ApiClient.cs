@@ -83,7 +83,17 @@ public class ApiClient
     {
         await DeleteAsync($"/events/{eventId}");
     }
-    
+
+    public async Task<ListUsersRequest> GetUsersAsync(int page, int count)
+    {
+        var queryParams = new Dictionary<string, string>();
+
+        queryParams.Add("pageNumber", page.ToString());
+        queryParams.Add("pageSize", count.ToString());
+        return await GetAsync<ListUsersRequest>($"/users", queryParams);
+    }
+
+
     private async Task<T> GetAsync<T>(string endpoint, Dictionary<string, string>? queryParams = null)
     {
         PutToken();

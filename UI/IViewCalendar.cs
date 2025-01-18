@@ -15,6 +15,5 @@ namespace UI
         public void PrevView();
 
         public void UpdateView();
-
     }
 }

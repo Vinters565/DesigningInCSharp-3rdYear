@@ -13,6 +13,7 @@ namespace UI.UserControls
         private readonly TextBlock dateTextBlock;
         private readonly List<EmptyBlock> emptyBlock = new();
         private bool isPublic;
+        private string? userName;
 
         public DateTime CurrentDate { get; set; }
 
@@ -22,6 +23,17 @@ namespace UI.UserControls
             this.dateTextBlock = dateTextBlock;
             CurrentDate = DateTime.Now;
             this.isPublic = isPublic;
+            FillGridCells();
+            FillCalendar();
+        }
+
+        public WeekView(TextBlock dateTextBlock, string userName)
+        {
+            InitializeComponent();
+            this.dateTextBlock = dateTextBlock;
+            CurrentDate = DateTime.Now;
+            isPublic = true;
+            this.userName = userName;
             FillGridCells();
             FillCalendar();
         }
@@ -62,7 +74,9 @@ namespace UI.UserControls
         {
             var startDay = CurrentDate.AddDays(-(int)CurrentDate.DayOfWeek + 1);
             var startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day);
-            var events = await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(startDate, 3);
+            var events = userName != null && isPublic 
+                ? await App.ServiceProvider.GetRequiredService<ApiClient>().GetPublicEventsAsync(userName, startDate, 2)
+                : await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(startDate, 2);
             return isPublic ? events.Where(e => e.Attributes.ContainsKey("PublicityEventAttribute")).ToList() : events;
         }
 

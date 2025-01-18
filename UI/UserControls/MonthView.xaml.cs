@@ -11,6 +11,7 @@ namespace UI.UserControls
     {
         private readonly TextBlock dateTextBlock;
         private readonly bool isPublic;
+        private readonly string? userName;
 
         public DateTime CurrentDate { get; set; }
 
@@ -20,6 +21,16 @@ namespace UI.UserControls
             this.dateTextBlock = dateTextBlock;
             CurrentDate = DateTime.Now;
             this.isPublic = isPublic;
+            UpdateView();
+        }
+
+        public MonthView(TextBlock dateTextBlock, string userName)
+        {
+            InitializeComponent();
+            this.dateTextBlock = dateTextBlock;
+            CurrentDate = DateTime.Now;
+            isPublic = true;
+            this.userName = userName;
             UpdateView();
         }
 
@@ -34,11 +45,13 @@ namespace UI.UserControls
 
         private async Task<List<CalendarEventDto>> LoadEvents()
         {
-            var prevDate = new DateTime(
+            var startDate = new DateTime(
                     CurrentDate.Month == 1 ? CurrentDate.Year - 1 : CurrentDate.Year,
                     CurrentDate.Month == 1 ? 12 : CurrentDate.Month - 1,
                     21);
-            var events = await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(prevDate, 3);
+            var events = userName != null && isPublic
+                ? await App.ServiceProvider.GetRequiredService<ApiClient>().GetPublicEventsAsync(userName, startDate, 3)
+                : await App.ServiceProvider.GetRequiredService<ApiClient>().GetPrivateEventsAsync(startDate, 3);
             return isPublic ? events.Where(e => e.Attributes.ContainsKey("PublicityEventAttribute")).ToList() : events;
         }
 
@@ -154,7 +167,8 @@ namespace UI.UserControls
                 Text = text,
                 Background = Brushes.Transparent,
                 Foreground = foreground,
-                Margin = new Thickness(3)
+                Margin = new Thickness(3),
+                TextWrapping = TextWrapping.WrapWithOverflow
             };
         }
 

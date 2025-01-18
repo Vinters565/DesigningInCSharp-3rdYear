@@ -19,7 +19,7 @@ namespace UI.UserControls
 
         private void Event_Click(object sender, RoutedEventArgs e)
         {
-            WeakReferenceMessenger.Default.Send(new ViewCalendarMessage(Calendar));
+            //WeakReferenceMessenger.Default.Send(new ViewCalendarMessage(Calendar));
         }
     }
 }

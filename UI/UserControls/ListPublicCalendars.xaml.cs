@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 using System.Windows.Controls;
+using UI.Dto;
 
 namespace UI.UserControls;
 /// <summary>
@@ -12,14 +14,25 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
     private readonly List<ContentControl> contentContolersCalendar = new();
     private readonly List<ButtonShowPublicCalendar> buttons = new();
     private List<IViewCalendar> currentCalendars;
+    private int pageNamber;
+    private readonly int pageSize;
+
     public DateTime CurrentDate { get; set; } = DateTime.Now;
 
     public ListPublicCalendars(int column, int row)
     {
         InitializeComponent();
-        monthViewsCalendars = CreateCalendars<MonthView>(column * row);
-        weekViewsCalendars = CreateCalendars<WeekView>(column * row);
+        pageNamber = 1;
+        pageSize = column * row;
+        CreateCalendars();
         CreateAreaCalendars(column, row);
+    }
+
+    private async void CreateCalendars()
+    {
+        var users = await App.ServiceProvider.GetRequiredService<ApiClient>().GetUsersAsync(pageNamber, pageSize);
+        monthViewsCalendars = CreateCalendars<MonthView>(new(users.Items));
+        weekViewsCalendars = CreateCalendars<WeekView>(new(users.Items));
         FillContentContolersView(monthViewsCalendars);
     }
 
@@ -66,24 +79,36 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
 
     private void FillContentContolersView<T>(List<T> currentCalendars) where T : UserControl, IViewCalendar
     {
+        if (currentCalendars.Count == 0)
+        {
+            pageNamber -= 1;
+            return;
+        } 
         this.currentCalendars = new List<IViewCalendar>(currentCalendars);
         for (int i = 0; i < contentContolersCalendar.Count; i++)
         {
-            contentContolersCalendar[i].Content = this.currentCalendars[i];
-            buttons[i].Calendar = currentCalendars[i];
+            if (i < currentCalendars.Count)
+            {
+                contentContolersCalendar[i].Content = this.currentCalendars[i];
+                buttons[i].Calendar = currentCalendars[i];
+            }
+            else
+            {
+                contentContolersCalendar[i].Content = null;
+            }
         }
         UpdateView();
     }
 
     //TO-DO
-    private List<T> CreateCalendars<T>(int count) where T : IViewCalendar
+    private List<T> CreateCalendars<T>(List<UserDto> users) where T : IViewCalendar
     {
         var result = new List<T>();
-        var constructor = typeof(T).GetConstructor(new[] { typeof(TextBlock) }) 
+        var constructor = typeof(T).GetConstructor(new[] { typeof(TextBlock), typeof(string) }) 
             ?? throw new InvalidOperationException($"Type {typeof(T)} must have a constructor with a TextBlock parameter.");
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < users.Count; i++)
         {
-            result.Add((T)constructor.Invoke([DateTextBlock]));
+            result.Add((T)constructor.Invoke([DateTextBlock, users[i].Username]));
         }
         return result;
     }
@@ -100,12 +125,14 @@ public partial class ListPublicCalendars : UserControl, IViewCalendar
 
     private void NextCalendar_Click(object sender, RoutedEventArgs e)
     {
-        //TO-DO
+        pageNamber += 1;
+        CreateCalendars();
     }
 
     private void PreviousCalendar_Click(object sender, RoutedEventArgs e)
     {
-        //TO-DO
+        pageNamber -= pageNamber > 1 ? 1 : 0;
+        CreateCalendars();
     }
 
     private void MonthButton_Click(object sender, RoutedEventArgs e)
