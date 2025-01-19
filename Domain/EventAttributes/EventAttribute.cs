@@ -4,6 +4,8 @@ namespace SchedulePlanner.Domain.EventAttributes;
 
 public abstract class EventAttribute : IEventAttribute
 {
+    public bool IsActive { get; protected set; }
+    
     protected EventAttribute() : this(false) { }
 
     protected EventAttribute(bool isActive)
@@ -12,8 +14,6 @@ public abstract class EventAttribute : IEventAttribute
     }
 
     public abstract string GetDescription();
- 
-    public bool IsActive { get; protected set; }
 
     public IReadOnlyCollection<FieldMetadata> GetFieldsMetadata()
     {

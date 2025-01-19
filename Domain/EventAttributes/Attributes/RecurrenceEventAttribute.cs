@@ -4,11 +4,11 @@ namespace SchedulePlanner.Domain.EventAttributes.Attributes;
 
 public class RecurrenceEventAttribute : EventAttribute
 {
-    public RecurrenceType? Type { get; private set; }
+    public RecurrenceType Type { get; private set; }
 
-    public DateTime? Until { get; }
+    public DateTime? Until { get; private set; }
     
-    public RecurrenceEventAttribute(bool isActive, RecurrenceType type, DateTime until) : base(isActive)
+    public RecurrenceEventAttribute(bool isActive, RecurrenceType type, DateTime? until) : base(isActive)
     {
         Type = type;
         Until = until;

@@ -2,7 +2,7 @@ namespace SchedulePlanner.Domain.EventAttributes.Attributes;
 
 public class CanBeCompletedEventAttribute : EventAttribute
 {
-    public bool? Completed { get; private set; }
+    public bool Completed { get; private set; }
 
     public CanBeCompletedEventAttribute(bool isActive, bool completed) : base(isActive)
     {
