@@ -7,8 +7,8 @@ namespace SchedulePlanner.Domain.Entities;
 
 public class CalendarEvent : Entity<Guid>
 {
-    public string Name { get; }
-    
+    public string Name { get; private set; }
+
     public Guid UserId { get; }
     
     public DateTime StartDate { get; private set; }
