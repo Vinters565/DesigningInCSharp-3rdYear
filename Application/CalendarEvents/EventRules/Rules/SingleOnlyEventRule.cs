@@ -1,5 +1,4 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.EventAttributes.Attributes;
 using SchedulePlanner.Domain.Interfaces;
 
@@ -15,8 +14,7 @@ public class SingleOnlyEventRule(ICalendarEventRepository calendarEventRepositor
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
         
-        if (!calendarEvent.AttributeData.TryGetAttribute<MandatoryEventAttribute>(out var singleOnlyEventAttribute) 
-            || !singleOnlyEventAttribute!.IsActive)
+        if (!calendarEvent.AttributeData.HasActiveAttribute<MandatoryEventAttribute>())
         {
             return !await calendarEventRepository.AnySingleOnlyAsync(userId, start, end);
         }

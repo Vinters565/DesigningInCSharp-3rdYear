@@ -15,7 +15,9 @@ public class RecurrenceProjectionsManager : IRecurrenceProjectionsManager
             if (!recurringEvent.AttributeData.TryGetAttribute<RecurrenceEventAttribute>(out var recurrenceAttribute))
                 throw new ArgumentException("Calendar event does not contains recurrence attribute");
 
-            var recurrenceType = recurrenceAttribute!.Type;
+            if (!recurrenceAttribute!.IsActive) continue;
+            
+            var recurrenceType = recurrenceAttribute.Type;
             
             var until = recurrenceAttribute.Until;
             if (until == null || until > maxUntil)

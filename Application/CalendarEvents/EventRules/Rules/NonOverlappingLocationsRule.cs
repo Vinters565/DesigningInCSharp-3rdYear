@@ -1,5 +1,4 @@
 using SchedulePlanner.Domain.Entities;
-using SchedulePlanner.Domain.EventAttributes;
 using SchedulePlanner.Domain.EventAttributes.Attributes;
 using SchedulePlanner.Domain.Interfaces;
 
@@ -12,15 +11,15 @@ public class NonOverlappingLocationsRule(
 
     public async Task<bool> CheckAsync(CalendarEvent calendarEvent)
     {
-        if (!calendarEvent.AttributeData.TryGetAttribute<DependsOnLocationEventAttribute>(out var dependsOnLocationAttribute)
-            || !dependsOnLocationAttribute!.IsActive)
+        if (!calendarEvent.AttributeData.TryGetActiveAttribute<DependsOnLocationEventAttribute>(
+                out var dependsOnLocationAttribute))
         {
             return true;
         }
-        
+
         var start = calendarEvent.StartDate;
         var end = calendarEvent.EndDate;
-        
-        return !await calendarEventRepository.AnyWithLocationAsync(dependsOnLocationAttribute.Location!, start, end);
+
+        return !await calendarEventRepository.AnyWithLocationAsync(dependsOnLocationAttribute!.Location!, start, end);
     }
 }

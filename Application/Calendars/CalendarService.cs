@@ -23,7 +23,7 @@ public class CalendarService(
         var events = await calendarEventRepository.GetByUserIdAsync(userId, start, end);
 
         var projections = recurrenceProjectionsManager.GetProjections(
-            events.Where(e => e.AttributeData.HasAttribute<RecurrenceEventAttribute>()).ToList(), end);
+            events.Where(e => e.AttributeData.HasActiveAttribute<RecurrenceEventAttribute>()).ToList(), end);
 
         var dtos = events.Select(e => e.ToDto()).ToList();
         dtos.AddRange(projections.Select(p => p.ToDto()));

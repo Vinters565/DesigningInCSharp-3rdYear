@@ -42,7 +42,7 @@ public class CalendarEventService(
         var calendarEvent = await calendarEventRepository.GetByIdAsync(id);
         if (calendarEvent == null) return Error.NotFound("Календарное событие не найдено");
 
-        calendarEvent.Update(request.Start, request.End);
+        calendarEvent.Update(request.Name, request.Start, request.End);
 
         if (request.Attributes != null)
         {

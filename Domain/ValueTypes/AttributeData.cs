@@ -64,6 +64,18 @@ public class AttributeData
         attribute = success ? (T?)value : default;
         return success;
     }
+    
+    public bool TryGetActiveAttribute<T>(out T? attribute) where T : IEventAttribute
+    {
+        var success = TryGetAttribute(out attribute);
+        
+        if (attribute != null && attribute.IsActive) 
+            return success;
+        
+        attribute = default;
+        return false;
+
+    }
 
     public bool HasAttribute(Type attributeType) => attributes.ContainsKey(attributeType);
 
@@ -83,25 +95,5 @@ public class AttributeData
     public bool HasActiveAttribute<T>(Func<T, bool> predicate) where T : IEventAttribute
     {
         return HasAttribute<T>(attr => attr.IsActive && predicate(attr));
-    }
-
-    public static bool IsAttributeCreated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
-        where TAttribute : IEventAttribute
-    {
-        return !existedAttributes.HasAttribute<TAttribute>() && newAttributes.HasAttribute<TAttribute>();
-    }
-    
-    public static bool IsAttributeUpdated<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
-        where TAttribute : IEventAttribute
-    {
-        return existedAttributes.TryGetAttribute<TAttribute>(out var existedAttr)
-               && newAttributes.TryGetAttribute<TAttribute>(out var newAttr)
-               && !existedAttr!.Equals(newAttr!);
-    }
-    
-    public static bool IsAttributeDeleted<TAttribute>(AttributeData existedAttributes, AttributeData newAttributes)
-        where TAttribute : IEventAttribute
-    {
-        return existedAttributes.HasAttribute<TAttribute>() && !newAttributes.HasAttribute<TAttribute>();
     }
 }

@@ -43,8 +43,9 @@ public class CalendarEvent : Entity<Guid>
     
     private CalendarEvent() : base(Guid.NewGuid()) { } // EF Core
 
-    public void Update(DateTime? start, DateTime? end)
+    public void Update(string? name, DateTime? start, DateTime? end)
     {
+        if (name != null) Name = name;
         if (start != null) StartDate = start.Value;
         if (end != null) EndDate = end.Value;
         ValidateDates();
